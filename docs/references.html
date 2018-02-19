@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Model Selection in High Dimensions</title>
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Model Selection in High Dimensions" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Model Selection in High Dimensions" />
+  
+  <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  
+
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+
+
+<meta name="date" content="2018-02-19">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="assessing-the-validity-of-a-model.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#read-this-part-first"><i class="fa fa-check"></i><b>1.1</b> Read this part first</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#content-choice-and-structure"><i class="fa fa-check"></i><b>1.2</b> Content choice and structure</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#bibliography"><i class="fa fa-check"></i><b>1.2.1</b> Bibliography</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#useful-links"><i class="fa fa-check"></i><b>1.2.2</b> Useful links</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#using-r"><i class="fa fa-check"></i><b>1.3</b> Using R</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#useful-r-packages"><i class="fa fa-check"></i><b>1.3.1</b> Useful R packages</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#managing-data"><i class="fa fa-check"></i><b>1.3.2</b> Managing Data</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#loading-data-from-an-r-package"><i class="fa fa-check"></i><b>1.3.3</b> Loading data from an R package</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#loading-data-from-a-local-file"><i class="fa fa-check"></i><b>1.3.4</b> Loading data from a local file</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#loading-data-from-an-online-file"><i class="fa fa-check"></i><b>1.3.5</b> Loading data from an online file</a></li>
+<li class="chapter" data-level="1.3.6" data-path="index.html"><a href="index.html#loading-data-from-an-online-database-using-a-mysql-query-optional"><i class="fa fa-check"></i><b>1.3.6</b> Loading data from an online database using a mySQL query (Optional)</a></li>
+<li class="chapter" data-level="1.3.7" data-path="index.html"><a href="index.html#data-wrangling"><i class="fa fa-check"></i><b>1.3.7</b> Data Wrangling</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#writing-reports"><i class="fa fa-check"></i><b>1.4</b> Writing reports</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#r-markdown"><i class="fa fa-check"></i><b>1.4.1</b> R Markdown</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.4.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#examples"><i class="fa fa-check"></i><b>1.5</b> Examples</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data-on-malnutrition-in-zambia"><i class="fa fa-check"></i><b>1.5.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#prognostic-factors-in-childhood-leukemia"><i class="fa fa-check"></i><b>1.5.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.3</b> R package quantmod</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#fundamental-statistical-concepts"><i class="fa fa-check"></i><b>1.6</b> Fundamental statistical concepts</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#sample-and-population"><i class="fa fa-check"></i><b>1.6.1</b> Sample and population</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#models-and-risk"><i class="fa fa-check"></i><b>1.6.2</b> Models and risk</a></li>
+<li class="chapter" data-level="1.6.3" data-path="index.html"><a href="index.html#estimators-and-associated-variability"><i class="fa fa-check"></i><b>1.6.3</b> Estimators and associated variability</a></li>
+<li class="chapter" data-level="1.6.4" data-path="index.html"><a href="index.html#simulating-the-population-using-resampling-techniques"><i class="fa fa-check"></i><b>1.6.4</b> Simulating the population using resampling techniques</a></li>
+<li class="chapter" data-level="1.6.5" data-path="index.html"><a href="index.html#model-selection"><i class="fa fa-check"></i><b>1.6.5</b> Model Selection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html"><i class="fa fa-check"></i><b>2</b> Assessing the validity of a model</a><ul>
+<li class="chapter" data-level="2.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#cross-validation"><i class="fa fa-check"></i><b>2.2</b> Cross-Validation</a></li>
+<li class="chapter" data-level="2.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#covariance-penalties-criteria"><i class="fa fa-check"></i><b>2.3</b> Covariance Penalties Criteria</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-2"><i class="fa fa-check"></i><b>2.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.3.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mallows-c_p"><i class="fa fa-check"></i><b>2.3.2</b> Mallows <span class="math inline">\(C_p\)</span></a></li>
+<li class="chapter" data-level="2.3.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#efrons-q-class"><i class="fa fa-check"></i><b>2.3.3</b> Efron’s q-class</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#information-theory-and-bayesian-criteria"><i class="fa fa-check"></i><b>2.4</b> Information Theory and Bayesian Criteria</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#aic-akaike-information-criterion"><i class="fa fa-check"></i><b>2.4.1</b> AIC: Akaike Information Criterion</a></li>
+<li class="chapter" data-level="2.4.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#bic-bayesian-information-criterion"><i class="fa fa-check"></i><b>2.4.2</b> BIC: Bayesian Information Criterion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model Selection in High Dimensions</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+
+<div id="refs" class="references">
+<div>
+<p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
+</div>
+<div>
+<p>Cowell, F. A. 2011. <em>Measuring Inequality</em>. Third Edition. Oxford: Oxford University Press.</p>
+</div>
+<div>
+<p>Efron, B. 1979. “Bootstrap Methods: Another Look at the Jacknife.” <em>Annst</em> 7: 1–26.</p>
+</div>
+<div>
+<p>———. 1986. “How Biased is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394). Taylor &amp; Francis: 461–70.</p>
+</div>
+<div>
+<p>———. 2004. “The Estimation of Prediction Error.” <em>Journal of the American Statistical Association</em> 99 (467). Taylor &amp; Francis: 619–32.</p>
+</div>
+<div>
+<p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
+</div>
+<div>
+<p>Efron, B., and C. Stein. 1981. “The Jackknife Estimate of Variance.” <em>Annals of Statististics</em> 9: 586–96.</p>
+</div>
+<div>
+<p>Fernholz, L. 2001. “On Multivariate Higher Order von Mises Expansions.” <em>Metrika</em> 53: 123–40.</p>
+</div>
+<div>
+<p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
+</div>
+<div>
+<p>Huber, P. J., and E. M. Ronchetti. 2009. <em>Robust Statistics</em>. Second Edition. Wiley Series in Probability and Statistics. John Wiley &amp; Sons.</p>
+</div>
+<div>
+<p>James, G., D. Witten, T. Hastie, and R. Tibshirani. 2013. <em>An Introduction to Statistical Learning: With Applications in R</em>. New York: Springer.</p>
+</div>
+<div>
+<p>Mallows, C. L. 1973. “Some Comments on <span class="math inline">\(C_p\)</span>.” <em>Technometrics</em> 15: 661–75.</p>
+</div>
+<div>
+<p>Quenouille, Maurice H. 1956. “Notes on Bias in Estimation.” <em>Biometrika</em> 43: 353–60.</p>
+</div>
+<div>
+<p>Schwarz, G. 1978. “Estimating the Dimension of a Model.” <em>Annst</em> 6: 461–64.</p>
+</div>
+<div>
+<p>Shannon, C. E. 1948a. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 379–423.</p>
+</div>
+<div>
+<p>———. 1948b. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 623–66.</p>
+</div>
+<div>
+<p>Tukey, John W. 1958. “Bias and Confidence in Not Quite Large Samples (Abstract).” <em>The Annals of Mathematical Statistics</em> 29: 614.</p>
+</div>
+<div>
+<p>United Nations Children’s Fund. 1998. “The State of the World’s Children 1998: Focus on Nutrition.” UNICEF, New York, USA.</p>
+</div>
+<div>
+<p>———. 2012. “The State of the World’s Children 2012: Children in an Urban World.” UNICEF, New York, USA.</p>
+</div>
+<div>
+<p>Victora, C. G., L. Adair, C. Fall, P. C. Hallal, R. Martorell, L. Richter, and H. S. Sachdev. 2008. “Maternal and Child Undernutrition: Consequences for Adult Health and Human Capital.” <em>Lancet</em> 371 (9609). Elsevier: 340.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="assessing-the-validity-of-a-model.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

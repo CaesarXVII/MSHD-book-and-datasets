@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Model Selection in High Dimensions</title>
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Model Selection in High Dimensions" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Model Selection in High Dimensions" />
+  
+  <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  
+
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+
+
+<meta name="date" content="2018-02-19">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#read-this-part-first"><i class="fa fa-check"></i><b>1.1</b> Read this part first</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#content-choice-and-structure"><i class="fa fa-check"></i><b>1.2</b> Content choice and structure</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#bibliography"><i class="fa fa-check"></i><b>1.2.1</b> Bibliography</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#useful-links"><i class="fa fa-check"></i><b>1.2.2</b> Useful links</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#using-r"><i class="fa fa-check"></i><b>1.3</b> Using R</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#useful-r-packages"><i class="fa fa-check"></i><b>1.3.1</b> Useful R packages</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#managing-data"><i class="fa fa-check"></i><b>1.3.2</b> Managing Data</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#loading-data-from-an-r-package"><i class="fa fa-check"></i><b>1.3.3</b> Loading data from an R package</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#loading-data-from-a-local-file"><i class="fa fa-check"></i><b>1.3.4</b> Loading data from a local file</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#loading-data-from-an-online-file"><i class="fa fa-check"></i><b>1.3.5</b> Loading data from an online file</a></li>
+<li class="chapter" data-level="1.3.6" data-path="index.html"><a href="index.html#loading-data-from-an-online-database-using-a-mysql-query-optional"><i class="fa fa-check"></i><b>1.3.6</b> Loading data from an online database using a mySQL query (Optional)</a></li>
+<li class="chapter" data-level="1.3.7" data-path="index.html"><a href="index.html#data-wrangling"><i class="fa fa-check"></i><b>1.3.7</b> Data Wrangling</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#writing-reports"><i class="fa fa-check"></i><b>1.4</b> Writing reports</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#r-markdown"><i class="fa fa-check"></i><b>1.4.1</b> R Markdown</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.4.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#examples"><i class="fa fa-check"></i><b>1.5</b> Examples</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data-on-malnutrition-in-zambia"><i class="fa fa-check"></i><b>1.5.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#prognostic-factors-in-childhood-leukemia"><i class="fa fa-check"></i><b>1.5.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.3</b> R package quantmod</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#fundamental-statistical-concepts"><i class="fa fa-check"></i><b>1.6</b> Fundamental statistical concepts</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#sample-and-population"><i class="fa fa-check"></i><b>1.6.1</b> Sample and population</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#models-and-risk"><i class="fa fa-check"></i><b>1.6.2</b> Models and risk</a></li>
+<li class="chapter" data-level="1.6.3" data-path="index.html"><a href="index.html#estimators-and-associated-variability"><i class="fa fa-check"></i><b>1.6.3</b> Estimators and associated variability</a></li>
+<li class="chapter" data-level="1.6.4" data-path="index.html"><a href="index.html#simulating-the-population-using-resampling-techniques"><i class="fa fa-check"></i><b>1.6.4</b> Simulating the population using resampling techniques</a></li>
+<li class="chapter" data-level="1.6.5" data-path="index.html"><a href="index.html#model-selection"><i class="fa fa-check"></i><b>1.6.5</b> Model Selection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html"><i class="fa fa-check"></i><b>2</b> Assessing the validity of a model</a><ul>
+<li class="chapter" data-level="2.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#cross-validation"><i class="fa fa-check"></i><b>2.2</b> Cross-Validation</a></li>
+<li class="chapter" data-level="2.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#covariance-penalties-criteria"><i class="fa fa-check"></i><b>2.3</b> Covariance Penalties Criteria</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-2"><i class="fa fa-check"></i><b>2.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.3.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mallows-c_p"><i class="fa fa-check"></i><b>2.3.2</b> Mallows <span class="math inline">\(C_p\)</span></a></li>
+<li class="chapter" data-level="2.3.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#efrons-q-class"><i class="fa fa-check"></i><b>2.3.3</b> Efron’s q-class</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#information-theory-and-bayesian-criteria"><i class="fa fa-check"></i><b>2.4</b> Information Theory and Bayesian Criteria</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#aic-akaike-information-criterion"><i class="fa fa-check"></i><b>2.4.1</b> AIC: Akaike Information Criterion</a></li>
+<li class="chapter" data-level="2.4.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#bic-bayesian-information-criterion"><i class="fa fa-check"></i><b>2.4.2</b> BIC: Bayesian Information Criterion</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model Selection in High Dimensions</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="assessing-the-validity-of-a-model" class="section level1">
+<h1><span class="header-section-number">2</span> Assessing the validity of a model</h1>
+<div id="introduction-1" class="section level2">
+<h2><span class="header-section-number">2.1</span> Introduction</h2>
+<p>Broadly speaking, model selection is about choosing a model that best <em>fits</em> (on some sense) the available sample so that it can be used to understand the phenomenon under investigation. This also includes being able to predict future outcomes and to assess research hypotheses within the population.</p>
+<p>Therefore, to reach these objectives, the available information should be used for two important tasks:</p>
+<ul>
+<li>building the model (learning phase)</li>
+<li>assess its <em>out-of-sample validity</em></li>
+</ul>
+<p>The two tasks are interdependent since building the model, i.e. finding the most suitable one, is made by optimizing, in some sense, its out-of-sample validity.</p>
+<p>Out-of-sample validity is a crucial concept in model selection. Indeed, it allows to assess how the results of a statistical analysis (e.g. the selection of a model) will generalize to other outcomes, equivalently, to the population. Without out-of-sample validation, a selection procedure will necessarily tend to choose models that <em>overfit</em> the data, since they would be the best within the sample. In other words, when overfitting, a model describes random error or noise instead of the underlying relationship, leading to an excessively complex model (too many parameters relative to the number of observations) and consequently a poor predictive performance and a wrong representation of what happens in the population.</p>
+<blockquote>
+Example of overfitting situation<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Taken from https://en.wikipedia.org/wiki/Overfitting.</span>
+<span class="co"># Noisy (roughly linear) data is fitted to a linear function and a polynomial function. </span>
+<span class="co"># Although the polynomial function is a perfect fit, the linear function can be expected </span>
+<span class="co"># to generalize better: if the two functions were used to extrapolate beyond the fit data, </span>
+<span class="co"># the linear function would make better predictions. This is because the polynomial</span>
+<span class="co"># function it is too dependent on the data which contains sampling error. </span>
+<span class="co">#</span>
+knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/OverfitEx1.png&quot;</span>)</code></pre></div>
+<p><img src="Figures/OverfitEx1.png" /><!-- --></p>
+<p>More formally, consider a random variable <span class="math inline">\(Y\)</span> distributed according to model <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span>, possibly conditionally on a set of fixed covariates <span class="math inline">\(\mathbf{X}=[x_1 \ldots \, x_p]\)</span>. We observe a random sample <span class="math inline">\(\mathbf{y} = (Y_i)_{i = 1, \ldots , n}\)</span> supposedly generated from <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span> together with a non-random <span class="math inline">\(n\times p\)</span> full rank matrix of predictors <span class="math inline">\(\mathbf{X}\)</span>. Define the prediction function <span class="math inline">\(\hat{\mathbf{y}}\)</span> that depends on the considered model, for example <span class="math inline">\(\hat{\mathbf{y}}=\hat{\boldsymbol{\beta}}\mathbf{y}\)</span> for the linear regression model. The inferential task is to assess the accuracy of the prediction function, so that it can be compared to alternative prediction functions.</p>
+Quantifying the prediction error of a prediction function requires specification of a discrepancy <span class="math inline">\(D\)</span> between a prediction <span class="math inline">\(\hat{\mathbf{y}}\)</span> and the actual response <span class="math inline">\(\mathbf{y}\)</span>. A natural choice is the mean squared error (mean residual squared error)
+<span class="math display">\[\begin{equation}  
+D\left(\hat{\mathbf{y}},\mathbf{y}\right)=\frac{1}{n}\sum_{i=1}^nd\left(\hat{y}_i,y_i\right)=\frac{1}{n}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2
+\end{equation}\]</span>
+However, in order to avoid overfitting situations for out-of-sample validity, what is actually sought is the <em>true prediction error</em>, i.e. the (mathematically) expected discrepancy between prediction function out-of-sample <span class="math inline">\(\hat{y}_0\)</span> and the corresponding out-of-sample realization <span class="math inline">\(y_0\)</span>, namely
+<span class="math display">\[\begin{equation}  
+\text{Err}=\mathbb{E}_{0}\left[d\left(\hat{Y}_0,Y_0\right)\right]
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\mathbb{E}_{0}\)</span> denotes the expectation at the <em>out-of-sample</em> distribution. This quantity needs to be estimated in some manner with the sample at hand, hence the real challenge in model selction is - the specification of an out-of-sample validity measure, called a model selection criterion - estimators for model selection criteria - performance measures to compare different model selection criteria</p>
+<p>In the following sections we present several methods for model selection and measures for out-of-sample validity.</p>
+<blockquote>
+<p>Exercice (optional):<br />
+- Consider the Malnutrition in Zambia dataset (without interections). As model fit assesment consider a) the residual variance and b) the R^2. Starting from the full model (without interactions), increase progressively model size by including polynomials (on the continuous variables) and observe the behavior of the model fit criteria (using e.g. a plot).  </p>
+</blockquote>
+<blockquote>
+Additional material:<br />
+Controlling for out-of-sample validity follows the lines of the scientific approach, in particular Occam’s razor problem-solving principle (<a href="https://en.wikipedia.org/wiki/Occam&#39;s_razor" class="uri">https://en.wikipedia.org/wiki/Occam's_razor</a>).<br />
+One can intuitively understand overfitting from the fact that information from all past experience can be divided into two groups: information that is relevant for the future <em>(“signal”)</em> and irrelevant information <em>(“noise”)</em>.<br />
+Everything else being equal, the more difficult a criterion is to predict (i.e., the higher its uncertainty), the more noise existing in past information needs to be ignored. The problem is to determine which part to ignore. See <a href="https://en.wikipedia.org/wiki/Overfitting" class="uri">https://en.wikipedia.org/wiki/Overfitting</a>.<br />
+
+</blockquote>
+</div>
+<div id="cross-validation" class="section level2">
+<h2><span class="header-section-number">2.2</span> Cross-Validation</h2>
+The challenge is now to find a suitable estimator for <span class="math inline">\(\text{Err}\)</span> with the help of the sample and the (assumed) model <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span>. A first guess is the apparent error
+<span class="math display">\[\begin{equation}  
+\text{err}= \frac{1}{n}\sum_{i=1}^nd\left(\hat{y}_i,y_i\right)
+\end{equation}\]</span>
+<p>Unfortunatelly err usually underestimates Err since <span class="math inline">\(\hat{y}_i\)</span> has been adjusted to fit the observed responses <span class="math inline">\(y_i\)</span> (<em>trainig set</em>).</p>
+Ideally, one should have an independent <em>validation set</em> (or <em>test set</em>) of say <span class="math inline">\(n^{\star}\)</span> additional observations <span class="math inline">\(y_{0i}, i=1,\ldots,n^{\star}\)</span>, so that one could estimate Err using
+<span class="math display">\[\begin{equation}  
+\widehat{\text{Err}}_{\text{val}}= \frac{1}{n^{\star}}\sum_{i=1}^{n^{\star}}d\left(\hat{y}_{0i},y_{0i}\right)
+\end{equation}\]</span>
+Cross-validation attempts to mimic <span class="math inline">\(\widehat{\text{Err}}_{\text{val}}\)</span> without the need for a validation set. Define <span class="math inline">\(\hat{y}_{(i)}\)</span> to be the predicted value compute on the reduced training set in which the <span class="math inline">\(i\)</span>th observation has been omitted. The the <em>leave one out</em> cross-validation estimate of prediction error is
+<span class="math display">\[\begin{equation}  
+\widehat{\text{Err}}_{\text{cv1}}= \frac{1}{n}\sum_{i=1}^{n}d\left(\hat{y}_{(i)},y_{i}\right)
+\end{equation}\]</span>
+<p>A more common practice is to leave out several observations at a time: the sample is randomly partitioned into <span class="math inline">\(J\)</span> groups of size about <span class="math inline">\(\lfloor n/J\rfloor=n_J\)</span> each, then for each <span class="math inline">\(j=1,\ldots,J\)</span> groups, the training set is the sample without the <span class="math inline">\(j\)</span>th group on which the prediction <span class="math inline">\(\hat{y}_{(j)}\)</span> is computed and then compared to the observations in the <span class="math inline">\(j\)</span>th group <span class="math inline">\(y_j\)</span> using the chosen discrepancy measure <span class="math inline">\(D\)</span>. A common choice is <span class="math inline">\(J=10\)</span> leading to the <em>ten-fold cross-validation</em> procedure. Reducing from <span class="math inline">\(n\)</span> to <span class="math inline">\(J\)</span> the number of training and validation sets reduces the necessary number of prediction rules constructions (estimation). The optimal value for <span class="math inline">\(J\)</span> is however not known.</p>
+<blockquote>
+<p>Exercise:<br />
+- Program k-fold Cross-Validation (with k=2) and do model selection in a specific simulation setting with an exhaustive search. Follow these steps:<br />
+(a) Generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span>. You can choose the location vector as you wish but set the scale matrix as the identity.<br />
+(b) Choose the generating vector <span class="math inline">\(\boldsymbol{\beta }= [3 \; 1.5 \; 0 \; 2 \; 0]\)</span> and retrieve the signal to noise ratio of this setting.<br />
+(c) Generate <span class="math inline">\(\hat{\mathbf{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal, <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span>. Suppose for simplicity that the errors are uncorrelated.<br />
+(d) Split the data randomly in two halves (k=2) and use the training set to determine <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Then, compute the squared loss function as prediction error measure for each possible model. Observe which model is the best model.<br />
+(e) Suppose now that we increase the size of <span class="math inline">\(\boldsymbol{\beta}\)</span> to 100 (i.e. <span class="math inline">\(p = 100\)</span> ). Calculate the number of possible models to evaluate together with an estimate of the time needed for an exhaustive search (<em>hint: use previous results</em>). Conclude on the feasibility of this task.</p>
+</blockquote>
+</div>
+<div id="covariance-penalties-criteria" class="section level2">
+<h2><span class="header-section-number">2.3</span> Covariance Penalties Criteria</h2>
+<div id="introduction-2" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Introduction</h3>
+Originally, the covariance penalty approach treats prediction error estimation in a regression framework, with the predictors <span class="math inline">\(\mathbf{X}\)</span> considered as fixed. Moreover, supposing for the moment that the discrepancy measure is the squared difference (or <span class="math inline">\(L_2\)</span> norm), the <em>true</em> prediction error (conditionnally on <span class="math inline">\(\mathbf{x}_i\)</span>) is defined as
+<span class="math display">\[\begin{equation}  
+\text{Err}_i=\mathbb{E}_{0}\left[\left(\hat{Y}_i-Y_0\right)^2\right]
+\end{equation}\]</span>
+<p>The overall prediction error is <span class="math inline">\(\text{Err}=1/n\sum_{i=1}^n\text{Err}_i\)</span>.</p>
+The question is how to estimate this quantity, given a sample and a data generating model? <span class="citation">(Efron <a href="#ref-efron2004estimation">2004</a>)</span> uses <span class="math inline">\(\mathbb{E}\left[\text{Err}_i\right]\)</span> (where <span class="math inline">\(\mathbb{E}\)</span> denotes the expectation at the <em>insample</em> distribution) and shows that
+<span class="math display">\[\begin{equation}  
+\mathbb{E}\left[\text{Err}_i\right]=
+\mathbb{E}\left[\text{err}_i\right]+2\text{cov}\left(\hat{Y}_i;Y_i\right)
+\end{equation}\]</span>
+with <span class="math inline">\(\mathbb{E}\left[\text{err}_i\right]= \left(\hat{y}_i-y_i\right)^2\)</span>, the apparent (or in-sample) error. This result says that, on average, the apparent error <span class="math inline">\(\text{err}_i\)</span> understimates the true prediction error <span class="math inline">\(\text{Err}_i\)</span> by the covariance penalty <span class="math inline">\(2\text{cov}\left(\hat{Y}_i;Y_i\right)\)</span>. This makes intuitive sense since <span class="math inline">\(\text{cov}\left(\hat{Y}_i;Y_i\right)\)</span> measures the amount by which <span class="math inline">\(y_i\)</span> influences its own prediction <span class="math inline">\(\hat{y}_i\)</span>. An natural estimator for the overall predition error is then given by
+<span class="math display">\[\begin{equation}  
+\widehat{\text{Err}}=
+\frac{1}{n}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2+\frac{2}{n}\sum_{i=1}^n\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)
+\end{equation}\]</span>
+<p>Depending on the assumed model, <span class="math inline">\(\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)\)</span> is obtained analytically up to a value of <span class="math inline">\(\boldsymbol{\theta}\)</span>, the model’s parameters, which is then replaced by <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span> (plug-in method), or by resampling methods such as the parametric bootstrap. For the later, considering the model <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span>, one uses the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Estimate <span class="math inline">\(\boldsymbol{\theta}\)</span> from <span class="math inline">\(F^{(n)}\)</span> to get <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>.<br />
+</li>
+<li>Set the seed<br />
+</li>
+<li>For <span class="math inline">\(j=1,\ldots,B\)</span>, do<br />
+</li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Simulate <span class="math inline">\(n\)</span> values <span class="math inline">\(y_i^{(j)}, i=1,\ldots,n\)</span> from <span class="math inline">\(F_{\hat{\boldsymbol{\theta}}}\)</span>,<br />
+</li>
+<li>Compute <span class="math inline">\(\hat{y}_i^{(j)}, i=1,\ldots,n\)</span>, possibly conditionally on the matrix of predictors <span class="math inline">\(\mathbf{X}\)</span><br />
+</li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li>Compute <span class="math inline">\(\forall i\)</span>
+<span class="math display">\[\begin{equation}  
+\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)=1/B\sum_{j=1}^B\left(\hat{y}_i^{(j)}-\hat{y}_i^{(j\cdot)}\right)\left(y_i^{(j)}-y_i^{(j\cdot)}\right)
+\end{equation}\]</span>
+with <span class="math inline">\(\hat{y}_i^{(j\cdot)}=1/n\sum_{j=1}^B\hat{y}_i^{(j)}\)</span> and <span class="math inline">\(y_i^{(j\cdot)}=1/n\sum_{j=1}^By_i^{(j)}\)</span></li>
+</ol>
+<blockquote>
+<p>Exercise (optional):<br />
+Consider the simulation setting of the exercise in the previous Section.<br />
+- Instead of splitting the sample in two halves, compute the covariance prenalized predition error, with covariance penalty estimated via simulations (using the proposed algorithm).<br />
+- Compare the analysis (decison) with the one obtained by means of cross-validation (in the previous exercise).</p>
+</blockquote>
+</div>
+<div id="mallows-c_p" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Mallows <span class="math inline">\(C_p\)</span></h3>
+Consider the linear regression model <span class="math inline">\(Y_i|\mathbf{x}_i \sim \mathcal{N}(\boldsymbol{\mu}\left(\mathbf{x}_i\right),\sigma^2), 0&lt;\sigma^2&lt;\infty\)</span>, with
+<span class="math display">\[\begin{equation}  
+\boldsymbol{\mu}\left(\mathbf{x}_i\right)=\mathbf{x}_i^T \boldsymbol{\beta}, 
+\end{equation}\]</span>
+where <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p\)</span> and <span class="math inline">\(\mathbf{x}_i^T\)</span> is the <em>i</em>th row of <span class="math inline">\(\mathbf{X}\)</span> (that includes a column of ones for the intercept). One notable result (see exercise below) that can be deduced from the covariance penalty formula, for the linear regression model using the least squares estimator (LSE) <span class="math inline">\(\hat{\beta}=\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\mathbf{X}^T\mathbf{y}\)</span>, <span class="math inline">\(\mathbf{y}=[y_1,\ldots,y_n]^T\)</span>, is Mallow’s <span class="math inline">\(C_p\)</span><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> <span class="citation">(Mallows <a href="#ref-Mall:73">1973</a>)</span>:
+<span class="math display">\[\begin{equation}  
+C_p=\frac{1}{n}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2+\frac{2}{n}p\sigma^2
+\end{equation}\]</span>
+<blockquote>
+<p>Exercise: derive Mallow’s <span class="math inline">\(C_p\)</span> from the general estimator <span class="math inline">\(\widehat{\text{Err}}\)</span>.</p>
+</blockquote>
+<blockquote>
+Exercise (optional):<br />
+Consider a Linear Mixed Model (LMM), for example the electrode resistance data, estimated using the generalized least squares (GLS) estimator.<br />
+- Derive and/or estimate <span class="math inline">\(\widehat{\text{Err}}\)</span>. Hint: write the model with a vector of stacked responses and, consequently, a non-diagonal residual error (co)variance.<br />
+
+</blockquote>
+</div>
+<div id="efrons-q-class" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> Efron’s q-class</h3>
+Covariance penalties can be applied to measures of prediction error other than squared error, like the Kullback - Leibler divergence. Then, to derive <span class="math inline">\(\widehat{\text{Err}}\)</span>, one needs a more general expression for <span class="math inline">\(\mathbb{E}\left[\text{Err}_i\right]\)</span>. <span class="citation">Efron (<a href="#ref-efron1986biased">1986</a>)</span> uses a function <span class="math inline">\(Q(\cdot,\cdot)\)</span> based on the <span class="math inline">\(q\)</span>-class error measure between two scalar functions <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>, given by
+<span class="math display">\[\begin{equation}  
+    Q(u,v) = q(v) + \dot{q}(v) (u - v) - q(u)
+\end{equation}\]</span>
+where <span class="math inline">\(\dot{q}(v)\)</span> is the derivative of <span class="math inline">\(q( \cdot )\)</span> evaluated at <span class="math inline">\(v\)</span>. For example <span class="math inline">\(q(v) = v(1-v)\)</span> gives the squared loss function <span class="math inline">\(Q(u,v) = (u - v)^2\)</span> and <span class="math inline">\(q(v)=\min\{v,(1-v)\}\)</span> leads to the missclassification loss <span class="math inline">\(Q(u,v)=I\{u\neq I(u&gt;1/2)\}\)</span>, where <span class="math inline">\(I(\cdot)\)</span> denotes the indicator function. Efron’s optimism Theorem <span class="citation">(Efron <a href="#ref-efron2004estimation">2004</a>)</span> demonstrates that
+<span class="math display">\[\begin{equation*} 
+    \text{Err}_i = \mathbb{E} \left[ \mathbb{E}_0 \left[ Q(Y^0_i,\hat{Y}_i) | \mathbf{y}\right] \right] =\mathbb{E} \left[ Q(Y_i,\hat{Y}_i) + \Omega_i \right] 
+    \label{eq:optimismTHM}
+\end{equation*}\]</span>
+with <span class="math inline">\(\Omega_i = \text{cov} \left( \dot{q}(\hat{Y}_i),Y_i \right)\)</span>. Hence, an estimator of <span class="math inline">\(\text{Err}\)</span> is obtained as
+<span class="math display">\[\begin{equation} 
+        \widehat{\text{Err}} = \frac{1}{n} \sum_{i = 1}^{n}\left( Q(y_i,\hat{y}_i) + \widehat{\text{cov}} \left( \dot{q}(\hat{Y}_i),Y_i \right)\right)
+\end{equation}\]</span>
+</div>
+</div>
+<div id="information-theory-and-bayesian-criteria" class="section level2">
+<h2><span class="header-section-number">2.4</span> Information Theory and Bayesian Criteria</h2>
+<div id="aic-akaike-information-criterion" class="section level3">
+<h3><span class="header-section-number">2.4.1</span> AIC: Akaike Information Criterion</h3>
+<p>The AIC is derived from <em>Information Theory</em> which concerns the quantification, storage, and communication of information (<span class="citation">Shannon (<a href="#ref-Shan:48a">1948</a><a href="#ref-Shan:48a">a</a>)</span>,<span class="citation">Shannon (<a href="#ref-Shan:48b">1948</a><a href="#ref-Shan:48b">b</a>)</span>). Associated measures are applied to distributions of random variables and include the <em>entropy</em> measure for a single random variable. A derived measure for two random variables is the <em>Kullback-Leibler divergence</em> (or information divergence, information gain, or relative entropy).</p>
+Consider two densities <span class="math inline">\(f_0\)</span> and <span class="math inline">\(f_1\)</span>, the Kullback–Leibler divergence is
+<span class="math display">\[\begin{equation}  
+D\left(f_0,f_1\right)=2\int f_0(y) \log\left(\frac{f_0(y)}{f_1(y)}\right)dy =
+2\mathbb{E}_0\left[\log\left(\frac{f_0(y)}{f_1(y)}\right)\right]
+\end{equation}\]</span>
+The Kullback-Leibler divergence can be used to evaluate the adequacy of a model, by considering e.g. <span class="math inline">\(f_1:=f(y;\hat{\boldsymbol{\theta}})\)</span>, the fitted density corresponding to model <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span>. In that case, the <em>true</em> prediction error becomes a <em>deviance</em> given by
+<span class="math display">\[\begin{equation}  
+\text{Err}_i=2\mathbb{E}_0\left[\log\left(\frac{f_0(y)}{f(y_i;\hat{\boldsymbol{\theta}})}\right)\right]
+\end{equation}\]</span>
+with total deviance <span class="math inline">\(1/n\sum_{i=1}^n \text{Err}_i\)</span>. Akaike <span class="citation">(Akaike <a href="#ref-Akai:74">1974</a>)</span> proposed to consider, as a model adequacy measure, an estimator of
+<span class="math display">\[\begin{equation}  
+2\mathbb{E}_0\left[\mathbb{E}\left[\log\left(f_0(y)\right)-\log\left(f(y;\hat{\boldsymbol{\theta}})\right)\right]\right]
+\end{equation}\]</span>
+where <span class="math inline">\(\mathbb{E}\)</span> denotes the expectation at the <em>insample</em> distribution. Akaike derived the estimator
+<span class="math display">\[\begin{equation} 
+
+-2\sum_{i=1}^n \log f(\hat{y}_i;\hat{\boldsymbol{\theta}})+2p + \text{const.}
+\end{equation}\]</span>
+where <span class="math inline">\(\text{const.}\)</span> does not depend on the model and hence can be ommitted when comparing models. For the linear regression model with <span class="math inline">\(\hat{\boldsymbol{\mu}}=\mathbf{x}^T \hat{\boldsymbol{\beta}}\)</span>, supposing <span class="math inline">\(\sigma^2\)</span> known (and ommitting the constant term), we have
+<span class="math display">\[\begin{equation} 
+
+\frac{1}{\sigma^2}\sum_{i=1}^n \left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\right)^2+2p 
+\end{equation}\]</span>
+There exist several expressions for the AIC for the linear regression model, one of them being
+<span class="math display">\[\begin{equation} 
+
+\text{AIC}=  \frac{1}{n\sigma^2} \text{RSS}+\frac{2}{n}p 
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\right)^2\)</span> is the residual sum-of-squares. We can see that <span class="math inline">\(C_p=\sigma^2\text{AIC}\)</span></p>
+<blockquote>
+Exercise: - Derive the AIC for the regression model from its more general definition.<br />
+- Program AIC and do model selection in a specific simulation setting with an exhaustive search (follow the passages listed in the CV exercise section).<br />
+- Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (<em>Exact</em>), the proportion of times the selected model contains the correct one (<em>Correct</em>) and the average number of selected regressors (<em>Average <span class="math inline">\(\sharp\)</span></em>)<br />
+- Load the <a href="https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data">wine dataset</a> from the UCI repository and perform an exhaustive search based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: <em>leaps</em>, <em>glmulti</em>, <em>MuMIn</em> and <em>caret</em>.<br />
+
+</blockquote>
+<blockquote>
+<p>Exercise (optional):<br />
+Using the general result on covariance penalty measures based on Efron’s <span class="math inline">\(q\)</span>-class, show that the AIC is a suitable estimator of the prediction error.</p>
+</blockquote>
+</div>
+<div id="bic-bayesian-information-criterion" class="section level3">
+<h3><span class="header-section-number">2.4.2</span> BIC: Bayesian Information Criterion</h3>
+<span class="citation">(Schwarz <a href="#ref-Schw:78">1978</a>)</span> derived the Bayesian information criterion as
+<span class="math display">\[\begin{equation} 
+\text{BIC} = -\sum_{i=1}^n \log f(\hat{y}_i;\hat{\boldsymbol{\mu}},\hat{\sigma}^2)+p\log(n) + \text{const.}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\text{const.}\)</span> does not depend on the model and hence can be ommitted when comparing models. The BIC is derived from Bayesian inference arguments, but is not related to information theory. Compared to the AIC (or indeed the <span class="math inline">\(C_p\)</span>), the BIC uses <span class="math inline">\(p\log(n)\)</span> istead of <span class="math inline">\(2p\)</span> as an estimated penalty and since <span class="math inline">\(\log(n)&gt; 2\)</span> for any <span class="math inline">\(n &gt; 7\)</span>, the BIC statistic generally places a heavier penalty on models with many variables, and hence results in the selection of smaller models than AIC.</p>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-efron2004estimation">
+<p>Efron, B. 2004. “The Estimation of Prediction Error.” <em>Journal of the American Statistical Association</em> 99 (467). Taylor &amp; Francis: 619–32.</p>
+</div>
+<div id="ref-Mall:73">
+<p>Mallows, C. L. 1973. “Some Comments on <span class="math inline">\(C_p\)</span>.” <em>Technometrics</em> 15: 661–75.</p>
+</div>
+<div id="ref-efron1986biased">
+<p>Efron, B. 1986. “How Biased is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394). Taylor &amp; Francis: 461–70.</p>
+</div>
+<div id="ref-Shan:48a">
+<p>Shannon, C. E. 1948a. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 379–423.</p>
+</div>
+<div id="ref-Shan:48b">
+<p>Shannon, C. 1948b. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 623–66.</p>
+</div>
+<div id="ref-Akai:74">
+<p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
+</div>
+<div id="ref-Schw:78">
+<p>Schwarz, G. 1978. “Estimating the Dimension of a Model.” <em>Annst</em> 6: 461–64.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>Mallows <span class="math inline">\(C_p\)</span> is originally defined as <span class="math inline">\(C_p=\frac{1}{n}\sum_{i=1}^n\frac{\left(\hat{y}_i-y_i\right)^2}{\sigma^2}+\frac{2}{n}p\)</span>, which provides the same information when comparing models.<a href="assessing-the-validity-of-a-model.html#fnref3">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
