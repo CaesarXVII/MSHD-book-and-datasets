@@ -99,7 +99,7 @@ The R packages that will be used throughout this class are the following (to be 
 - rmarkdown
 - quantmod
 - plotly
-- tydir
+- tidyr
 - dplyr
 - RODBC
 - pool
@@ -113,14 +113,24 @@ The R packages that will be used throughout this class are the following (to be 
 
 To install a package, use the R command `install.packages("chosen.package.name")` (see also <https://cran.r-project.org/web/packages/>). Visit the CRAN R project (<https://cran.r-project.org/>) to get useful information about all the available R packages (<https://cran.r-project.org/web/packages/available_packages_by_name.html>)
 
+To install all packages at once, run the following code with administrator rights.
+```{r echo=T}
+packages.required <- c("rmarkdown", "quantmod", "plotly", "tidyr", "dplyr", "RODBC", "pool", "RMySQL", 
+                       "foreign", "leaps", "glmulti", "MuMIn", "caret", "glmnet")
+packages.missing  <- packages.required[!(packages.required %in% rownames(installed.packages()))]
+if(length(packages.missing)!=0) install.packages(packages.missing)
+```
+
 ### Managing Data  
 (by G. Blanc)
 
 Data are nowadays continuously produced and readily available from internet platforms. This has become necessary since very often personal computer memory is not sufficient to store (high dimensional) data locally. It is therefore important to be able to import data into R for data analysis in an (almost) automatic fashion. 
 
-Colloquially, `loading' a dataset means storing it into your computer's Random-Access-Memory (RAM), which allows for a fast access of the CPU to the data. The RAM is extremely fast[^1], but is typically of limited amount compared to what can be stored in a hard-drive or a SSD (usually 4 to 16 Gbs in a typical consumer-grade computer). The data stored in your computer's RAM is called \textit{volatile}: the information it contains will disappear once the computer is shut down. This is the reason why the datasets must be loaded into R at the beginning of each session. 
+Colloquially, `loading' a dataset means storing it into your computer's Random-Access-Memory (RAM), which allows for a fast access of the CPU to the data. The RAM is extremely fast[^1], but is typically of limited amount compared to what can be stored in a hard-drive or a SSD (usually 4 to 16 Gbs in a typical consumer-grade computer). The data stored in your computer's RAM is called *volatile*: the information it contains will disappear once the computer is shut down. This is the reason why the datasets must be loaded into R at the beginning of each session. 
 
-In this section, you will learn different ways to load the data that you may encounter in the future, depending on the context and the size of the databases: from an R package, from a local data file, from an online data file, and from an online database. In this latter case, datasets are obtained by way of SQL queries via a remote connection. Follow along and load all the datasets as in the text: they will be used for the following exercises.
+In this section, you will learn different ways to load the data that you may encounter in the future, depending on the context and the size of the databases: from an R package, from a local data file, from an online data file, and from an online database. In this latter case, datasets are obtained by way of SQL queries via a remote connection. 
+
+Follow along and load all the datasets as in the text: they will be used for the following exercises.
 
 [^1]: The amount of RAM in your computer does not determine the speed of computation: it merely sets an upper limit of storage available for these computations.
 
@@ -142,14 +152,14 @@ and display its structure with:
 str(iris)
 ```
 
+The dataset *iris* is now ready for analysis.
 
 ### Loading data from a local file
 (by G. Blanc)
 
 Typical file formats include *.txt* and *.csv*, or *.data*. Download the file *wine.data* from <http://archive.ics.uci.edu/ml/machine-learning-databases/wine/> to a folder on your computer, say in *./datasets/*.
-Every line of the file becomes a row in the dataset.
 
-You can load the data using the `read.table` function, which takes as further input `sep = ","` to indicate that the variables in each line are separated by a comma. These variables will be organized as columns in the dataset.
+You can load the data using the `read.table` function, which takes as further input `sep = ","` to indicate that the variables in each line are separated by a comma. These variables will be organized as columns in the dataset.Every line of the file becomes a row in the dataset.
 
 ```{r}
 wine <- read.table("./datasets/wine.data", sep = ",")
@@ -158,10 +168,15 @@ wine <- read.table("./datasets/wine.data", sep = ",")
 ### Loading data from an online file
 (by G. Blanc)
 
-The end result will be the same as above, but is less tedious, provided you have an internet connection. Simply load the data using the complete url as an input for `read.table`:
+The end result will be the same as above, but the process is less tedious, provided you have an internet connection. Simply load the data using the complete url as an input for `read.table`:
 
 ```{r}
 wine <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data", sep = ",")
+```
+
+A quick look at the structure of the dataset shows that the columns do not have names that describe their content. Let's change that:
+
+```{r}
 
 # format the data.frame:
 
@@ -171,6 +186,8 @@ colnames(wine) <- c("Class", "Alcohol", "Malic_acid", "Ash",
                     "Color_intensity", "Hue", "OD280vsOD315", "Proline")
 wine$Class <- as.factor(wine$Class)
 ```
+
+The dataset *wine* is now ready for analysis.
 
 ### Loading data from an online database using a mySQL query (Optional)
 (by G. Blanc)
@@ -185,7 +202,7 @@ The databases can be stored
 - offline, on a non-volatile memory (for instance your hard drive or SSD drive), or
 - online, which require an internet connection to access.
 
-You will usually need credentials (a username and a) to access either databases.
+You will usually need credentials (a username and a password) to access either databases.
 
 <!-- #### Why relational databases instead of a "flat file"? -->
 As we will see, there are many advantages of relational databases which explain their almost universal use when it comes to storing massive amount of data online. The main advantages are that they:
@@ -310,7 +327,7 @@ boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentr
 </div>
 
 
-> 3. Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels): above or below 5.0. (optional). Compute the corresponding means using dplyr.
+> 3. Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.
 
 ```{r results="asis", echo=F}
 cat(solution_header)
@@ -326,7 +343,7 @@ wine %>% group_by(Class, Color_intensity_factor) %>% summarise_at("Alcohol", mea
 ```
 </div>
 
-> 4. Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational databases, to that of the unique database. What do you notice? [Hint: notice that "country" is the common relation among the three datasets]
+> 4. Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that "country" is the common relation among the three datasets]
 
 ```{r results="asis", echo=F}
 cat(solution_header)

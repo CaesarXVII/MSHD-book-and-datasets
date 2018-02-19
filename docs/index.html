@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Model Selection in High Dimensions</title>
   <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.6 and GitBook 2.6.7">
 
   <meta property="og:title" content="Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -242,7 +242,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>rmarkdown</li>
 <li>quantmod</li>
 <li>plotly</li>
-<li>tydir</li>
+<li>tidyr</li>
 <li>dplyr</li>
 <li>RODBC</li>
 <li>pool</li>
@@ -255,13 +255,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>glmnet</li>
 </ul>
 <p>To install a package, use the R command <code>install.packages(&quot;chosen.package.name&quot;)</code> (see also <a href="https://cran.r-project.org/web/packages/" class="uri">https://cran.r-project.org/web/packages/</a>). Visit the CRAN R project (<a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a>) to get useful information about all the available R packages (<a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="uri">https://cran.r-project.org/web/packages/available_packages_by_name.html</a>)</p>
+<p>To install all packages at once, run the following code with administrator rights.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">packages.required &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;quantmod&quot;</span>, <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;tidyr&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;RODBC&quot;</span>, <span class="st">&quot;pool&quot;</span>, <span class="st">&quot;RMySQL&quot;</span>, 
+                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>, <span class="st">&quot;glmnet&quot;</span>)
+packages.missing  &lt;-<span class="st"> </span>packages.required[!(packages.required %in%<span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))]
+if(<span class="kw">length</span>(packages.missing)!=<span class="dv">0</span>) <span class="kw">install.packages</span>(packages.missing)</code></pre></div>
 </div>
 <div id="managing-data" class="section level3">
 <h3><span class="header-section-number">1.3.2</span> Managing Data</h3>
 <p>(by G. Blanc)</p>
 <p>Data are nowadays continuously produced and readily available from internet platforms. This has become necessary since very often personal computer memory is not sufficient to store (high dimensional) data locally. It is therefore important to be able to import data into R for data analysis in an (almost) automatic fashion.</p>
-<p>Colloquially, `loading’ a dataset means storing it into your computer’s Random-Access-Memory (RAM), which allows for a fast access of the CPU to the data. The RAM is extremely fast<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but is typically of limited amount compared to what can be stored in a hard-drive or a SSD (usually 4 to 16 Gbs in a typical consumer-grade computer). The data stored in your computer’s RAM is called : the information it contains will disappear once the computer is shut down. This is the reason why the datasets must be loaded into R at the beginning of each session.</p>
-<p>In this section, you will learn different ways to load the data that you may encounter in the future, depending on the context and the size of the databases: from an R package, from a local data file, from an online data file, and from an online database. In this latter case, datasets are obtained by way of SQL queries via a remote connection. Follow along and load all the datasets as in the text: they will be used for the following exercises.</p>
+<p>Colloquially, `loading’ a dataset means storing it into your computer’s Random-Access-Memory (RAM), which allows for a fast access of the CPU to the data. The RAM is extremely fast<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but is typically of limited amount compared to what can be stored in a hard-drive or a SSD (usually 4 to 16 Gbs in a typical consumer-grade computer). The data stored in your computer’s RAM is called <em>volatile</em>: the information it contains will disappear once the computer is shut down. This is the reason why the datasets must be loaded into R at the beginning of each session.</p>
+<p>In this section, you will learn different ways to load the data that you may encounter in the future, depending on the context and the size of the databases: from an R package, from a local data file, from an online data file, and from an online database. In this latter case, datasets are obtained by way of SQL queries via a remote connection.</p>
+<p>Follow along and load all the datasets as in the text: they will be used for the following exercises.</p>
 </div>
 <div id="loading-data-from-an-r-package" class="section level3">
 <h3><span class="header-section-number">1.3.3</span> Loading data from an R package</h3>
@@ -278,27 +284,29 @@ iris &lt;-<span class="st"> </span>iris</code></pre></div>
 ##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
 ##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
 ##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>The dataset <em>iris</em> is now ready for analysis.</p>
 </div>
 <div id="loading-data-from-a-local-file" class="section level3">
 <h3><span class="header-section-number">1.3.4</span> Loading data from a local file</h3>
 <p>(by G. Blanc)</p>
-<p>Typical file formats include <em>.txt</em> and <em>.csv</em>, or <em>.data</em>. Download the file <em>wine.data</em> from <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/wine/" class="uri">http://archive.ics.uci.edu/ml/machine-learning-databases/wine/</a> to a folder on your computer, say in <em>./datasets/</em>. Every line of the file becomes a row in the dataset.</p>
-<p>You can load the data using the <code>read.table</code> function, which takes as further input <code>sep = &quot;,&quot;</code> to indicate that the variables in each line are separated by a comma. These variables will be organized as columns in the dataset.</p>
+<p>Typical file formats include <em>.txt</em> and <em>.csv</em>, or <em>.data</em>. Download the file <em>wine.data</em> from <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/wine/" class="uri">http://archive.ics.uci.edu/ml/machine-learning-databases/wine/</a> to a folder on your computer, say in <em>./datasets/</em>.</p>
+<p>You can load the data using the <code>read.table</code> function, which takes as further input <code>sep = &quot;,&quot;</code> to indicate that the variables in each line are separated by a comma. These variables will be organized as columns in the dataset.Every line of the file becomes a row in the dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wine &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;./datasets/wine.data&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
 </div>
 <div id="loading-data-from-an-online-file" class="section level3">
 <h3><span class="header-section-number">1.3.5</span> Loading data from an online file</h3>
 <p>(by G. Blanc)</p>
-<p>The end result will be the same as above, but is less tedious, provided you have an internet connection. Simply load the data using the complete url as an input for <code>read.table</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wine &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)
-
-<span class="co"># format the data.frame:</span>
+<p>The end result will be the same as above, but the process is less tedious, provided you have an internet connection. Simply load the data using the complete url as an input for <code>read.table</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wine &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
+<p>A quick look at the structure of the dataset shows that the columns do not have names that describe their content. Let’s change that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># format the data.frame:</span>
 
 <span class="kw">colnames</span>(wine) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Alcohol&quot;</span>, <span class="st">&quot;Malic_acid&quot;</span>, <span class="st">&quot;Ash&quot;</span>, 
                     <span class="st">&quot;Alcalinity_of_ash&quot;</span>, <span class="st">&quot;Magnesium&quot;</span>, <span class="st">&quot;Total_phenols&quot;</span>, 
                     <span class="st">&quot;Flavanoids&quot;</span>, <span class="st">&quot;Nonflavanoid_phenols&quot;</span>, <span class="st">&quot;Proanthocynins&quot;</span>,
                     <span class="st">&quot;Color_intensity&quot;</span>, <span class="st">&quot;Hue&quot;</span>, <span class="st">&quot;OD280vsOD315&quot;</span>, <span class="st">&quot;Proline&quot;</span>)
-wine<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw">as.factor</span>(wine<span class="op">$</span>Class)</code></pre></div>
+wine$Class &lt;-<span class="st"> </span><span class="kw">as.factor</span>(wine$Class)</code></pre></div>
+<p>The dataset <em>wine</em> is now ready for analysis.</p>
 </div>
 <div id="loading-data-from-an-online-database-using-a-mysql-query-optional" class="section level3">
 <h3><span class="header-section-number">1.3.6</span> Loading data from an online database using a mySQL query (Optional)</h3>
@@ -307,7 +315,7 @@ wine<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw
 <p>A <em>database</em> is an organized collection of data. A <em>relational database</em> (see also <a href="https://en.wikipedia.org/wiki/Database" class="uri">https://en.wikipedia.org/wiki/Database</a>), more restrictively, is a collection of schema, tables, queries, reports, views, and other elements. A <em>database-management system</em> (<em>DBMS</em>) is a computer-software application that interacts with end-users (you), other applications that you may develop (e.g., an <em>Rmarkdown</em> document), and the database itself to capture and analyze data.</p>
 <p>Relational databases organize data into one or more <em>tables</em> of columns and rows, with a <em>unique key</em> identifying each row. Generally, each table/relation represents one “entity type” (such as customer or product). The rows represent instances of that type of entity (such as “Lee” or “chair”) and the columns represent values attributed to that instance (such as “address” or “price”).</p>
 <p>The databases can be stored - offline, on a non-volatile memory (for instance your hard drive or SSD drive), or - online, which require an internet connection to access.</p>
-<p>You will usually need credentials (a username and a) to access either databases.</p>
+<p>You will usually need credentials (a username and a password) to access either databases.</p>
 <!-- #### Why relational databases instead of a "flat file"? -->
 <p>As we will see, there are many advantages of relational databases which explain their almost universal use when it comes to storing massive amount of data online. The main advantages are that they:</p>
 <ul>
@@ -324,9 +332,9 @@ wine<span class="op">$</span>Class &lt;-<span class="st"> </span><span class="kw
 <pre><code>## [1] &quot;City&quot;            &quot;Country&quot;         &quot;CountryLanguage&quot;</code></pre>
 <p>Remember that each table is a different dataset. Some databases are very big, in the <em>BigData</em> sense: think millions, even billions of entries. SQL queries allow to cherry pick the data we need, without having to download the whole dataset (which would be in some cases unfeasible). In a typical use, we would then query the data that we need, and no more. Since this is not a <code>mySQL</code> course and our datasets are of reasonable size, we will simply download the three datasets entirely using the <code>SQL</code>query <code>SELECT * FROM (Table)</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Download the three datasets</span>
-City &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from City&quot;</span>)
-Country &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from Country&quot;</span>)
-CountryLanguage &lt;-<span class="st"> </span>DBI<span class="op">::</span><span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from CountryLanguage&quot;</span>)
+City &lt;-<span class="st"> </span>DBI::<span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from City&quot;</span>)
+Country &lt;-<span class="st"> </span>DBI::<span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from Country&quot;</span>)
+CountryLanguage &lt;-<span class="st"> </span>DBI::<span class="kw">dbGetQuery</span>(con, <span class="st">&quot;select * from CountryLanguage&quot;</span>)
 <span class="kw">poolClose</span>(con)</code></pre></div>
 <blockquote>
 Exercise:<br />
@@ -370,27 +378,27 @@ species.types &lt;-<span class="st"> </span><span class="kw">c</span>(<span clas
 <span class="co">#</span>
 <span class="co"># Method 1A: without dplyr using a for loop; outputs a matrix </span>
 species.means1 &lt;-<span class="st"> </span><span class="ot">NULL</span>
-<span class="cf">for</span>(type <span class="cf">in</span> species.types){
-  is.species &lt;-<span class="st"> </span>iris<span class="op">$</span>Species<span class="op">==</span>type
+for(type in species.types){
+  is.species &lt;-<span class="st"> </span>iris$Species==type
   species.subset &lt;-<span class="st"> </span>iris[is.species, variables.to.average]
   species.means1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(species.means1, <span class="kw">colMeans</span>(species.subset))
 }
 <span class="kw">rownames</span>(species.means1) &lt;-<span class="st"> </span>species.types
 <span class="co">#</span>
 <span class="co"># Method 1B: more compact and efficient; outputs a matrix</span>
-species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(species.types, <span class="cf">function</span>(species){
-  <span class="kw">colMeans</span>(iris[iris<span class="op">$</span>Species<span class="op">==</span>species, variables.to.average])
+species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(species.types, function(species){
+  <span class="kw">colMeans</span>(iris[iris$Species==species, variables.to.average])
 }))
 <span class="co">#</span>
 <span class="co"># Method 2: using dplyr; outputs a dataframe</span>
- species.means3 &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
+ species.means3 &lt;-<span class="st"> </span>iris %&gt;%<span class="st"> </span><span class="kw">group_by</span>(Species) %&gt;%<span class="st"> </span><span class="kw">summarise_all</span>(mean)
  species.means3</code></pre></div>
 <pre><code>## # A tibble: 3 x 5
-##   Species    Sepal.Length Sepal.Width Petal.Length Petal.Width
-##   &lt;fct&gt;             &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
-## 1 setosa             5.01        3.43         1.46       0.246
-## 2 versicolor         5.94        2.77         4.26       1.33 
-## 3 virginica          6.59        2.97         5.55       2.03</code></pre>
+##      Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+##       &lt;fctr&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+## 1     setosa        5.006       3.428        1.462       0.246
+## 2 versicolor        5.936       2.770        4.260       1.326
+## 3  virginica        6.588       2.974        5.552       2.026</code></pre>
 </div>
 <blockquote>
 <ol start="2" style="list-style-type: decimal">
@@ -398,37 +406,37 @@ species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span cla
 </ol>
 </blockquote>
 <div style="display:none">
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(Alcohol ~<span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 </div>
 <blockquote>
 <ol start="3" style="list-style-type: decimal">
-<li>Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels): above or below 5.0. (optional). Compute the corresponding means using dplyr.</li>
+<li>Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.</li>
 </ol>
 </blockquote>
 <div style="display:none">
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.</span>
-wine<span class="op">$</span>Color_intensity_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(wine<span class="op">$</span>Color_intensity<span class="op">&gt;</span><span class="dv">5</span>, <span class="dt">levels=</span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;mild&quot;</span>, <span class="st">&quot;intense&quot;</span>))
+wine$Color_intensity_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(wine$Color_intensity&gt;<span class="dv">5</span>, <span class="dt">levels=</span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;mild&quot;</span>, <span class="st">&quot;intense&quot;</span>))
 <span class="co"># Create the boxplots using the standard formulae</span>
-<span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Color_intensity_factor <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<span class="kw">boxplot</span>(Alcohol ~<span class="st"> </span>Color_intensity_factor +<span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#</span>
 <span class="co"># Compute the alcohol means of each subgroup using dplyr</span>
-wine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Class, Color_intensity_factor) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="st">&quot;Alcohol&quot;</span>, mean)</code></pre></div>
+wine %&gt;%<span class="st"> </span><span class="kw">group_by</span>(Class, Color_intensity_factor) %&gt;%<span class="st"> </span><span class="kw">summarise_at</span>(<span class="st">&quot;Alcohol&quot;</span>, mean)</code></pre></div>
 <pre><code>## # A tibble: 6 x 3
 ## # Groups:   Class [?]
-##   Class Color_intensity_factor Alcohol
-##   &lt;fct&gt; &lt;fct&gt;                    &lt;dbl&gt;
-## 1 1     mild                      13.4
-## 2 1     intense                   13.9
-## 3 2     mild                      12.3
-## 4 2     intense                   12.4
-## 5 3     mild                      13.0
-## 6 3     intense                   13.2</code></pre>
+##    Class Color_intensity_factor  Alcohol
+##   &lt;fctr&gt;                 &lt;fctr&gt;    &lt;dbl&gt;
+## 1      1                   mild 13.44000
+## 2      1                intense 13.90103
+## 3      2                   mild 12.27176
+## 4      2                intense 12.43667
+## 5      3                   mild 13.02900
+## 6      3                intense 13.18658</code></pre>
 </div>
 <blockquote>
 <ol start="4" style="list-style-type: decimal">
-<li>Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational databases, to that of the unique database. What do you notice? [Hint: notice that “country” is the common relation among the three datasets]</li>
+<li>Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that “country” is the common relation among the three datasets]</li>
 </ol>
 </blockquote>
 <div style="display:none">
@@ -436,7 +444,7 @@ wine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gro
 <span class="co"># Let&#39;s try to merge all datasets into a single one using this key</span>
 <span class="co">#</span>
 <span class="co"># Merge all cities with country attributes</span>
-data.merged &lt;-<span class="st"> </span><span class="kw">left_join</span>(City, Country, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;CountryCode&quot;</span> =<span class="st"> &quot;Code&quot;</span>)) <span class="op">%&gt;%</span><span class="st">   </span><span class="kw">left_join</span>(CountryLanguage, <span class="dt">by=</span><span class="st">&quot;CountryCode&quot;</span>)
+data.merged &lt;-<span class="st"> </span><span class="kw">left_join</span>(City, Country, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;CountryCode&quot;</span> =<span class="st"> &quot;Code&quot;</span>)) %&gt;%<span class="st">   </span><span class="kw">left_join</span>(CountryLanguage, <span class="dt">by=</span><span class="st">&quot;CountryCode&quot;</span>)
 <span class="co"># we observe that all the data pertaining to the countries appear multiple times. #The total number of data &quot;cells&quot; of the merged data set is 27031*22 = 594682, as compared to the original 24656 data &quot;cells&quot;, that is about 24 times bigger to store the same information.</span></code></pre></div>
 </div>
 </div>
@@ -464,7 +472,7 @@ data.merged &lt;-<span class="st"> </span><span class="kw">left_join</span>(City
 
 </div>
 <div style="display:none">
-<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="480" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="480" /></p>
 </div>
 <blockquote>
 <ul>
@@ -478,11 +486,11 @@ data.merged &lt;-<span class="st"> </span><span class="kw">left_join</span>(City
 \end{equation*}
  -->
 <div style="display:none">
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sub_joint =<span class="st"> </span><span class="kw">subset</span>(iris,iris<span class="op">$</span>Species <span class="op">==</span><span class="st"> &quot;virginica&quot;</span> <span class="op">&amp;</span><span class="st"> </span>iris<span class="op">$</span>Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sub_joint =<span class="st"> </span><span class="kw">subset</span>(iris,iris$Species ==<span class="st"> &quot;virginica&quot;</span> &amp;<span class="st"> </span>iris$Sepal.Width &gt;<span class="st"> </span><span class="dv">3</span>)
 
-sub_marg =<span class="st"> </span>iris<span class="op">$</span>Sepal.Width[iris<span class="op">$</span>Sepal.Width <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span>]
+sub_marg =<span class="st"> </span>iris$Sepal.Width[iris$Sepal.Width &gt;<span class="st"> </span><span class="dv">3</span>]
 
-result =<span class="st"> </span><span class="kw">dim</span>(sub_joint)[<span class="dv">1</span>]<span class="op">/</span><span class="kw">length</span>(sub_marg)
+result =<span class="st"> </span><span class="kw">dim</span>(sub_joint)[<span class="dv">1</span>]/<span class="kw">length</span>(sub_marg)
 
 result</code></pre></div>
 <pre><code>## [1] 0.2537313</code></pre>
@@ -527,7 +535,7 @@ result</code></pre></div>
 </blockquote>
 <blockquote>
 <ul>
-<li>In order to properly execute your <em>commits</em>, you need to be added as a collaborator of the project. It is sufficient to send an email to <em><a href="mailto:cesare.miglioli@etu.unige.ch">cesare.miglioli@etu.unige.ch</a></em> with your GitHub name in it from your unige mail account and you will be set as a collaborator.</li>
+<li>In order to properly execute your <em>commits</em>, you need to be added as a collaborator of the project. It is sufficient to send an email to <a href="mailto:*cesare.miglioli@etu.unige.ch">*cesare.miglioli@etu.unige.ch</a>* with your GitHub name in it from your unige mail account and you will be set as a collaborator.</li>
 </ul>
 </blockquote>
 </div>
@@ -8048,9 +8056,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
