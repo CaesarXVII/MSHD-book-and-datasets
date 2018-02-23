@@ -458,7 +458,7 @@ Under nutrition is generally assessed by comparing anthropometric indicators suc
 where $H_{i,j}$, $\mu_j$ and $\sigma_j$ denote, respectively, the height of the $i^{\text{th}}$ child at age $j$, the median height of a child of the same age in the reference population and the associated standard deviation. Several factors are assumed to have a determinant influence on under nutrition. 
 
 
-Consider the dataset *Zambia.SAV* available at [Course Datasets](https://github.com/CaesarXVII/Book-and-Datasets-of-Model-Selection-in-High-Dimensions/blob/master/Datasets/Zambia.SAV) containing variables assumed to be potential causes for childhood malnutrition, i.e.
+Consider the dataset *Zambia.SAV* available at [Course Datasets - Malnutrition in Zambia](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/Zambia.SAV) containing variables assumed to be potential causes for childhood malnutrition, i.e.
 
 * breastfeeding duration (month);
 * age of the child (month);
