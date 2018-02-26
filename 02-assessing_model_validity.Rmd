@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Assessing the validity of a model
 
 ## Introduction
@@ -100,7 +105,7 @@ The question is how to estimate this quantity, given a sample and a data generat
 \end{equation}
 with $\text{err}_i= (Y_i-\hat{Y}_i)^2$, the apparent (or in-sample) error and  $\text{cov}\left(\hat{Y}_i;Y_i\right)=\mathbb{E}\left[(Y_i-\mathbb{E}[Y_i])(\hat{Y}_i-\mathbb{E}[Y_i])\right]$.
 
-<!--
+
 > Proof (see @EfHa:16, p. 220):\ 
 
 > Let $\delta_{1i}=Y_i-\mathbb{E}[Y_i]$ and $\delta_{2i}=\hat{Y}_i-\mathbb{E}[Y_i]$, we can write \
@@ -108,16 +113,16 @@ with $\text{err}_i= (Y_i-\hat{Y}_i)^2$, the apparent (or in-sample) error and  $
 (Y_i-\hat{Y}_i)^2&=&(\delta_{1i}-\delta_{2i})^2=\delta^2_{1i}-2\delta_{1i}\delta_{2i}+\delta_{2i}^2 \\
 &=&(Y_i-\mathbb{E}[Y_i])^2-2(Y_i-\mathbb{E}[Y_i])(\hat{Y}_i-\mathbb{E}[Y_i])+(\hat{Y}_i-\mathbb{E}[Y_i])^2
 \end{eqnarray}
-We then have
+> We then have
 \begin{eqnarray}
 \mathbb{E}\left[(Y_i-\hat{Y}_i)^2\right]&=&\mathbb{E}\left[(Y_i-\mathbb{E}[Y_i])^2\right]-2\mathbb{E}\left[(Y_i-\mathbb{E}[Y_i])(\hat{Y}_i-\mathbb{E}[Y_i])\right]+\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right] \\
 &=& \sigma^2 -2\mbox{cov}\left(Y_i,\hat{Y}_i\right)+\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right]
 \end{eqnarray}
-from which we deduce that $\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right]=\mathbb{E}[\text{err}_i]+2\mbox{cov}\left(Y_i,\hat{Y}_i\right)-\sigma^2$. Likewise
+> from which we deduce that $\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right]=\mathbb{E}[\text{err}_i]+2\mbox{cov}\left(Y_i,\hat{Y}_i\right)-\sigma^2$. Likewise
 \begin{eqnarray}
 \mathbb{E}\left[(Y_{0i}-\hat{Y}_i)^2\right]&=&\mathbb{E}\left[(Y_{0i}-\mathbb{E}[Y_i])^2\right]-2\mathbb{E}\left[(Y_{0i}-\mathbb{E}[Y_i])(\hat{Y}_i-\mathbb{E}[Y_i])\right]+\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right] \\
 \end{eqnarray}
-and because $\hat{Y}_i$ and $Y_{0i}$ are independent, we get
+> and because $\hat{Y}_i$ and $Y_{0i}$ are independent, we get
 \begin{eqnarray}
 \mathbb{E}\left[(Y_{0i}-\hat{Y}_i)^2\right]&=& \sigma^2 +\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right]
 \end{eqnarray}
@@ -126,7 +131,7 @@ Note that $\mathbb{E}\left[\mathbb{E}_{0}\left[(Y_{0i}-\hat{Y}_i)^2\right]\right
 \mathbb{E}\left[\text{Err}_i\right]&=&\sigma^2 +\mathbb{E}\left[(\hat{Y}_i-\mathbb{E}[Y_i])^2\right] \\
 &=& \mathbb{E}[\text{err}_i]+2\mbox{cov}\left(Y_i,\hat{Y}_i\right)
 \end{eqnarray}
--->
+
 
 This result says that, on average, the apparent error $\text{err}_i$ underestimates the true prediction error $\text{Err}_i$ by the covariance penalty $2\text{cov}\left(\hat{Y}_i;Y_i\right)$. This
 makes intuitive sense since $\text{cov}\left(\hat{Y}_i;Y_i\right)$ measures the amount by which $Y_i$ influences its own prediction $\hat{Y}_i$. An natural estimator for the overall prediction error is then given by
@@ -166,39 +171,26 @@ C_p=\frac{1}{n}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2+\frac{2}{n}p\sigma^2
 (\#eq:mallow)
 \end{equation}
 
-[^6]: Mallows $C_p$ is originally defined as $C_p=\frac{1}{n}\sum_{i=1}^n\frac{\left(\hat{y}_i-y_i\right)^2}{\sigma^2}+\frac{2}{n}p$, which provides the same information when comparing models.
+[^6]: Mallows $C_p$ is originally defined as $C_p=\frac{1}{\sigma^2}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2+2p-n$, which provides the same information when comparing models.
 
 
 > Exercise: derive Mallow's $C_p$ from $\text{Err}$.
 
-<!-- Basically here we have two choices: either we demonstrate equality with $\hat{C}_p$ or we we look not at the estimator of the error $\widehat{\text{Err}}$ but at the true one (i.e. $\text{Err}$) as Efron did in both 2004 paper and 1986. This because it changes the role of the \sigma^2: in practice we work with an estimator given that \sigma^2 is always unknown. If needed I can change the demonstration with $\text{Err}$ as the only difference would be a constant n which does not count in model selection 
-
-> Starting from equation \@ref(eq:err), we need to retrieve equation \@ref(eq:mallow) for the specific case of the linear regression. 
-
-> As we can notice, the *in-sample* quantity (i.e. $\frac{1}{n}\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2$) it is common to both equations so that we can focus only on the *out-of-sample* quantity(i.e. $\frac{2}{n}\sum_{i=1}^n\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)$). We make use of the trace operator (see [trace](https://en.wikipedia.org/wiki/Trace_(linear_algebra))) to work on the multivariate dimension of the problem:
+> \@ref(eq:mallow) is a special case of \@ref(eq:err) if 
+$\sum_{i=1}^n\text{cov}\left(\hat{Y}_i;Y_i\right)=p\sigma^2$. We can make use of the trace operator (see [trace](https://en.wikipedia.org/wiki/Trace_(linear_algebra))) to write
 \begin{equation}
-\frac{2}{n}\sum_{i=1}^n\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right) = \frac{2}{n} \; tr( \widehat{\boldsymbol{cov}}(\boldsymbol{\hat{y}},\boldsymbol{y}))
+\sum_{i=1}^n\text{cov}\left(\hat{Y}_i;Y_i\right) = \mbox{tr}\left(\mbox{cov}(\hat{\mathbf{Y}},\mathbf{Y})\right)
 \end{equation}
-
-> Now we use the fact that, in the linear regression case $\boldsymbol{\hat{y}} = \boldsymbol{H}\boldsymbol{y}$ where the projection matrix $\boldsymbol{H} = \boldsymbol{X}\;(\boldsymbol{X}^{T}\boldsymbol{X})^{-1}\;\boldsymbol{X}^{T}$. We can than write that:
-\begin{equation}
-\frac{2}{n} \; tr( \widehat{\boldsymbol{cov}}(\boldsymbol{\hat{y}},\boldsymbol{y})) = \frac{2}{n} \; tr( \widehat{\boldsymbol{cov}}(\boldsymbol{Hy},\boldsymbol{y}))
-\end{equation}
-
->At this point, knowing that the covariance is a linear operator and that $\boldsymbol{cov}(\boldsymbol{y},\boldsymbol{y}) = \boldsymbol{Var}(\boldsymbol{y})$ we can conclude that:
-\begin{align}
-\frac{2}{n} \; tr( \widehat{\boldsymbol{cov}}(\boldsymbol{Hy},\boldsymbol{y}))
-
-& = \frac{2}{n} \; tr(\boldsymbol{H} \hat{\sigma}^2 I) \\
-
-& = \frac{2}{n} \hat{\sigma}^2 tr(\boldsymbol{H}) \\
-
-& = \frac{2}{n} \hat{\sigma}^2 p  
-\end{align}
-> which implies equality with equation \@ref(eq:mallow) in the case of $\sigma^{2}$ unknown.
+> Since $\hat{\mathbf{Y}} = \mathbf{H}\boldsymbol{Y}$, with $\mathbf{H} = \mathbf{X}(\mathbf{X}^{T}\mathbf{X})^{-1}\mathbf{X}^{T}$ is the least squares projection matrix (or *hat matrix*) of trace $p$, we can then write
+\begin{eqnarray}
+\mbox{tr}\left(\mbox{cov}(\hat{\mathbf{Y}},\mathbf{Y})\right) &=& \mbox{tr}\left( \mbox{cov}(\mathbf{HY},\mathbf{Y})\right)\\
+&=& \mbox{tr}\left( \mathbf{H}\mbox{cov}(\mathbf{Y},\mathbf{Y})\right) = 
+\mbox{tr}\left(\mathbf{H} \sigma^2 \mathbf{I}\right) \\
+&=& \sigma^2 \mbox{tr}\left(\mathbf{H}\right) = \sigma^2 p
+\end{eqnarray}
 > q.e.d.
--->
 
+Note that \@ref(eq:mallow) cannot be used in a real situation since the value of $\sigma^2$ is unknown. In practice, $\sigma^2$ is replaced by $\hat{\sigma}^2$ suitabily chosen. For that, there is no *optimal* choice and what is usually preferred is the residual variance estimator at the full or maximal model. When $n<p$, the choice is still an open question...
 
 > Exercise (optional): \
 > Consider a Linear Mixed Model (LMM), for example the electrode resistance data, estimated using the generalized least squares (GLS) estimator. \
@@ -222,7 +214,8 @@ with $\Omega_i = \text{cov} \left( \dot{q}(\hat{Y}_i),Y_i \right)$. Hence, an es
 		\widehat{\text{Err}} = \frac{1}{n} \sum_{i = 1}^{n}\left( Q(y_i,\hat{y}_i) + \widehat{\text{cov}} \left( \dot{q}(\hat{Y}_i),Y_i \right)\right)
 \end{equation}
 
-
+> Exercise: \
+- Verify that by setting $q(v)=\min\{v,(1-v)\}$ one gets $Q(u,v)=I\{u\neq I(u>1/2)\}$.
 
 ## Information Theory and Bayesian Criteria 
 
@@ -266,7 +259,7 @@ where $\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\
 > - Derive the AIC for the regression model from its more general definition.\
 > - Program AIC and do model selection in a specific simulation setting with an exhaustive search (follow the passages listed in the CV exercise section).\
 > - Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (*Exact*), the proportion of times the selected model contains the correct one (*Correct*) and the average number of selected regressors (*Average $\sharp$*)\
-> - Load the [wine dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data) from the UCI repository and perform an exhaustive search based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
+> - Load the [Malnutrition in Zambia](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/Zambia.SAV) and perform an exhaustive search based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
 
 
 
