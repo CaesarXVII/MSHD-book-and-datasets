@@ -256,10 +256,11 @@ There exist several expressions for the AIC for the linear regression model, one
 where $\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\right)^2$ is the residual sum-of-squares. We can see that $C_p=\sigma^2\text{AIC}$
 
 > Exercise:
-> - Derive the AIC for the regression model from its more general definition.\
+
+> - Derive the AIC for the regression model from its more general definition. (optional)\
 > - Program AIC and do model selection in a specific simulation setting with an exhaustive search (follow the passages listed in the CV exercise section).\
 > - Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (*Exact*), the proportion of times the selected model contains the correct one (*Correct*) and the average number of selected regressors (*Average $\sharp$*)\
-> - Load the [Malnutrition in Zambia](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda) and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
+> - Upload the [Zambia dataset](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda) and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
 
 
 
