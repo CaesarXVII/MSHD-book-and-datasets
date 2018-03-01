@@ -380,7 +380,7 @@ Inline formula with Dollar operator:
 
 $P(\; virginica / \; sepal.width > 3) = \frac{P(virginica \; \& \; sepal.width > 3)}{P(sepal.width > 3)} = 0.254$
 
-Latex enviroment equation: 
+Latex enviroment *equation*: 
 
 \begin{equation*}
 	P(\; virginica / \; sepal.width > 3) = \frac{P(virginica \; \& \; sepal.width > 3)}{P(sepal.width > 3)} = 0.254
