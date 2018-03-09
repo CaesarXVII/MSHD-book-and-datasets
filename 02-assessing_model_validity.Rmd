@@ -33,7 +33,7 @@ knitr::include_graphics("Figures/OverfitEx1.png")
 ```
 
 
-More formally, consider a random variable $Y$ distributed according to model $F_{\boldsymbol{\theta}}$, possibly conditionally on a set of fixed covariates $\mathbf{X}=[x_1 \ldots \, x_p]$. We observe a random sample $\mathbf{y} = (Y_i)_{i = 1, \ldots , n}$ supposedly generated from $F_{\boldsymbol{\theta}}$ together with a non-random $n\times p$ full rank matrix of predictors $\mathbf{X}$. Define the prediction function $\hat{\mathbf{y}}$ that depends on the considered model, for example $\hat{\mathbf{y}}=\hat{\boldsymbol{\beta}}\mathbf{y}$ for the linear regression model. The inferential task is to assess the accuracy of the prediction function, so that it can be compared to alternative prediction functions.
+More formally, consider a random variable $Y$ distributed according to model $F_{\boldsymbol{\theta}}$, possibly conditionally on a set of fixed covariates $\mathbf{X}=[x_1 \ldots \, x_p]$. We observe a random sample $\mathbf{y} = (Y_i)_{i = 1, \ldots , n}$ supposedly generated from $F_{\boldsymbol{\theta}}$ together with a non-random $n\times p$ full rank matrix of predictors $\mathbf{X}$. Define the prediction function $\hat{\mathbf{y}}$ that depends on the considered model, for example $\hat{\mathbf{y}}=\hat{\boldsymbol{\beta}}\mathbf{x}$ for the linear regression model. The inferential task is to assess the accuracy of the prediction function, so that it can be compared to alternative prediction functions.
 
 Quantifying the prediction error of a prediction function requires specification of a discrepancy $D$ between a prediction $\hat{\mathbf{y}}$ and the actual response $\mathbf{y}$. A natural choice is the mean squared error (mean residual squared error)
 \begin{equation}  
