@@ -270,12 +270,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>glmulti</li>
 <li>MuMIn</li>
 <li>caret</li>
+<li>mvtnorm</li>
+<li>MASS</li>
+<li>tictoc</li>
+<li>pROC</li>
 <li>glmnet</li>
 </ul>
 <p>To install a package, use the R command <code>install.packages(&quot;chosen.package.name&quot;)</code> (see also <a href="https://cran.r-project.org/web/packages/" class="uri">https://cran.r-project.org/web/packages/</a>). Visit the <a href="https://cran.r-project.org/">CRAN R project</a> to get useful information about all the available R packages (<a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="uri">https://cran.r-project.org/web/packages/available_packages_by_name.html</a>)</p>
 <p>To install all packages at once, run the following code with administrator rights.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">packages.required &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;quantmod&quot;</span>, <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;tidyr&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;RODBC&quot;</span>, <span class="st">&quot;pool&quot;</span>, <span class="st">&quot;RMySQL&quot;</span>, 
-                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>, <span class="st">&quot;glmnet&quot;</span>)
+                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>,<span class="st">&quot;mvtnorm&quot;</span>, <span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;tictoc&quot;</span>,<span class="st">&quot;pROC&quot;</span>,<span class="st">&quot;glmnet&quot;</span>)
 packages.missing  &lt;-<span class="st"> </span>packages.required[!(packages.required %in%<span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))]
 if(<span class="kw">length</span>(packages.missing)!=<span class="dv">0</span>) <span class="kw">install.packages</span>(packages.missing)</code></pre></div>
 </div>

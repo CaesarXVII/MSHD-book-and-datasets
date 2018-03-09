@@ -438,6 +438,8 @@ There exist several expressions for the AIC for the linear regression model, one
 </li>
 <li>Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (<em>Exact</em>), the proportion of times the selected model contains the correct one (<em>Correct</em>) and the average number of selected regressors (<em>Average <span class="math inline">\(\sharp\)</span></em>)<br />
 </li>
+<li>In the same simulation setting outlined in the CV exercise section, generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span> but now fix the scale matrix with an autoregressive form <span class="math inline">\(\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}\)</span> with <span class="math inline">\(\sigma_{lm} = \rho^{\mid l - m\mid}\)</span>. Compare the performance of CV and AIC for <span class="math inline">\(\boldsymbol{\rho} = [0.2 \; 0.5\; 0.7]\)</span> (<span class="math inline">\(\rho = 0\)</span> corresponds to the identity case that you have already treated).<br />
+</li>
 <li>Upload the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda">Zambia dataset</a> and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: <em>leaps</em>, <em>glmulti</em>, <em>MuMIn</em> and <em>caret</em>.<br />
 </li>
 </ul>
@@ -537,6 +539,7 @@ D \left( \mathbf{Y} , \hat{\boldsymbol{\mu}}(\mathbf{X}) \right) = 2 \left( \log
 <p>Exercise:<br />
 - Show that when <span class="math inline">\(q(v) = v(1-v)\)</span> in <a href="assessing-the-validity-of-a-model.html#eq:Quv">(2.3)</a>, one obtains for the loss function the quadratic error.<br />
 - Show that when <span class="math inline">\(q(v)=\min\{v,(1-v)\}\)</span> in <a href="assessing-the-validity-of-a-model.html#eq:Quv">(2.3)</a>, one obtains for the loss function the misclassification error.<br />
+- Show that when <span class="math inline">\(q(v)= -2[v \log(v) + (1-v)\log(1-v)]\)</span> in <a href="assessing-the-validity-of-a-model.html#eq:Quv">(2.3)</a>, one obtains for the loss function the binomial deviance or twice the Kullback-Leibler divergence.<br />
 - Show that when <span class="math inline">\(q(v)=2\min\{v,(1-v)\}\)</span> in <a href="assessing-the-validity-of-a-model.html#eq:Quv">(2.3)</a>, one obtains for the loss function the hinge loss.<br />
 - Show that when <span class="math inline">\(q(v)=2\sqrt{v,(1-v)}\)</span> in <a href="assessing-the-validity-of-a-model.html#eq:Quv">(2.3)</a>, one obtains for the loss function the exponential loss.</p>
 </blockquote>
@@ -568,14 +571,20 @@ knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/R
 <p><img src="Figures/ROC_curves.png" style="display: block; margin: auto;" /></p>
 <p>The ROC curve is mostly used as a <em>diagnostic</em> tool to evaluate a selected model (classifier). Indeed, in subset selection, a set of predictors (say <span class="math inline">\(\mathbf{X}_S\)</span>) are chosen and from which, using the logistic regression, fitted probabilities <span class="math inline">\(\hat{\pi}_i(\mathbf{x}_{iS})\)</span> can be computed. The ROC curve is then computed by varying the threshold <span class="math inline">\(c\)</span> in predicting outcomes using <span class="math inline">\(\hat{y}_i=I(\hat{\pi}_i(\mathbf{x}_{iS})\geq c)\)</span>. Indeed, for different values of <span class="math inline">\(c\)</span>, the predictions <span class="math inline">\(\hat{y}_i\)</span> are different, hence leading to different measures for the sensitivity and the specificity. Conventionally, the sensitivity and specificity are computed at <span class="math inline">\(c=0.5\)</span>.</p>
 <blockquote>
-<p>Exercise:<br />
-- For a given selected model (classifier), using the logistic model and estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, express (formula) the estimated sensitivity and specificity as a function of the threshold <span class="math inline">\(c\)</span>. -</p>
+Exercise:<br />
+- Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
+(a) Fit the appropriate GLM for the situation at hand using all the available predictors<br />
+(b) Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve">ROC curve</a> section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value <span class="math inline">\(c = 0.5\)</span>.<br />
+(c) For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model at point (a).<br />
+(d) Check the quality of your result at point (c) with the R package <em>pROC</em>.<br />
+
+</blockquote>
+<blockquote>
+Exercise (optional):<br />
+- For a given selected model (classifier), using the logistic model and estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, express (formula) the estimated sensitivity and specificity as a function of the threshold <span class="math inline">\(c\)</span>.<br />
+
 </blockquote>
 <p>The area under the ROC is a scalar summary measure that is sometimes used as model validity. It is sometimes called the <em>c</em>-statistic. Alternative summary statistics include the <em>Gini coefficient</em> which corresponds to the area between the ROC curve and the no-discrimination line. However, for evaluating the contribution of an additional predictor when added to a standard model, any summary statistic associated to the ROC curve, like the the <em>c</em>-statistic, may not be an informative measure. The new predictor can be very significant in terms of the change in e.g. model deviance, but show only a small increase in the <em>c</em>-statistic (see <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-HaTiFr:09">2009</a>)</span>).</p>
-<!--
-> Exercise: \
-- Compute a ROC curve from a dataset with chosen predictors
--->
 
 </div>
 </div>

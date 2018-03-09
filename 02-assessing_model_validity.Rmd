@@ -260,6 +260,7 @@ where $\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\
 > - Derive the AIC for the regression model from its more general definition. (optional)\
 > - Program AIC and do model selection in a specific simulation setting with an exhaustive search (follow the passages listed in the CV exercise section).\
 > - Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (*Exact*), the proportion of times the selected model contains the correct one (*Correct*) and the average number of selected regressors (*Average $\sharp$*)\
+> - In the same simulation setting outlined in the CV exercise section, generate from a MVN (multivariate normal) a matrix $\mathbf{X_{n*p}}$ with $n = 1000$ and $p = 5$ but now fix the scale matrix with an autoregressive form $\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}$  with $\sigma_{lm} = \rho^{\mid l - m\mid}$. Compare the performance of CV and AIC for $\boldsymbol{\rho} = [0.2 \; 0.5\; 0.7]$ ($\rho = 0$ corresponds to the identity case that you have already treated).\
 > - Upload the [Zambia dataset](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda) and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
 
 
@@ -379,6 +380,7 @@ Efron's optimism Theorem [@efron2004estimation] can also be used to obtain an es
 > Exercise: \
 - Show that when  $q(v) = v(1-v)$ in \@ref(eq:Quv), one obtains for the loss function the quadratic error.\
 >- Show that when $q(v)=\min\{v,(1-v)\}$ in \@ref(eq:Quv), one obtains for the loss function  the misclassification error.\
+>- Show that when $q(v)= -2[v \log(v) + (1-v)\log(1-v)]$ in \@ref(eq:Quv), one obtains for the loss function the binomial deviance or twice the Kullback-Leibler divergence.\
 >- Show that when $q(v)=2\min\{v,(1-v)\}$ in \@ref(eq:Quv), one obtains for the loss function  the hinge loss. \
 >- Show that  when $q(v)=2\sqrt{v,(1-v)}$ in \@ref(eq:Quv), one obtains for the loss function  the exponential loss.
 
@@ -416,15 +418,16 @@ knitr::include_graphics("Figures/ROC_curves.png")
 The ROC curve is mostly used as a *diagnostic* tool to evaluate a selected model (classifier). Indeed, in subset selection, a set of predictors (say $\mathbf{X}_S$) are chosen and from which, using the logistic regression, fitted probabilities $\hat{\pi}_i(\mathbf{x}_{iS})$ can be computed. The ROC curve is then computed by varying the threshold $c$ in predicting outcomes using $\hat{y}_i=I(\hat{\pi}_i(\mathbf{x}_{iS})\geq c)$. Indeed, for different values of $c$, the predictions $\hat{y}_i$ are different, hence leading to different measures for the sensitivity and the specificity. Conventionally, the sensitivity and specificity are computed at $c=0.5$.
 
 > Exercise:\
-- For a given selected model (classifier), using the logistic model and estimator $\hat{\boldsymbol{\beta}}$, express (formula) the estimated sensitivity and  specificity as a function of the threshold $c$.
-- 
+- Read the information on the [Leukemia Dataset](https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia) in the first chapter of the book. Then load the [Leukemia dataset reduced](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda) which contains a subset of 11 eleven predictors among the 3571 present in the *leukemia_small.csv*. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:\
+> (a) Fit the appropriate GLM for the situation at hand using all the available predictors\
+> (b) Read the [ROC curve](https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve) section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value $c = 0.5$.\
+> (c) For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model at point (a).\
+> (d) Check the quality of your result at point (c) with the R package *pROC*.\
 
+> Exercise (optional):\
+- For a given selected model (classifier), using the logistic model and estimator $\hat{\boldsymbol{\beta}}$, express (formula) the estimated sensitivity and  specificity as a function of the threshold $c$.\
 
 The area under the ROC is a scalar summary measure that is sometimes used as model validity. It is sometimes called the *c*-statistic. Alternative summary statistics include the *Gini coefficient* which corresponds to the area between the ROC curve and the no-discrimination line. However, for evaluating the contribution of an additional predictor when added to a standard model, any summary statistic associated to the ROC curve, like the the *c*-statistic, may not be an informative measure. The new predictor can be very significant in terms of the change in e.g. model deviance, but show only a small increase in the *c*-statistic (see @HaTiFr:09). 
 
-<!--
-> Exercise: \
-- Compute a ROC curve from a dataset with chosen predictors
--->
 
 
