@@ -32,7 +32,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="assessing-the-validity-of-a-model.html">
+<link rel="prev" href="ordering-the-variables.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -154,6 +154,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.6.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-roc-curve"><i class="fa fa-check"></i><b>2.6.4</b> The ROC curve</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html"><i class="fa fa-check"></i><b>3</b> Ordering the variables</a><ul>
+<li class="chapter" data-level="3.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#introduction-3"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#stepwise-forward-regression"><i class="fa fa-check"></i><b>3.2</b> Stepwise forward regression</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#partial-correlations"><i class="fa fa-check"></i><b>3.2.1</b> Partial correlations</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#selection-by-hypothesis-testing"><i class="fa fa-check"></i><b>3.2.2</b> Selection by hypothesis testing</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -178,6 +185,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="refs" class="references">
 <div>
 <p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
+</div>
+<div>
+<p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
 </div>
 <div>
 <p>Claeskens, Gerda, and Nils Lid Hjort. 2003. “The Focused Information Criterion.” <em>Journal of the American Statistical Association</em> 98: 900–945.</p>
@@ -213,7 +223,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Fernholz, L. 2001. “On Multivariate Higher Order von Mises Expansions.” <em>Metrika</em> 53: 123–40.</p>
 </div>
 <div>
+<p>Foster, D. P., and R. A. Stine. 2008. “Alpha-Investing: A Procedure for Sequential Control of Expected False Discoveries.” <em>Journal of the Royal Statistical Society, Ser. B</em> 70: 429–44.</p>
+</div>
+<div>
+<p>Foster, D., and R Stine. 2004. “Variable Selection in Data Mining: Building a Predictive Model for Bankruptcy.” <em>Journal of the American Statistical Association</em> 99: 303–13.</p>
+</div>
+<div>
 <p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
+</div>
+<div>
+<p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
+</div>
+<div>
+<p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
 </div>
 <div>
 <p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
@@ -223,6 +245,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div>
 <p>James, G., D. Witten, T. Hastie, and R. Tibshirani. 2013. <em>An Introduction to Statistical Learning: With Applications in R</em>. New York: Springer.</p>
+</div>
+<div>
+<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
 </div>
 <div>
 <p>Mallows, C. L. 1973. “Some Comments on <span class="math inline">\(C_p\)</span>.” <em>Technometrics</em> 15: 661–75.</p>
@@ -280,7 +305,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="assessing-the-validity-of-a-model.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ordering-the-variables.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

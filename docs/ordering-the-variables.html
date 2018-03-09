@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Model Selection in High Dimensions</title>
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Model Selection in High Dimensions" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Model Selection in High Dimensions" />
+  
+  <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  
+
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+
+
+<meta name="date" content="2018-03-09">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="assessing-the-validity-of-a-model.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#read-this-part-first"><i class="fa fa-check"></i><b>1.1</b> Read this part first</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#content-choice-and-structure"><i class="fa fa-check"></i><b>1.2</b> Content choice and structure</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#bibliography"><i class="fa fa-check"></i><b>1.2.1</b> Bibliography</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#useful-links"><i class="fa fa-check"></i><b>1.2.2</b> Useful links</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#using-r"><i class="fa fa-check"></i><b>1.3</b> Using R</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#useful-r-packages"><i class="fa fa-check"></i><b>1.3.1</b> Useful R packages</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#managing-data"><i class="fa fa-check"></i><b>1.3.2</b> Managing Data</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#loading-data-from-an-r-package"><i class="fa fa-check"></i><b>1.3.3</b> Loading data from an R package</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#loading-data-from-a-local-file"><i class="fa fa-check"></i><b>1.3.4</b> Loading data from a local file</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#loading-data-from-an-online-file"><i class="fa fa-check"></i><b>1.3.5</b> Loading data from an online file</a></li>
+<li class="chapter" data-level="1.3.6" data-path="index.html"><a href="index.html#loading-data-from-an-online-database-using-a-mysql-query-optional"><i class="fa fa-check"></i><b>1.3.6</b> Loading data from an online database using a mySQL query (Optional)</a></li>
+<li class="chapter" data-level="1.3.7" data-path="index.html"><a href="index.html#data-wrangling"><i class="fa fa-check"></i><b>1.3.7</b> Data Wrangling</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#writing-reports"><i class="fa fa-check"></i><b>1.4</b> Writing reports</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#r-markdown"><i class="fa fa-check"></i><b>1.4.1</b> R Markdown</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.4.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#examples"><i class="fa fa-check"></i><b>1.5</b> Examples</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data-on-malnutrition-in-zambia"><i class="fa fa-check"></i><b>1.5.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#prognostic-factors-in-childhood-leukemia"><i class="fa fa-check"></i><b>1.5.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.3</b> R package quantmod</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#fundamental-statistical-concepts"><i class="fa fa-check"></i><b>1.6</b> Fundamental statistical concepts</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#sample-and-population"><i class="fa fa-check"></i><b>1.6.1</b> Sample and population</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#models-and-risk"><i class="fa fa-check"></i><b>1.6.2</b> Models and risk</a></li>
+<li class="chapter" data-level="1.6.3" data-path="index.html"><a href="index.html#estimators-and-associated-variability"><i class="fa fa-check"></i><b>1.6.3</b> Estimators and associated variability</a></li>
+<li class="chapter" data-level="1.6.4" data-path="index.html"><a href="index.html#simulating-the-population-using-resampling-techniques"><i class="fa fa-check"></i><b>1.6.4</b> Simulating the population using resampling techniques</a></li>
+<li class="chapter" data-level="1.6.5" data-path="index.html"><a href="index.html#model-selection"><i class="fa fa-check"></i><b>1.6.5</b> Model Selection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html"><i class="fa fa-check"></i><b>2</b> Assessing the validity of a model</a><ul>
+<li class="chapter" data-level="2.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#cross-validation"><i class="fa fa-check"></i><b>2.2</b> Cross-Validation</a></li>
+<li class="chapter" data-level="2.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#covariance-penalties-criteria"><i class="fa fa-check"></i><b>2.3</b> Covariance Penalties Criteria</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-2"><i class="fa fa-check"></i><b>2.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.3.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mallows-c_p"><i class="fa fa-check"></i><b>2.3.2</b> Mallows <span class="math inline">\(C_p\)</span></a></li>
+<li class="chapter" data-level="2.3.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#efrons-q-class"><i class="fa fa-check"></i><b>2.3.3</b> Efron’s <span class="math inline">\(q\)</span>-class</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#information-theory-and-bayesian-criteria"><i class="fa fa-check"></i><b>2.4</b> Information Theory and Bayesian Criteria</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#aic-akaike-information-criterion"><i class="fa fa-check"></i><b>2.4.1</b> AIC: Akaike Information Criterion</a></li>
+<li class="chapter" data-level="2.4.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#bic-bayesian-information-criterion"><i class="fa fa-check"></i><b>2.4.2</b> BIC: Bayesian Information Criterion</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mean-squared-error-based-criteria"><i class="fa fa-check"></i><b>2.5</b> Mean Squared Error Based Criteria</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#steins-unbiased-risk-estimator-sure"><i class="fa fa-check"></i><b>2.5.1</b> Stein’s unbiased risk estimator (SURE)</a></li>
+<li class="chapter" data-level="2.5.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-focused-information-criterion-fic"><i class="fa fa-check"></i><b>2.5.2</b> The Focused Information Criterion (FIC)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#classification-measures"><i class="fa fa-check"></i><b>2.6</b> Classification measures</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-logistic-model"><i class="fa fa-check"></i><b>2.6.1</b> The logistic model</a></li>
+<li class="chapter" data-level="2.6.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#prediction-error-measures-for-binary-classification"><i class="fa fa-check"></i><b>2.6.2</b> Prediction error measures for Binary classification</a></li>
+<li class="chapter" data-level="2.6.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#classification-error-estimation"><i class="fa fa-check"></i><b>2.6.3</b> Classification error estimation</a></li>
+<li class="chapter" data-level="2.6.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-roc-curve"><i class="fa fa-check"></i><b>2.6.4</b> The ROC curve</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html"><i class="fa fa-check"></i><b>3</b> Ordering the variables</a><ul>
+<li class="chapter" data-level="3.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#introduction-3"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#stepwise-forward-regression"><i class="fa fa-check"></i><b>3.2</b> Stepwise forward regression</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#partial-correlations"><i class="fa fa-check"></i><b>3.2.1</b> Partial correlations</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#selection-by-hypothesis-testing"><i class="fa fa-check"></i><b>3.2.2</b> Selection by hypothesis testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model Selection in High Dimensions</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ordering-the-variables" class="section level1">
+<h1><span class="header-section-number">3</span> Ordering the variables</h1>
+<div id="introduction-3" class="section level2">
+<h2><span class="header-section-number">3.1</span> Introduction</h2>
+<p>In high dimensional settings, for causal models, the available set of potential predictors can be very large and an exhaustive building of potential models (to be compared in terms of model validity) is practically impossible. One hence needs to find <em>suitable</em> methods for reducing the model size (number of predictors) by either:<br />
+(a) ordering the predictors that enter the model sequentially, to constitute, at most, <span class="math inline">\(p\)</span> potential models to be assessed and compared,<br />
+(b) averaging groups of predictors.<br />
+<br />
+For (a), the ordering consists in a sequence of steps in which, starting from a null model (usually just the intercept), a covariate is chosen for addition to the current model based on some prespecified criterion. The sequence then stops when an overall criterion is met.</p>
+<p>For (b) averaging predictors is very popular in machine learning (supervised learning) and in this chapter we only review Classification And Regression Tree (CART).</p>
+<p>Obviously, the two approaches do not lead to the same type of chosen model. While stepwise methods lead to models that only include a subset of the available covariates, averaging methods use all the available covariates and group them in weighted averages. If the model is used to understand the underlying phenomenon, then stepwise methods are usually preferred.</p>
+<blockquote>
+<p>Exercise: Compare the number of models to be considered in an exhaustive approach to the ones considered in a stepwise forward approach. Choose <span class="math inline">\(p=\{5,10,15,20\}\)</span> and suppose that the true (best) model has <span class="math inline">\(p\)</span> and <span class="math inline">\(p/2\)</span> predictors.</p>
+</blockquote>
+</div>
+<div id="stepwise-forward-regression" class="section level2">
+<h2><span class="header-section-number">3.2</span> Stepwise forward regression</h2>
+<p>Very generally, a forward stepwise regression follows the steps:<br />
+1. Let <span class="math inline">\(\cal{M}_0\)</span> denote the null model, which typically contains no predictors.<br />
+2. For <span class="math inline">\(k = 1,\ldots,p-1\)</span>, do :<br />
+(a) Consider all <span class="math inline">\(p-k\)</span> models that augment the predictors in <span class="math inline">\(\mathcal{M}_k\)</span> with one additional predictor.<br />
+(b) Choose the <em>best</em> among these <span class="math inline">\(p-k\)</span> models, and call it <span class="math inline">\(\mathcal{M}_{k+1}\)</span>.<br />
+3. Stop the algorithm if <span class="math inline">\(\mathcal{M}_{k+1}\)</span> is not better than <span class="math inline">\(\mathcal{M}_{k}\)</span> and provide <span class="math inline">\(\mathcal{M}_{k}\)</span> as output.</p>
+<p>The algorithms differ in the definition of <em>best</em> in 2(b) and in the stopping rule criteria in 3. For the latter, it can be chosen among the criteria presented in Chapter 2.</p>
+<p>As an example, consider the <span class="math inline">\(C_p\)</span> given in <a href="assessing-the-validity-of-a-model.html#eq:mallow">(2.2)</a> as model selection criterion. We note that for fixed <span class="math inline">\(p\)</span>, i.e. when comparing models of the same size <span class="math inline">\(p\)</span>, the difference among the possible models that can be constructed is measured by the residual sum of squares <span class="math inline">\(\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2\)</span>. Hence, choosing the <em>best</em> model in 2(b) amounts at choosing the added covariate that most reduces the residual sum of squares of the augmented model.</p>
+<p>In a sequential framework, optimizing the choice of the covariate to add to the current model does not necessary lead to the <em>best</em> model of the current size since the optimization is done on the added covariate only. Additional properties need therefore to be considered.</p>
+<div id="partial-correlations" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Partial correlations</h3>
+<p>The partial correlation between <span class="math inline">\(X_j\)</span> and <span class="math inline">\(Y\)</span> conditional of a set of <span class="math inline">\(q\)</span> variables <span class="math inline">\(\mathbf{X} = \{X_1, X_2, \ldots, X_q\}, X_j\notin \mathbf{X}\)</span>, written <span class="math inline">\(\hat{\rho}_{X_jY,\mathbf{X}}\)</span>, is the correlation between the residuals resulting from the linear regression of <span class="math inline">\(X_j\)</span> on <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(Y\)</span> on <span class="math inline">\(\mathbf{X}\)</span>.</p>
+Namely, let <span class="math inline">\(\mathbf{X}_k\)</span>, of size <span class="math inline">\(n\times q\)</span>, and <span class="math inline">\(\mathbf{X}_{k+1}=[\mathbf{x}_j]_{j=1,\ldots,p-q}\)</span> be the matrices formed by the columns of <span class="math inline">\(\mathbf{X}\)</span> (containing all the potential predictors) that are a) present at the current stepwise forward step for <span class="math inline">\(\mathbf{X}_k\)</span> and b) not present at the current stepwise forward step for <span class="math inline">\(\mathbf{X}_{k+1}\)</span>. The partial correlations between each covariate <span class="math inline">\(X_j\)</span> (corresponding to the columns of <span class="math inline">\(\mathbf{X}_{k+1}\)</span>) and the response vector <span class="math inline">\(Y\)</span>, given the set of <span class="math inline">\(q\)</span> covariates corresponding to <span class="math inline">\(\mathbf{X}_k\)</span>, can be written as
+<span class="math display">\[\begin{equation}
+\hat{\rho}_{X_jY,\mathbf{X}_k}=\frac{\mathbf{e}^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j}{\sqrt{\left(\mathbf{e}^T\mathbf{e}\right)\left(\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j\right)}}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}=\mathbf{H}\mathbf{y}\)</span>. The predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. <span class="citation">Foster and Stine (<a href="#ref-FoSt:04">2004</a>)</span>. In high dimensional settings, the sweep operator <span class="citation">(Goodnight <a href="#ref-Good:79">1979</a>)</span> can be used to obtain the partial correlations in a computationally fast manner.</p>
+<blockquote>
+Exercise (optional):<br />
+- Show that the predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares.<br />
+Hint: Use the proof of Proposition I of <span class="citation">Lin, Foster, and Ungar (<a href="#ref-LiFoUn:11">2011</a>)</span>.<br />
+
+</blockquote>
+<blockquote>
+Exercise (project):<br />
+- Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>).<br />
+- Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different. - Apply the <span class="math inline">\(C_p\)</span> as stopping criterion (or indeed another one) to both procedures and comment.<br />
+
+</blockquote>
+</div>
+<div id="selection-by-hypothesis-testing" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Selection by hypothesis testing</h3>
+<p>Partial correlations have been used in several instances to <em>order</em> the covariates in stepwise forward regression, combined with a <em>stopping</em> criterion based on a test statistic, like the <span class="math inline">\(t\)</span>-test for significance testing. That is, the covariates are entered in the model using the partial correlation criterion (that is maximized) and the procedure stops when the <span class="math inline">\(t\)</span>-test is not significant. However, with testing multiple hypothesis, one has to pay attention to the <em>familywise error rate</em> (FWER), i.e. the probability of making one or more false discoveries, or type I errors (rejecting the null hypothesis when it is true). This probability increases very rapidly with the number of hypothesis to be tested.</p>
+<p>Another concept is the <em>false discovery rate</em> (FDR) which is a measure that provides less stringent control of Type I errors compared to familywise error rate <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>. FDR actually controls the expected proportion of <em>discoveries</em> (rejected null hypotheses) that are false (incorrect rejections). When all hypotheses are true, the FDR is equal to the FWER, and smaller otherwise. Hence, substantial power can be gained when testing multiple hypothesis, while controlling the FDR.</p>
+Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope <span class="math inline">\(\beta_j, j=1,\ldots,p\)</span> at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to find the (maximal number) <span class="math inline">\(k\)</span> of slopes that can be considered as significantly different from 0 using hypothesis testing while controlling the FDR. Namely, let <span class="math inline">\(\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p\)</span> a sequence of null hypotheses, one seeks to reject ALL null hypothesis up to the <span class="math inline">\(k\)</span>th one and none of them after it. Usually, the choice for <span class="math inline">\(k\)</span> should control the mFDR (a weaker criterion than the FRD), which is given by <span class="citation">(Foster and Stine <a href="#ref-FoSt:08">2008</a>)</span>
+<span class="math display">\[\begin{equation}
+\mbox{mFDR}_\eta(p)=\sup_{\boldsymbol{\beta}}\frac{\mathbb{E}\left[V^{\boldsymbol{\beta}}(p)\right]}{\mathbb{E}\left[R(p)+\eta\right]}
+\end{equation}\]</span>
+<p>with <span class="math inline">\(V^{\boldsymbol{\beta}}(p)\)</span> denoting the (unknown) number of false positive results among the <span class="math inline">\(p\)</span> tests (the testing procedure incorrectly rejects a true null hypothesis), <span class="math inline">\(R(p)\)</span> denotes the (observed) number of rejected null hypotheses. Under the complete null hypothesis (all <span class="math inline">\(p\)</span> null hypothesis are true), when <span class="math inline">\(\eta=1-\alpha\)</span>, <span class="math inline">\(\mbox{mFRD}_\eta(p)\leq\alpha\)</span> implies <span class="math inline">\(V^{\boldsymbol{\beta}}(p)\leq\alpha\)</span>, hence controlling the FWER (see <span class="citation">Foster and Stine (<a href="#ref-FoSt:08">2008</a>)</span>).</p>
+<p>Let the sequence <span class="math inline">\(\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p\)</span> be ordered according to the variables that are ordered using the (maximum) partial correlation, for a general <span class="math inline">\(\alpha\)</span>-level, at each iteration <span class="math inline">\(k\)</span>, the <span class="math inline">\(p\)</span>-value associated to the <span class="math inline">\(t\)</span>-statistic computed on the added covariate, is compared to a level <span class="math inline">\(\alpha_k\)</span>. A rule for <span class="math inline">\(\alpha_k\)</span> that controls the FDR (<span class="math inline">\(\leq\alpha\)</span>) is <span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>.</p>
+<p><span class="citation">G’Sell et al. (<a href="#ref-GSWaChTi:16">2016</a>)</span> propose two rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let <span class="math inline">\(\hat{k}\)</span> denote the last rejected null hypothesis (in the sequence), the rules are:<br />
+- ForwardStop: <span class="math inline">\(\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}\)</span><br />
+- StrongStop: <span class="math inline">\(\hat{k}_S=\max\left\{k\in\{1,\ldots,p\}\vert \exp\left\{\sum_{j=k}^p\frac{\log\left(p_j\right)}{j}\right\}\leq\frac{k\alpha}{p}\right\}\)</span><br />
+with <span class="math inline">\(p_j\)</span> the <span class="math inline">\(p\)</span>-value associated to <span class="math inline">\(\mathbb{H}_j\)</span> and by convention <span class="math inline">\(\hat{k}=0\)</span> whenever no rejections can be made. Both rules control the FDR at level <span class="math inline">\(\alpha\)</span>.</p>
+To order the covariates (hence the null hypotheses), one can use partial correlations, or, alternatively, as proposed in <span class="citation">Lin, Foster, and Ungar (<a href="#ref-LiFoUn:11">2011</a>)</span>, to use <span class="math inline">\(\hat{\gamma}_j\)</span>, the least squares estimator of the model
+<span class="math display">\[\begin{equation}
+\mathbf{e}=\gamma_j\mathbf{x}_j+\tilde{\varepsilon}
+\end{equation}\]</span>
+with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is the least squares estimator of the model at step <span class="math inline">\(k\)</span> (i.e. with <span class="math inline">\(\mathbf{X}_k\)</span>). <span class="citation">Lin, Foster, and Ungar (<a href="#ref-LiFoUn:11">2011</a>)</span> show that <span class="math inline">\(\hat{\gamma}_j=\rho^2\hat{\beta}_j\)</span>, where <span class="math inline">\(\hat{\beta}_j\)</span> is the least squares estimator of <span class="math inline">\(\beta_j\)</span> in the model with covariates matrix <span class="math inline">\(\left[\mathbf{X}_k \; \mathbf{x}_j\right]\)</span> and with
+<span class="math display">\[\begin{equation}
+\rho^2=\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j
+\end{equation}\]</span>
+<p>and <span class="math inline">\(\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\)</span>. <span class="math inline">\(p\)</span>-values associated to <span class="math inline">\(\beta_j\)</span> (<span class="math inline">\(\forall j\)</span> corresponding to the columns of <span class="math inline">\(\mathbf{X}_{k+1}\)</span>) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).</p>
+<blockquote>
+<p>Exercise :<br />
+- Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>) and compare the selected models when using:   – the ForwardStop<br />
+– the StrongStop<br />
+– <span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span><br />
+– the <span class="math inline">\(C_p\)</span></p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-FoSt:04">
+<p>Foster, D., and R Stine. 2004. “Variable Selection in Data Mining: Building a Predictive Model for Bankruptcy.” <em>Journal of the American Statistical Association</em> 99: 303–13.</p>
+</div>
+<div id="ref-Good:79">
+<p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
+</div>
+<div id="ref-LiFoUn:11">
+<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
+</div>
+<div id="ref-BeHo:95">
+<p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
+</div>
+<div id="ref-FoSt:08">
+<p>Foster, D. P., and R. A. Stine. 2008. “Alpha-Investing: A Procedure for Sequential Control of Expected False Discoveries.” <em>Journal of the Royal Statistical Society, Ser. B</em> 70: 429–44.</p>
+</div>
+<div id="ref-GSWaChTi:16">
+<p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="assessing-the-validity-of-a-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

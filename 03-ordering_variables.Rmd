@@ -1,0 +1,103 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+# Ordering the variables
+
+## Introduction
+
+
+In high dimensional settings, for causal models, the available set of potential predictors can be very large and an exhaustive building of potential models (to be compared in terms of model validity) is practically impossible. One hence needs to find *suitable* methods for reducing the model size (number of predictors) by either:\
+(a) ordering the predictors that enter the model sequentially, to constitute, at most, $p$ potential models to be assessed and compared, \
+(b) averaging groups of predictors. \
+\
+For (a), the ordering consists in a sequence of steps in which, starting from a null model (usually just the intercept), a covariate is chosen for addition to the current model  based on some prespecified criterion. The sequence then stops when an overall criterion is met.
+
+
+For (b) averaging predictors is very popular in machine learning (supervised learning) and in this chapter we only review Classification And Regression Tree (CART).
+
+Obviously, the two approaches do not lead to the same type of chosen model. While stepwise methods lead to models that only include a subset of the available covariates, averaging methods use all the available covariates and group them in weighted averages. If the model is used to understand the underlying phenomenon, then stepwise methods are usually preferred.
+
+
+> Exercise: Compare the number of models to be considered in an exhaustive approach to the ones considered in a stepwise forward approach. Choose $p=\{5,10,15,20\}$ and suppose that the true (best) model has $p$ and $p/2$ predictors.
+
+## Stepwise forward regression
+
+Very generally, a forward stepwise regression follows the steps: \
+1. Let $\cal{M}_0$ denote the null model, which typically contains no predictors. \
+2. For $k = 1,\ldots,p-1$, do :\
+  (a) Consider all $p-k$ models that augment the predictors in $\mathcal{M}_k$ with one additional predictor.\
+  (b) Choose the *best* among these $p-k$ models, and call it $\mathcal{M}_{k+1}$.\
+3. Stop the algorithm if $\mathcal{M}_{k+1}$ is not better than $\mathcal{M}_{k}$ and provide $\mathcal{M}_{k}$ as output.
+
+The algorithms differ in the definition of *best* in 2(b) and in the stopping rule criteria in 3. For the latter, it can be chosen among the criteria presented in Chapter 2.
+
+As an example, consider the $C_p$ given in \@ref(eq:mallow) as model selection criterion. We note that for fixed $p$, i.e. when comparing models of the same size $p$, the difference among the possible models that can be constructed is measured by the residual sum of squares $\sum_{i=1}^n\left(\hat{y}_i-y_i\right)^2$.  Hence, choosing the *best* model in 2(b) amounts at choosing the added covariate that most reduces the residual sum of squares of the augmented model.
+
+In a sequential framework, optimizing the choice of the covariate to add to the current model does not necessary lead to the *best* model of the current size since the optimization is done on the added covariate only. Additional properties  need therefore to be considered.  
+
+
+
+### Partial correlations
+
+The partial correlation between $X_j$ and $Y$ conditional of a set of $q$  variables $\mathbf{X} = \{X_1, X_2, \ldots, X_q\}, X_j\notin \mathbf{X}$, written $\hat{\rho}_{X_jY,\mathbf{X}}$, is the correlation between the residuals resulting from the linear regression of $X_j$ on $\mathbf{X}$ and $Y$ on $\mathbf{X}$. 
+
+Namely, let $\mathbf{X}_k$, of size $n\times q$, and $\mathbf{X}_{k+1}=[\mathbf{x}_j]_{j=1,\ldots,p-q}$ be the matrices formed by the columns of $\mathbf{X}$ (containing all the potential predictors) that are a) present at the current stepwise forward step for  $\mathbf{X}_k$ and b) not present  at the current stepwise forward step for  $\mathbf{X}_{k+1}$. The partial correlations between each covariate $X_j$ (corresponding to the columns of $\mathbf{X}_{k+1}$) and the response vector $Y$, given the set of $q$ covariates corresponding to $\mathbf{X}_k$, can be written as
+\begin{equation}
+\hat{\rho}_{X_jY,\mathbf{X}_k}=\frac{\mathbf{e}^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j}{\sqrt{\left(\mathbf{e}^T\mathbf{e}\right)\left(\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j\right)}}
+\end{equation}
+with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$, $\hat{\boldsymbol{\beta}}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}=\mathbf{H}\mathbf{y}$. The predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. @FoSt:04. In high dimensional settings, the sweep operator [@Good:79] can be used to obtain the partial correlations in a computationally fast manner.
+
+
+> Exercise (optional):\
+> - Show that the predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares. \
+Hint: Use the proof of Proposition I of @LiFoUn:11. \
+
+
+> Exercise (project): \
+> - Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>). \
+> - Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.
+> - Apply the $C_p$ as stopping criterion (or indeed another one) to both procedures and comment. \
+
+
+### Selection by hypothesis testing
+
+Partial correlations have been used in several instances to *order* the covariates in stepwise forward regression, combined with a *stopping* criterion based on a test statistic, like the $t$-test for significance testing. That is, the covariates are entered in the model using the partial correlation criterion (that is maximized) and the procedure stops when the $t$-test is not significant. 
+However, with testing multiple hypothesis, one has to pay attention to the *familywise error rate* (FWER), i.e. the probability of making one or more false discoveries, or type I errors (rejecting the null hypothesis when it is true). This probability increases very rapidly with the number of hypothesis to be tested. 
+
+Another concept is the *false discovery rate* (FDR) which is a measure that provides less stringent control of Type I errors compared to familywise error rate [@BeHo:95]. FDR actually controls the expected proportion of *discoveries* (rejected null hypotheses) that are false (incorrect rejections). When all hypotheses are true, the FDR is equal to the FWER, and smaller otherwise. Hence, substantial power can be gained when testing multiple hypothesis, while controlling the FDR.
+
+Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope $\beta_j, j=1,\ldots,p$ at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to find the (maximal number) $k$ of slopes that can be considered as significantly different from 0 using hypothesis testing while controlling the FDR. Namely, let $\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p$ a sequence of null hypotheses, one seeks to reject ALL null hypothesis up to the $k$th one and none of them after it. Usually, the  choice for $k$ should control the mFDR (a weaker
+criterion than the FRD), which is given by [@FoSt:08]
+\begin{equation}
+\mbox{mFDR}_\eta(p)=\sup_{\boldsymbol{\beta}}\frac{\mathbb{E}\left[V^{\boldsymbol{\beta}}(p)\right]}{\mathbb{E}\left[R(p)+\eta\right]}
+\end{equation}
+with $V^{\boldsymbol{\beta}}(p)$ denoting the (unknown) number of false positive results among the $p$ tests (the testing procedure incorrectly rejects a true null hypothesis), $R(p)$ denotes the (observed) number of rejected null hypotheses. Under the complete null hypothesis (all $p$ null hypothesis are true), when $\eta=1-\alpha$, $\mbox{mFRD}_\eta(p)\leq\alpha$ implies $V^{\boldsymbol{\beta}}(p)\leq\alpha$, hence controlling the FWER (see @FoSt:08).
+
+Let the sequence $\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p$ be ordered according to the variables that are ordered using the (maximum) partial correlation, for a general $\alpha$-level, at each iteration $k$, the $p$-value associated to the $t$-statistic computed on the added covariate, is compared to a level $\alpha_k$. A rule for $\alpha_k$ that controls the FDR ($\leq\alpha$) is $\alpha_k=\alpha(k+1)/p$ [@BeHo:95].
+
+@GSWaChTi:16 propose two rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let $\hat{k}$ denote the last rejected null hypothesis (in the sequence), the rules are: \
+- ForwardStop: $\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}$ \
+- StrongStop: $\hat{k}_S=\max\left\{k\in\{1,\ldots,p\}\vert \exp\left\{\sum_{j=k}^p\frac{\log\left(p_j\right)}{j}\right\}\leq\frac{k\alpha}{p}\right\}$ \
+with $p_j$ the $p$-value associated to $\mathbb{H}_j$ and by convention $\hat{k}=0$ whenever no rejections can be made. Both rules control the FDR at level $\alpha$.
+
+To order the covariates (hence the null hypotheses), one can use partial correlations, or, alternatively, as proposed in @LiFoUn:11, to use $\hat{\gamma}_j$, the least squares estimator of the model
+\begin{equation}
+\mathbf{e}=\gamma_j\mathbf{x}_j+\tilde{\varepsilon}
+\end{equation}
+with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$ and $\hat{\boldsymbol{\beta}}$ is the least squares estimator of the model at step $k$ (i.e. with $\mathbf{X}_k$). @LiFoUn:11 show that $\hat{\gamma}_j=\rho^2\hat{\beta}_j$, where $\hat{\beta}_j$ is the least squares estimator of $\beta_j$ in the model with covariates matrix $\left[\mathbf{X}_k \; \mathbf{x}_j\right]$ and with 
+\begin{equation}
+\rho^2=\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j
+\end{equation}
+and $\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T$. $p$-values associated to $\beta_j$ ($\forall j$ corresponding to the columns of $\mathbf{X}_{k+1}$) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).
+
+> Exercise : \
+- Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>) and compare the selected models when 
+using: \ 
+-- the ForwardStop  \
+-- the StrongStop \
+-- $\alpha_k=\alpha(k+1)/p$ [@BeHo:95] \
+-- the $C_p$
+
