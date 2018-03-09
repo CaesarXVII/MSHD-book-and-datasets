@@ -573,7 +573,7 @@ knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/R
 <blockquote>
 Exercise:<br />
 - Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
-(a) Fit the appropriate GLM for the situation at hand using all the available predictors<br />
+(a) Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)<br />
 (b) Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve">ROC curve</a> section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value <span class="math inline">\(c = 0.5\)</span>.<br />
 (c) For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model at point (a).<br />
 (d) Check the quality of your result at point (c) with the R package <em>pROC</em>.<br />
