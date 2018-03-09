@@ -901,7 +901,7 @@ de-emphasizing extreme observations. They are particularly appreciated when stud
 
 Model selection is a broad concept. For example, for a family of models $F_{\mathbf{\theta}}$, there exists an (almost) infinite number of different ones according to the value of $\mathbf{\theta}$. Hence, estimation (parametric or non parametric) is also a form of model selection since it allows, from the sample, to reduce the set of potential models.
 
-Another form of model selection involves, simultaneously, the specification of the parameter's set $\mathbf{\theta}$ (e.g. what is $p$) and, within this specification, a reduced set of potential values. This process, like estimation, is by nature inferential, since the only available information is the sample. A trade-off needs then to be made between the *model complexity* (e.g. $p$) and the *model edequacy* (e.g. its fit to the data). The choice of the measure associated to the trade-off is also important.
+Another form of model selection involves, simultaneously, the specification of the parameter's set $\mathbf{\theta}$ (e.g. what is $p$) and, within this specification, a reduced set of potential values. This process, like estimation, is by nature inferential, since the only available information is the sample. A trade-off needs then to be made between the *model complexity* (e.g. $p$) and the *model adequacy* (e.g. its fit to the data). The choice of the measure associated to the trade-off is also important.
 
 While model adequacy is an obvious objective to achieve, reducing model complexity is a more subtle, but also an important feature. The reasons include (see also @JaWiHaTi:13, Section 2.1.3): 
 
@@ -916,7 +916,7 @@ a less complex models (see Section 2.1)
 One can separate model selection procedures in three broad categories which are:
 - *Subset Selection*: This approach involves identifying a subset of the $p$
 *predictors* (i.e. a non zero subset of $\mathbf{\theta}$) that we believe to be related to the response. 
-- *Shrinkage*: This approach involves fitting a model involving all $p$ predictors (or parameters in $\mathbf{\theta}$). However, the estimated parameters are shrunken towards zero
+- *Shrinkage*: This approach involves fitting a model involving all $p$ predictors (or parameters in $\mathbf{\theta}$). However, the estimated parameters are shrunk towards zero
 relative in the estimation procedure. This shrinkage is also known as
 regularization and has the effect of reducing sampling error and,  depending on what
 type of shrinkage is performed, some of the coefficients may be estimated
