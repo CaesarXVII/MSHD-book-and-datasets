@@ -2,3 +2,5 @@ base
 dplyr
 pool
 foreign
+MASS
+mvtnorm
