@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-11">
+<meta name="date" content="2018-03-12">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -785,7 +785,7 @@ Using the general result on covariance penalty measures based on Efron’s <span
 <span class="math display">\[\begin{equation} 
 \text{BIC} = -\sum_{i=1}^n \log f(\hat{y}_i;\hat{\boldsymbol{\mu}},\hat{\sigma}^2)+p\log(n) + \text{const.}
 \end{equation}\]</span>
-<p>where <span class="math inline">\(\text{const.}\)</span> does not depend on the model and hence can be omitted when comparing models. The BIC is derived from Bayesian inference arguments, but is not related to information theory. Compared to the AIC (or indeed the <span class="math inline">\(C_p\)</span>), the BIC uses <span class="math inline">\(p\log(n)\)</span> instead of <span class="math inline">\(2p\)</span> as an estimated penalty and since <span class="math inline">\(\log(n)&gt; 2\)</span> for any <span class="math inline">\(n &gt; 7\)</span>, the BIC statistic generally places a heavier penalty on models with many variables, and hence results in the selection of smaller models than AIC.</p>
+<p>where <span class="math inline">\(\log(n)\)</span> is the natural logarithm of n and <span class="math inline">\(\text{const.}\)</span> does not depend on the model; hence can be omitted when comparing models. The BIC is derived from Bayesian inference arguments, but is not related to information theory. Compared to the AIC (or indeed the <span class="math inline">\(C_p\)</span>), the BIC uses <span class="math inline">\(p\log(n)\)</span> instead of <span class="math inline">\(2p\)</span> as an estimated penalty and since <span class="math inline">\(\log(n)&gt; 2\)</span> for any <span class="math inline">\(n &gt; 7\)</span>, the BIC statistic generally places a heavier penalty on models with many variables, and hence results in the selection of smaller models than AIC.</p>
 </div>
 </div>
 <div id="mean-squared-error-based-criteria" class="section level2">
@@ -844,15 +844,21 @@ In high dimensions, this feature adds numerical difficulties compared to the lin
 <p>Before considering a prediction error measure, one should define a prediction measure for the logistic model. There are two common measures:<br />
 - The <em>fitted probabilities</em>: <span class="math inline">\(\hat{\pi}_i=\widehat{\mathbb{E}[Y_i]}=\exp(\mathbf{x}_i\hat{\boldsymbol{\beta}})/(1+\exp(\mathbf{x}_i\hat{\boldsymbol{\beta}}))\)</span><br />
 - The <em>predicted outcome</em>: <span class="math inline">\(I\left(\hat{\pi}_i\geq c\right)\)</span> with <span class="math inline">\(I\left(\right)\)</span> being the indicator function and <span class="math inline">\(c\)</span> a chosen threshold with a priori <span class="math inline">\(c=0.5\)</span>.</p>
-<p>A classification error then builds, in general, upon <span class="math inline">\(\left(y_i-\hat{\pi}_i\right)\)</span> or <span class="math inline">\(\left(y_i-I\left(\hat{\pi}_i\geq c\right)\right)\)</span>. Popular measures include: <br />
-- The quadratic error: <span class="math inline">\(\Vert \mathbf{y}-\hat{\boldsymbol{\pi}}(\mathbf{X})\Vert_2\)</span> with <span class="math inline">\(\mathbf{y}=[y_i]_{i=1,\ldots,n}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\pi}}(\mathbf{X})=[\hat{\pi}_i(\mathbf{x}_i)]_{i=1,\ldots,n}\)</span> and <span class="math inline">\(\Vert \cdot \Vert_2\)</span> denoting the <span class="math inline">\(L2\)</span>-norm.<br />
+<p>A classification error then builds, in general, upon <span class="math inline">\(\left(y_i-\hat{\pi}_i\right)\)</span> or <span class="math inline">\(\left(y_i-I\left(\hat{\pi}_i\geq c\right)\right)\)</span>. Popular measures include: </p>
+<ul>
+<li>The quadratic error: <span class="math inline">\(\Vert \mathbf{y}-\hat{\boldsymbol{\pi}}(\mathbf{X})\Vert_2\)</span> with <span class="math inline">\(\mathbf{y}=[y_i]_{i=1,\ldots,n}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\pi}}(\mathbf{X})=[\hat{\pi}_i(\mathbf{x}_i)]_{i=1,\ldots,n}\)</span> and <span class="math inline">\(\Vert \cdot \Vert_2\)</span> denoting the <span class="math inline">\(L2\)</span>-norm.<br />
 <br />
-- The misclassification error or Hamming distance: <span class="math inline">\(\sum_{i=1}^n\left(y_i-I\left(\hat{\pi}_i(\mathbf{x}_i)\geq c\right)\right)\)</span>.<br />
+</li>
+<li>The misclassification error or Hamming distance: <span class="math inline">\(\sum_{i=1}^n(y_i-I\left(\hat{\pi}_i(\mathbf{x}_i)\geq c\right))^2\)</span>.<br />
 <br />
-- The Binomial <em>deviance</em> (or cross-entropy): <span class="math inline">\(\sum_{i=1}^n\left(y_i\log(\hat{\pi}_i(\mathbf{x}_i))-(1-y_i)\log(1-\hat{\pi}_i(\mathbf{x}_i))\right)\)</span>. <br />
-- The hinge loss (or support vector machines, <span class="citation">Vapnik (<a href="#ref-Vapn:96">1996</a>)</span>): <span class="math inline">\(\sum_{i=1}^n \max\left(1−(2y_i −1)\mbox{sign}(\hat{\pi}_i(\mathbf{x}_i) −c), 0\right)\)</span>, with <span class="math inline">\(c=0.5\)</span>.<br />
+</li>
+<li>The Binomial <em>deviance</em> (or cross-entropy): <span class="math inline">\(\sum_{i=1}^n\left(y_i\log(\hat{\pi}_i(\mathbf{x}_i))-(1-y_i)\log(1-\hat{\pi}_i(\mathbf{x}_i))\right)\)</span>. <br />
+</li>
+<li>The hinge loss (or support vector machines, <span class="citation">Vapnik (<a href="#ref-Vapn:96">1996</a>)</span>): <span class="math inline">\(\sum_{i=1}^n \max\left(1−(2y_i −1)\mbox{sign}(\hat{\pi}_i(\mathbf{x}_i) −c), 0\right)\)</span>, with <span class="math inline">\(c=0.5\)</span>.<br />
 <br />
-- The exponential loss (from the AdaBoost algorithm in generalized additive models, <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-HaTiFr:09">2009</a>)</span>): <span class="math inline">\(\sum_{i=1}^n\exp\left(-(2y_i-1)\mathbf{x}_i\hat{\boldsymbol{\beta}}\right)\)</span>.</p>
+</li>
+<li>The exponential loss (from the AdaBoost algorithm in generalized additive models, <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-HaTiFr:09">2009</a>)</span>): <span class="math inline">\(\sum_{i=1}^n\exp\left(-(2y_i-1)\mathbf{x}_i\hat{\boldsymbol{\beta}}\right)\)</span>.</li>
+</ul>
 <p>The Hamming distance does not really <em>predict</em> above (below) the threshold <span class="math inline">\(c\)</span>, since they are the same for say <span class="math inline">\(\hat{\pi}_i(\mathbf{x}_i)=0.6\)</span> and <span class="math inline">\(\hat{\pi}_i(\mathbf{x}_i)=0.9\)</span> with <span class="math inline">\(c=0.5\)</span>. There is therefore an information loss.</p>
 In general, the (total) deviance for a model with estimates <span class="math inline">\(\hat{\boldsymbol{\mu}}(\mathbf{X}) =\widehat{\mathbb{E}}\left[ \mathbf{Y} \vert \mathbf{X},\hat{\boldsymbol{\beta}}\right]\)</span> may be constructed by its likelihood function as
 <span class="math display">\[\begin{equation}

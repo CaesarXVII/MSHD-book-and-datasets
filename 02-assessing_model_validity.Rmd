@@ -637,7 +637,7 @@ detach(data_zambia)
 \begin{equation} 
 \text{BIC} = -\sum_{i=1}^n \log f(\hat{y}_i;\hat{\boldsymbol{\mu}},\hat{\sigma}^2)+p\log(n) + \text{const.}
 \end{equation}
-where $\text{const.}$ does not depend on the model and hence can be omitted when comparing models. The BIC is derived from Bayesian inference arguments, but is not related to information theory. Compared to the AIC (or indeed the $C_p$), the BIC uses $p\log(n)$ instead of $2p$ as an estimated penalty and since $\log(n)> 2$ for any $n > 7$, the BIC statistic generally places a heavier penalty on models with many variables, and hence results in the selection of smaller models than AIC.
+where $\log(n)$ is the natural logarithm of n and $\text{const.}$ does not depend on the model; hence can be omitted when comparing models. The BIC is derived from Bayesian inference arguments, but is not related to information theory. Compared to the AIC (or indeed the $C_p$), the BIC uses $p\log(n)$ instead of $2p$ as an estimated penalty and since $\log(n)> 2$ for any $n > 7$, the BIC statistic generally places a heavier penalty on models with many variables, and hence results in the selection of smaller models than AIC.
 
 ## Mean Squared Error Based Criteria
 
@@ -712,11 +712,12 @@ Before considering a prediction error measure, one should define a prediction me
 
 
 A classification error then builds, in general, upon $\left(y_i-\hat{\pi}_i\right)$ or $\left(y_i-I\left(\hat{\pi}_i\geq c\right)\right)$. Popular measures include:\ 
-\
+
 - The quadratic error: $\Vert \mathbf{y}-\hat{\boldsymbol{\pi}}(\mathbf{X})\Vert_2$ with $\mathbf{y}=[y_i]_{i=1,\ldots,n}$, $\hat{\boldsymbol{\pi}}(\mathbf{X})=[\hat{\pi}_i(\mathbf{x}_i)]_{i=1,\ldots,n}$ and $\Vert \cdot \Vert_2$ denoting the $L2$-norm.\
 \
-- The misclassification error or Hamming distance: $\sum_{i=1}^n\left(y_i-I\left(\hat{\pi}_i(\mathbf{x}_i)\geq c\right)\right)$.\
+- The misclassification error or Hamming distance: $\sum_{i=1}^n(y_i-I\left(\hat{\pi}_i(\mathbf{x}_i)\geq c\right))^2$.\
 \
+
 - The Binomial *deviance* (or cross-entropy):  $\sum_{i=1}^n\left(y_i\log(\hat{\pi}_i(\mathbf{x}_i))-(1-y_i)\log(1-\hat{\pi}_i(\mathbf{x}_i))\right)$.\ 
 \
 - The hinge loss (or support vector machines, @Vapn:96): $\sum_{i=1}^n \max\left(1−(2y_i −1)\mbox{sign}(\hat{\pi}_i(\mathbf{x}_i) −c), 0\right)$, with $c=0.5$.\
