@@ -715,11 +715,13 @@ A classification error then builds, in general, upon $\left(y_i-\hat{\pi}_i\righ
 
 - The quadratic error: $\Vert \mathbf{y}-\hat{\boldsymbol{\pi}}(\mathbf{X})\Vert_2$ with $\mathbf{y}=[y_i]_{i=1,\ldots,n}$, $\hat{\boldsymbol{\pi}}(\mathbf{X})=[\hat{\pi}_i(\mathbf{x}_i)]_{i=1,\ldots,n}$ and $\Vert \cdot \Vert_2$ denoting the $L2$-norm.\
 \
+
 - The misclassification error or Hamming distance: $\sum_{i=1}^n(y_i-I\left(\hat{\pi}_i(\mathbf{x}_i)\geq c\right))^2$.\
 \
 
 - The Binomial *deviance* (or cross-entropy):  $\sum_{i=1}^n\left(y_i\log(\hat{\pi}_i(\mathbf{x}_i))-(1-y_i)\log(1-\hat{\pi}_i(\mathbf{x}_i))\right)$.\ 
 \
+
 - The hinge loss (or support vector machines, @Vapn:96): $\sum_{i=1}^n \max\left(1−(2y_i −1)\mbox{sign}(\hat{\pi}_i(\mathbf{x}_i) −c), 0\right)$, with $c=0.5$.\
 \
 - The exponential loss (from the AdaBoost algorithm in generalized additive models, @HaTiFr:09): $\sum_{i=1}^n\exp\left(-(2y_i-1)\mathbf{x}_i\hat{\boldsymbol{\beta}}\right)$.
