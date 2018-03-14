@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-12">
+<meta name="date" content="2018-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -161,6 +161,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#selection-by-hypothesis-testing"><i class="fa fa-check"></i><b>3.2.2</b> Selection by hypothesis testing</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="solutions.html"><a href="solutions.html"><i class="fa fa-check"></i><b>4</b> Solutions</a><ul>
+<li class="chapter" data-level="4.1" data-path="solutions.html"><a href="solutions.html#chapter-1"><i class="fa fa-check"></i><b>4.1</b> Chapter 1</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="solutions.html"><a href="solutions.html#zam"><i class="fa fa-check"></i><b>4.1.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="4.1.2" data-path="solutions.html"><a href="solutions.html#leuk"><i class="fa fa-check"></i><b>4.1.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>4.2</b> Chapter 2</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -182,7 +189,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Model Selection in High Dimensions</h1>
 <h4 class="author"><em>Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)</em></h4>
-<h4 class="date"><em>2018-03-12</em></h4>
+<h4 class="date"><em>2018-03-14</em></h4>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -584,212 +591,17 @@ result</code></pre></div>
 <li>main source of drinking water (8 levels: Piped into dwelling, Piped to yard/plot, Public tap/standpipe, Protected well, Unprotected well, River/dam/lake/ponds/stream/canal/ irrigation channel, Bottled water, Other).</li>
 </ul>
 <blockquote>
-<p>Exercise:</p>
+Exercise (<a href="solutions.html#zam">4.1.1</a>)<br />
+
 </blockquote>
 <blockquote>
-<ul>
-<li>Load the dataset and build the variables so that they can be used for a regression analysis.</li>
-</ul>
+Load the dataset and build the variables so that they can be used for a regression analysis.<br />
+Associate proper names to each variable (hint: look at the previous comments in the r chunk).<br />
+Perform a linear regression on all the available variables.<br />
+Reduce the number of covariates (e.g. using the t-test) and add some interactions. Perform a linear regression on the new dataset.<br />
+Analyse your chosen estimated model with a residual analysis (e.g. residuals vs fitted plot, normal QQ plot etc.).<br />
+
 </blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(foreign)  <span class="co"># install foreign package if you do not have it yet</span>
-
-<span class="co"># See section 1.6.2 e-book for information on the dataset.</span>
-
-<span class="co"># dat = read.spss(&quot;Zambia.SAV&quot;, add.undeclared.levels = &quot;no&quot;)</span>
-
-dat =<span class="st"> </span><span class="kw">read.spss</span>(<span class="st">&quot;Zambia.SAV&quot;</span>)
-
-<span class="co"># Construct system matrix</span>
-
-<span class="co"># The idea behind this exercise is to be aware that data cleaning is most of the times the real issue </span>
-<span class="co"># with a real problem. It is sensitive to say that 80% of the work is cleaning and only 20% is modeling.</span>
-
-<span class="co"># Extract response variable i.e. HW70 Height for age standard deviation (according to WHO)</span>
-y =<span class="st"> </span>dat$HW70
-y[y ==<span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Revert tranformation (i.e. z-score)</span>
-y =<span class="st"> </span>y/<span class="dv">100</span>
-
-<span class="co"># Variable 1: The calculated months of breastfeeding gives the duration of breastfeeding</span>
-x1 =<span class="st"> </span>dat$M5
-x1[x1 ==<span class="st"> </span><span class="dv">94</span>] =<span class="st"> </span><span class="dv">0</span>
-x1[x1 ==<span class="st"> </span><span class="dv">97</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 ==<span class="st"> </span><span class="dv">98</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 ==<span class="st"> </span><span class="dv">99</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 &gt;<span class="st"> </span><span class="dv">40</span>] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Variable 2: Age in months of the child</span>
-x2 =<span class="st"> </span>dat$HW1
-
-<span class="co"># Variable 3: Age of the mother at birth</span>
-x3 =<span class="st"> </span>dat$V012 -<span class="st"> </span>dat$B8
-x3[x3&gt;<span class="dv">45</span>] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Variable 4: Body mass index (BMI) of the mother</span>
-x4 =<span class="st"> </span>dat$V445
-
-x4 =<span class="st"> </span>x4/<span class="dv">100</span>  <span class="co"># no sense without this division</span>
-
-<span class="co"># Variable 5: Height of the mother in meters</span>
-x5 =<span class="st"> </span>dat$V438
-x5[x5 ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 &lt;<span class="st"> </span><span class="dv">1300</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 &gt;<span class="st"> </span><span class="dv">1900</span>] =<span class="st"> </span><span class="ot">NA</span>
-
-x5 =<span class="st"> </span>x5/<span class="dv">1000</span>  <span class="co"># it was in mm, we need to transform from original</span>
-
-<span class="co"># Variable 6: Weight of the mother in kilograms</span>
-x6 =<span class="st"> </span>dat$V437
-
-x6=x6/<span class="dv">10</span> <span class="co"># we need to go back to Kg</span>
-
-<span class="co"># Variable 7: De facto region of residence</span>
-
-<span class="co"># Creating dummies (i.e. indicator functions) for each level of an existing factor enables</span>
-<span class="co"># to check the coefficients of each level in a possible future model estimation</span>
-
-x7 =<span class="st"> </span><span class="kw">as.factor</span>(dat$V101)
-
-
-x7 =<span class="st"> </span><span class="kw">model.matrix</span>(~x7<span class="dv">-1</span>)
-
-<span class="kw">dim</span>(x7)
-
-<span class="co"># Variable 8: Mother highest education level attended</span>
-x8 =<span class="st"> </span><span class="kw">as.factor</span>(dat$V106)
-x8 =<span class="st"> </span><span class="kw">model.matrix</span>(~x8<span class="dv">-1</span>)
-
-<span class="kw">dim</span>(x8)
-
-<span class="co"># Variable 9: Wealth index factor score</span>
-x9 =<span class="st"> </span>dat$V191
-
-<span class="co"># Variable 10: Weight of child at birth given in kilograms with three implied decimal places</span>
-x10 =<span class="st"> </span>dat$M19
-x10[x10 ==<span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10 =<span class="st"> </span>x10/<span class="dv">1000</span>
-
-<span class="co"># Variable 11: Child Sex</span>
-x11 =<span class="st"> </span>dat$B4
-
-<span class="co"># Variable 12: Preceding birth interval is calculated as the difference in months between the current birth and the previous birth</span>
-x12 =<span class="st"> </span>dat$B11
-x12[x12 &gt;<span class="st"> </span><span class="dv">125</span>] =<span class="st"> </span><span class="ot">NA</span>
-
-<span class="co"># Variable 13: Drinking Water</span>
-x13 =<span class="st"> </span>dat$V113
-x13 =<span class="st"> </span><span class="kw">model.matrix</span>(~x13<span class="dv">-1</span>)
-x13 =<span class="st"> </span>x13[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">13</span>,<span class="dv">17</span>,<span class="dv">18</span>)]
-
-<span class="kw">dim</span>(x13)
-
-<span class="kw">levels</span>(x13)
-
-mat.sys =<span class="st"> </span><span class="kw">na.omit</span>(<span class="kw">cbind</span>(y,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13))
-<span class="kw">dim</span>(mat.sys)[<span class="dv">2</span>]
-
-
-<span class="co"># Number of regressor</span>
-p =<span class="st"> </span><span class="kw">dim</span>(mat.sys)[<span class="dv">2</span>]
-
-<span class="co"># Construct X and Y</span>
-y =<span class="st"> </span>mat.sys[,<span class="dv">1</span>]
-X =<span class="st"> </span>mat.sys[,<span class="dv">2</span>:p]
-
-<span class="co"># Create a dataframe</span>
-
-data_zambia =<span class="st"> </span><span class="kw">cbind</span>(y,X)
-
-data_zambia =<span class="st"> </span><span class="kw">data.frame</span>(data_zambia)</code></pre></div>
-<blockquote>
-<ul>
-<li>Associate proper names to each variable (hint: look at the previous comments in the r chunk).</li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(data_zambia) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Height for age sd&quot;</span>, <span class="st">&quot;Breastfeeding duration (months)&quot;</span>,<span class="st">&quot;Age of the child (months)&quot;</span>, <span class="st">&quot;Age of the mother (years)&quot;</span>, <span class="st">&quot;BMI mother&quot;</span>, <span class="st">&quot;Heigth mother (meter)&quot;</span>, <span class="st">&quot;Weight mother (kg)&quot;</span>, <span class="st">&quot;Region:Central&quot;</span>, <span class="st">&quot;Region:Copperbelt&quot;</span>, <span class="st">&quot;Region:Eastern&quot;</span>, <span class="st">&quot;Region:Luapula&quot;</span>, <span class="st">&quot;Region:Lusaka&quot;</span>, <span class="st">&quot;Region:Northern&quot;</span>, <span class="st">&quot;Region:Northwestern&quot;</span>, <span class="st">&quot;Region:Southern&quot;</span>, <span class="st">&quot;Region:Western&quot;</span>, <span class="st">&quot;Ed:No education&quot;</span>, <span class="st">&quot;Ed:Primary&quot;</span>, <span class="st">&quot;Ed:Secondary&quot;</span>, <span class="st">&quot;Ed:Higher&quot;</span>, <span class="st">&quot;Wealth index factor score&quot;</span>, <span class="st">&quot;Child weight at birth (kg)&quot;</span>, <span class="st">&quot;Child sex&quot;</span>, <span class="st">&quot;Interval between births&quot;</span>,<span class="st">&quot;Water:Piped into dwelling&quot;</span>, <span class="st">&quot;Water:Piped to yard/plot&quot;</span>, <span class="st">&quot;Water:Public tap/standpipe&quot;</span>, <span class="st">&quot;Water:Protected well&quot;</span>, <span class="st">&quot;Water:Unprotected well&quot;</span>, <span class="st">&quot;Water:River/dam/lake/ponds/stream/canal/irrigation channel&quot;</span>, <span class="st">&quot;Water:Bottled water&quot;</span>, <span class="st">&quot;Water:Other&quot;</span>)</code></pre></div>
-<blockquote>
-<ul>
-<li>Perform a linear regression on all the available variables.</li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(data_zambia)
-
-lm_zambia =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. -<span class="st">`</span><span class="dt">Region:Central</span><span class="st">`</span>-<span class="st"> `</span><span class="dt">Ed:No education</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia)
-
-<span class="co"># We take off two levels to avoid multicollinearity. This should always be done when you create dummies.</span>
-<span class="kw">summary</span>(lm_zambia) <span class="co"># read the output understand the benchmark of the factor</span>
-
-lm_zambia_full =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. , <span class="dt">data =</span> data_zambia)
-
-<span class="kw">summary</span>(lm_zambia_full) <span class="co">#here it is R who choses the benchmark for the factors (i.e. NA variables)</span>
-
-<span class="kw">detach</span>(data_zambia)</code></pre></div>
-<blockquote>
-<ul>
-<li>Reduce the number of covariates (e.g. using the <em>t</em>-test) and add some interactions. Perform a linear regression on the new dataset.</li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(data_zambia)
-
-<span class="co"># Eliminate variables with t-test in a stepwise manner (fixed alfa = 0.05 in this case)</span>
-
-model_zambia_reduced =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>., <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span>:<span class="dv">16</span>,<span class="dv">21</span>:<span class="dv">23</span>)])
-
-
-<span class="kw">summary</span>(model_zambia_reduced) <span class="co"># notice what is happening to the age of the mother variable </span>
-
-
-<span class="co"># Introduce one interaction in the reduced model. We start with the childsex factor.</span>
-
-model_zambia_int =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. +<span class="st"> `</span><span class="dt">Breastfeeding duration (months)</span><span class="st">`</span>*<span class="st">`</span><span class="dt">Child sex</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span>:<span class="dv">16</span>,<span class="dv">21</span>:<span class="dv">23</span>)])
-
-
-<span class="kw">summary</span>(model_zambia_int) <span class="co">#We take out the interaction from the model as it is not significant</span>
-
-#### Remember: the hierarchical effect states that anytime you add an interaction also the marginal effects
-
-#### should be part of your model
-
-<span class="kw">detach</span>(data_zambia)</code></pre></div>
-<blockquote>
-<ul>
-<li>Other available procedures for a first model selection in this specific case:</li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># (1) VIF (variance inflation factor) for avoiding multicollinearity, </span>
-
-<span class="co"># (2) Automatic Stepwise procedures (e.g. forward and backward) </span>
-
-<span class="co"># (3) Exhaustive search (See practical 3 exercises)</span>
-
-<span class="co"># Example with an automatic stepwise procedure</span>
-
-<span class="kw">help</span>(<span class="st">&quot;step&quot;</span>)
-
-stepwise_procedue =<span class="st"> </span><span class="kw">step</span>(lm_zambia_full,<span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>) <span class="co">#or forward</span>
-
-<span class="co"># This procedure evaluates, given a criterion, a sequence of variables stopping when</span>
-<span class="co"># the criterion is increasing</span></code></pre></div>
-<blockquote>
-<ul>
-<li>Analyse your chosen estimated model with a residual analysis (e.g. residuals vs fitted plot, normal QQ plot etc.).</li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Validate your model looking at residuals vs fitted plot and normal QQ plot</span>
-
-<span class="kw">plot</span>(model_zambia_reduced, <span class="dt">which =</span> <span class="dv">1</span>)  <span class="co"># Residuals vs fitted: no particular structure</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(model_zambia_reduced, <span class="dt">which =</span> <span class="dv">2</span>) </code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-23-2.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Normal QQ plot: We observe right tail which is not compatible with a normal assumption</span></code></pre></div>
 </div>
 <div id="prognostic-factors-in-childhood-leukemia" class="section level3">
 <h3><span class="header-section-number">1.5.2</span> Prognostic Factors in Childhood Leukemia</h3>
@@ -797,55 +609,19 @@ stepwise_procedue =<span class="st"> </span><span class="kw">step</span>(lm_zamb
 <p>Factors that can affect a child’s outlook (prognosis) suffering e.g. from Leukemia are called prognostic factors. They help doctors decide whether a child with leukemia should receive standard treatment or more intensive treatment. Prognostic factors seem to be more determinant in acute lymphocytic leukemia (ALL) than in acute myelogenous leukemia (AML). See <a href="https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html" class="uri">https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html</a> for a detailed explanation.</p>
 <p>The <em>leukemia_big.csv</em> dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of <span class="citation">Golub et al. (<a href="#ref-golub1999molecular">1999</a>)</span> Science paper and exhibit an important statistical challenge because <span class="math inline">\(p &gt;&gt; n\)</span> as we deal with 72 patients and 7128 measurements.</p>
 <blockquote>
-<p>Exercises</p>
+Exercises (<a href="solutions.html#leuk">4.1.2</a>)<br />
+
 </blockquote>
-<ul>
-<li>Load the data from the URL <a href="http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv" class="uri">http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv</a></li>
-</ul>
-<div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">leukemia_big &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv&quot;</span>)</code></pre></div>
-</div>
-<ul>
-<li>Create the response variable y according to the number of ALL and AML patients. In the same fashion create the matrix X of independent variables.</li>
-</ul>
+<blockquote>
+<p>Load the data from the URL <a href="http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv" class="uri">http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv</a><br />
+Create the response variable y according to the number of ALL and AML patients. In the same fashion create the matrix X of independent variables. </p>
+</blockquote>
 <p>See <a href="https://web.stanford.edu/~hastie/CASI_files/DATA/leukemia.html" class="uri">https://web.stanford.edu/~hastie/CASI_files/DATA/leukemia.html</a> for further details.</p>
-<div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">leukemia_mat =<span class="st"> </span><span class="kw">as.matrix</span>(leukemia_big)
+<blockquote>
+Choose the correct exponential family for this situation and perform a GLM on the data. Comment on the results that you obtain.<br />
 
-<span class="kw">dim</span>(leukemia_mat)
-
-leukemia_mat =<span class="st"> </span><span class="kw">t</span>(leukemia_mat) <span class="co">#this is the design matrix for the analysis</span>
-
-<span class="co"># Generate the 0 and 1 values for the two different categories: there are 20 ALL, 14 AML, 27 ALL and</span>
-
-<span class="co"># 11 AML for a total of 47 ALL and 25 AML.</span>
-
-<span class="co"># Given the above excerpt from the cancer society, I have decided to code ALL as 1 and AML as 0 since</span>
-
-<span class="co"># doctors are interested in knowing the characteristics which differentiate ALL from AML in order to</span>
-
-<span class="co"># understand if we can use standard treatment or a more aggressive one.</span>
-
-y =<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">20</span>),<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">14</span>), <span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">27</span>), <span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">11</span>))  <span class="co">#the response vector</span>
-
-<span class="kw">length</span>(y)
-
-X =<span class="st"> </span>leukemia_mat
-
-<span class="kw">dim</span>(X)</code></pre></div>
-</div>
-<ul>
-<li>Choose the correct exponential family for this situation and perform a GLM on the data. Comment on the results that you obtain.</li>
-</ul>
+</blockquote>
 <!-- Since p>>n there are problems -->
-<div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_glm =<span class="st"> </span><span class="kw">glm</span>(<span class="dt">formula =</span> y ~<span class="st"> </span>X,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
-
-
-<span class="kw">summary</span>(model_glm)  <span class="co">#singularity issues in the IWLS algorithm of GLM. It is impossible to invert the matrix.</span>
-
-<span class="co"># The binary Lasso is a possible way to solve the issue and have an actual estimate. See glmnet package.</span></code></pre></div>
-</div>
 </div>
 <div id="r-package-quantmod" class="section level3">
 <h3><span class="header-section-number">1.5.3</span> R package quantmod</h3>
