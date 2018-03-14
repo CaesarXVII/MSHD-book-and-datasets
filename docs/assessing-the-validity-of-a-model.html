@@ -166,7 +166,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1.1" data-path="solutions.html"><a href="solutions.html#zam"><i class="fa fa-check"></i><b>4.1.1</b> Data on Malnutrition in Zambia</a></li>
 <li class="chapter" data-level="4.1.2" data-path="solutions.html"><a href="solutions.html#leuk"><i class="fa fa-check"></i><b>4.1.2</b> Prognostic Factors in Childhood Leukemia</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>4.2</b> Chapter 2</a></li>
+<li class="chapter" data-level="4.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>4.2</b> Chapter 2</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="solutions.html"><a href="solutions.html#cv"><i class="fa fa-check"></i><b>4.2.1</b> Cross-validation</a></li>
+<li class="chapter" data-level="4.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>4.2.2</b> Akaike Information Criterion</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -254,113 +257,28 @@ Cross-validation attempts to mimic <span class="math inline">\(\widehat{\text{Er
 \widehat{\text{Err}}_{\text{cv1}}= \frac{1}{n}\sum_{i=1}^{n}d\left(\hat{y}_{(i)},y_{i}\right)
 \end{equation}\]</span>
 <p>A more common practice is to leave out several observations at a time: the sample is randomly partitioned into <span class="math inline">\(J\)</span> groups of size about <span class="math inline">\(\lfloor n/J\rfloor=n_J\)</span> each, then for each <span class="math inline">\(j=1,\ldots,J\)</span> groups, the training set is the sample without the <span class="math inline">\(j\)</span>th group on which the prediction <span class="math inline">\(\hat{y}_{(j)}\)</span> is computed and then compared to the observations in the <span class="math inline">\(j\)</span>th group <span class="math inline">\(y_j\)</span> using the chosen discrepancy measure <span class="math inline">\(D\)</span>. A common choice is <span class="math inline">\(J=10\)</span> leading to the <em>ten-fold cross-validation</em> procedure. Reducing from <span class="math inline">\(n\)</span> to <span class="math inline">\(J\)</span> the number of training and validation sets reduces the necessary number of prediction rules constructions (estimation). The optimal value for <span class="math inline">\(J\)</span> is however not known.</p>
+<p><br></p>
 <blockquote>
-<p>Exercise: (solutions provided by <strong>Alexander Maslev</strong>, <strong>Hanxiong Wang</strong> and <strong>Minyoung Lee</strong>). </p>
+<p>Exercise: (solutions (<a href="solutions.html#cv">4.2.1</a>) provided by <strong>Alexander Maslev</strong>, <strong>Hanxiong Wang</strong> and <strong>Minyoung Lee</strong>). </p>
 </blockquote>
-<p>Program k-fold Cross-Validation (with k=2) and do model selection in a specific simulation setting with an exhaustive search. Follow these steps:</p>
+<blockquote>
+Program k-fold Cross-Validation (with k=2) and do model selection in a specific simulation setting with an exhaustive search. Follow these steps:<br />
+
+</blockquote>
 <blockquote>
 <ol style="list-style-type: lower-alpha">
 <li>Generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span>. You can choose the location vector as you wish but set the scale matrix as the identity.<br />
 </li>
-</ol>
-</blockquote>
-<p>We have chosen the location vector [2,4,6,8,10] and the scale matrix as the identity.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n&lt;-<span class="dv">1000</span>
-p&lt;-<span class="dv">5</span>
-Mu&lt;-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>) <span class="co"># location vector</span>
-sigma&lt;-<span class="kw">diag</span>(<span class="dv">5</span>) <span class="co"># scale matrix as the identity</span>
-X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)</code></pre></div>
-<blockquote>
-<ol start="2" style="list-style-type: lower-alpha">
 <li>Choose the generating vector <span class="math inline">\(\boldsymbol{\beta }= [3 \; 1.5 \; 0 \; 2 \; 0]\)</span> and retrieve the signal to noise ratio of this setting.<br />
 </li>
-</ol>
-</blockquote>
-<p>We found in Wikipedia that the statistical definition of SNR is the reciprocal of the coefficient of variation (i.e. the ratio of mean to standard deviation of a signal or measurement) : <span class="math display">\[SNR = \frac{\mu}{\sigma}\]</span> where <span class="math inline">\(\mu\)</span> is the signal mean or expected value and <span class="math inline">\(\sigma\)</span> is the standard deviation of the noise.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
-e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
-
-SNR&lt;-<span class="kw">mean</span>(X%*%beta)/<span class="kw">sqrt</span>(<span class="kw">var</span>(e))
-
-SNR</code></pre></div>
-<pre><code>## [1] 27.90095</code></pre>
-<p>In the engineering literature, there is an alternative definition:</p>
-<p><span class="math display">\[SNR_{eng} = \frac{Var(f(x))}{Var(\epsilon)}\]</span> where <span class="math inline">\(f(x)\)</span> is the chosen prediction rule (e.g. linear function in the OLS case) and <span class="math inline">\(\epsilon\)</span> is the noise. You can fix in advance your SNR with the following code and generate the data accordingly:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">signal_to_noise_ratio =<span class="st"> </span><span class="co">#number to fix as you wish#</span>
-
-data =<span class="st"> </span>X%*%beta
-
-noise =<span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)
-
-k =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">var</span>(data)/(signal_to_noise_ratio*<span class="kw">var</span>(noise)))
-
-
-y_hat_eng =<span class="st"> </span>data +<span class="st"> </span>k*noise <span class="co"># how you generate data to retrieve your fixed signal to noise ratio</span></code></pre></div>
-<blockquote>
-<ol start="3" style="list-style-type: lower-alpha">
 <li>Generate <span class="math inline">\(\hat{\mathbf{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal, <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span>. Suppose for simplicity that the errors are uncorrelated.<br />
 </li>
-</ol>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Y_hat&lt;-X%*%beta+e</code></pre></div>
-<blockquote>
-<ol start="4" style="list-style-type: lower-alpha">
 <li>Split the data randomly in two halves (k=2) and use the training set to determine <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Then, compute the squared loss function as prediction error measure for each possible model. Observe which model is the best model.<br />
 </li>
-</ol>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:n, <span class="dt">size=</span><span class="fl">0.5</span>*n)
-
-<span class="co"># Split data</span>
-y_train&lt;-<span class="st"> </span>Y_hat[-index,]
-x_train&lt;-X[-index,]
-y_test&lt;-<span class="st"> </span>Y_hat[index,]
-x_test&lt;-X[index,]
-
-index_sub_choose&lt;-<span class="kw">c</span>(<span class="dv">1</span>:p)
-sub_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>,<span class="dt">ncol =</span> p,<span class="dt">nrow =</span> <span class="dv">2</span>^p<span class="dv">-1</span>)
-t=<span class="dv">0</span>
-for(i in <span class="dv">1</span>:<span class="dv">5</span>)
-{
-  index_matrix &lt;-<span class="st"> </span><span class="kw">combn</span>(index_sub_choose,i)
-  for(j in <span class="dv">1</span>:<span class="kw">ncol</span>(index_matrix))
-  {
-    t &lt;-<span class="st"> </span>t<span class="dv">+1</span>
-    index_sub &lt;-<span class="st"> </span>index_matrix[,j]
-    sub_matrix[t,<span class="kw">c</span>(index_sub)]  &lt;-<span class="st">  </span><span class="dv">1</span>
-  }
-}
-
-k&lt;-<span class="kw">nrow</span>(sub_matrix)
-cv &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data=</span><span class="ot">NA</span>,<span class="dt">nrow =</span> k,<span class="dt">ncol =</span> <span class="dv">1</span>)
-for(j in <span class="dv">1</span>:k){
-  Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]
-  betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%y_train
-  new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]%*%betaMLE
-  cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test-new_Y)%*%(y_test-new_Y)
-  
-}
-
-BEST_cv&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(cv),]==<span class="dv">1</span>)
-BEST_cv</code></pre></div>
-<pre><code>## [1] 1 2 4 5</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xsub_cv&lt;-x_train[,BEST_cv]
-betaMLE_cv&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub_cv)%*%Xsub_cv)%*%<span class="kw">t</span>(Xsub_cv)%*%y_train
-betaMLE_cv</code></pre></div>
-<pre><code>##             [,1]
-## [1,]  3.03433961
-## [2,]  1.51075393
-## [3,]  2.01760617
-## [4,] -0.02911818</code></pre>
-<p>Each time it changes but most of the times we obtain the best model when p=5. The beta sometimes is not close to generating vector <span class="math inline">\(\beta\)</span> = [3 1.5 0 2 0].</p>
-<blockquote>
-<ol start="5" style="list-style-type: lower-alpha">
 <li>Suppose now that we increase the size of <span class="math inline">\(\boldsymbol{\beta}\)</span> to 100 (i.e. <span class="math inline">\(p = 100\)</span> ). Calculate the number of possible models to evaluate together with an estimate of the time needed for an exhaustive search (<em>hint: use previous results</em>). Conclude on the feasibility of this task.</li>
 </ol>
 </blockquote>
-<pre><code>## [1] 1.267651e+30</code></pre>
-<pre><code>## [1] 6.915153e+27</code></pre>
-<p>When we run a CV process with p=5, it takes 0.1691079 seconds. For p = 5, we can have 31 different models thanks to Newton’s binomial theorem (i.e. <span class="math inline">\(2^p - 1\)</span>). Unfortunately when we increase p to 100, we have 1.26e+30 different models. Thus it will take approximately 1.9e+24 hours. This is the case when we do k=2 cross validation. Moreover if we increase the number of k, we will drastically increase the time needed. This task is not feasible.</p>
+<p><br></p>
 </div>
 <div id="covariance-penalties-criteria" class="section level2">
 <h2><span class="header-section-number">2.3</span> Covariance Penalties Criteria</h2>
@@ -531,260 +449,36 @@ There exist several expressions for the AIC for the linear regression model, one
 
 \text{AIC}=  \frac{1}{n\sigma^2} \text{RSS}+\frac{2}{n}p 
 \end{equation}\]</span>
-<p>where <span class="math inline">\(\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\right)^2\)</span> is the residual sum-of-squares. We can see that <span class="math inline">\(C_p=\sigma^2\text{AIC}\)</span></p>
+<p>where <span class="math inline">\(\text{RSS}=\sum_{i=1}^n\left(y_i-\mathbf{x}_i^T \hat{\boldsymbol{\beta}}\right)^2\)</span> is the residual sum-of-squares. We can see that <span class="math inline">\(C_p=\sigma^2\text{AIC}\)</span>.</p>
+<p><br></p>
 <blockquote>
-<p>Exercise (solutions provided by <strong>Alexander Maslev</strong>, <strong>Hanxiong Wang</strong> and <strong>Minyoung Lee</strong>). </p>
+<p>Exercise (solutions (<a href="solutions.html#aic">4.2.2</a>) provided by <strong>Alexander Maslev</strong>, <strong>Hanxiong Wang</strong> and <strong>Minyoung Lee</strong>). </p>
 </blockquote>
 <blockquote>
-<ul>
-<li>Derive the AIC for the regression model from its more general definition. (optional)<br />
-</li>
-</ul>
+Derive the AIC for the regression model from its more general definition. (optional)<br />
+
 </blockquote>
 <blockquote>
-<ul>
+<ol style="list-style-type: lower-alpha">
 <li>Program AIC and do model selection in a specific simulation setting with an exhaustive search (follow the passages listed in the CV exercise section).<br />
 </li>
-</ul>
+</ol>
 </blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n&lt;-<span class="dv">1000</span>
-p&lt;-<span class="dv">5</span>
-Mu&lt;-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>) <span class="co"># location vector</span>
-sigma&lt;-<span class="kw">diag</span>(<span class="dv">5</span>) <span class="co"># scale matrix as the identity</span>
-X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)
-
-beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
-e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
-SNR&lt;-<span class="kw">mean</span>(X%*%beta)/<span class="kw">var</span>(e)
-
-Y_hat&lt;-X%*%beta+e</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index_sub_choose&lt;-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)
-sub_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>,<span class="dt">ncol =</span> <span class="dv">5</span>,<span class="dt">nrow =</span> <span class="dv">31</span>)
-t=<span class="dv">0</span>
-for(i in <span class="dv">1</span>:<span class="dv">5</span>)
-{
-  index_matrix &lt;-<span class="st"> </span><span class="kw">combn</span>(index_sub_choose,i)
-  for(j in <span class="dv">1</span>:<span class="kw">ncol</span>(index_matrix))
-  {
-    t &lt;-<span class="st"> </span>t<span class="dv">+1</span>
-    index_sub &lt;-<span class="st"> </span>index_matrix[,j]
-    sub_matrix[t,<span class="kw">c</span>(index_sub)]  &lt;-<span class="st">  </span><span class="dv">1</span>
-  }
-}
-
-<span class="co"># AIC</span>
-RSS&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
-AIC&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
-k&lt;-<span class="kw">nrow</span>(sub_matrix)
-for(j in <span class="dv">1</span>:k){
-Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)])
-betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
-new_Y&lt;-Xsub%*%betaMLE
-for(i in <span class="dv">1</span>:(n/<span class="dv">2</span>)){
-  RSS[j]&lt;-RSS[j]+(new_Y[i]-Y_hat[i])^<span class="dv">2</span>
-}
-AIC[j]&lt;-RSS[j]/<span class="kw">var</span>(e)+<span class="dv">2</span>*<span class="kw">ncol</span>(Xsub)
-}
-BEST&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(AIC),]==<span class="dv">1</span>)
-BEST</code></pre></div>
-<pre><code>## [1] 1 2 4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xsub&lt;-<span class="kw">as.matrix</span>(X[,BEST])
-betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
-betaMLE</code></pre></div>
-<pre><code>##          [,1]
-## [1,] 3.039224
-## [2,] 1.488103
-## [3,] 1.993914</code></pre>
-<p>Each time it changes but most of the times we obtain the best model when p=4 in position[1 2 4 5]. The estimated beta is very close to generating vector <span class="math inline">\(\beta\)</span> = [3 1.5 0 2 0].</p>
-<p>The above results hold not considering <span class="math inline">\(\sigma\)</span> and the intercept as parameters. In the general formulation of the Akaike’s information criterion, <span class="math inline">\(p = dim(\Theta)\)</span> where <span class="math inline">\(\Theta\)</span> is the parameters space.</p>
-<p>As we computed in point (e) in CV exercise, when p = 100, we have 1.26e+30 different model. The time needed to run the AIC process with p = 5 takes 0.2441621 seconds. When we calculate the time that we need to run when p = 100, we obtain approximately 2.7e+24 hours. Thus we still think that the task to do all the combinations when p = 100 is not feasible.</p>
-<pre><code>## [1] 1.267651e+30</code></pre>
-<pre><code>## [1] 9.984266e+27</code></pre>
-<pre><code>## [1] 2.773407e+24</code></pre>
 <blockquote>
-<ul>
+<ol start="2" style="list-style-type: lower-alpha">
 <li>Compare the performance of your programmed CV and AIC by replicating 100 times the tasks. In particular you should evaluate three specific criteria: the proportion of times the correct model is selected (<em>Exact</em>), the proportion of times the selected model contains the correct one (<em>Correct</em>) and the average number of selected regressors (<em>Average <span class="math inline">\(\sharp\)</span></em>)<br />
 </li>
-</ul>
-</blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Rep 100 times AIC
-
-cv &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data=</span><span class="ot">NA</span>,<span class="dt">nrow =</span> k,<span class="dt">ncol =</span> <span class="dv">1</span>)
-Exact&lt;-<span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)))
-<span class="kw">colnames</span>(Exact)&lt;-<span class="kw">c</span>(<span class="st">&quot;AIC&quot;</span>,<span class="st">&quot;CV&quot;</span>)
-AverageN&lt;-<span class="kw">matrix</span>(<span class="ot">NA</span>,<span class="dt">nrow=</span><span class="dv">100</span>,<span class="dt">ncol =</span> <span class="dv">2</span>)
-<span class="kw">colnames</span>(AverageN)&lt;-<span class="kw">c</span>(<span class="st">&quot;AIC&quot;</span>,<span class="st">&quot;CV&quot;</span>)
-Correct&lt;-<span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)))
-<span class="kw">colnames</span>(Correct)&lt;-<span class="kw">c</span>(<span class="st">&quot;AIC&quot;</span>,<span class="st">&quot;CV&quot;</span>)
-
-for(l in <span class="dv">1</span>:<span class="dv">100</span>){
-  
-### SETTING ###
-  n&lt;-<span class="dv">1000</span>
-  p&lt;-<span class="dv">5</span>
-  Mu&lt;-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>) <span class="co"># location vector</span>
-  sigma&lt;-<span class="kw">diag</span>(<span class="dv">5</span>) <span class="co"># scale matrix as the identity</span>
-  X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)
-  beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
-  e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
-  Y_hat&lt;-X%*%beta+e
-
-### AIC ###    
-  RSS&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
-  AIC&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
-
-  for(j in <span class="dv">1</span>:k){
-    Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)])
-    betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
-    new_Y&lt;-Xsub%*%betaMLE
-    for(i in <span class="dv">1</span>:(n/<span class="dv">2</span>)){
-      RSS[j]&lt;-RSS[j]+(new_Y[i]-Y_hat[i])^<span class="dv">2</span>
-    }
-    AIC[j]&lt;-RSS[j]/<span class="kw">var</span>(e)+<span class="dv">2</span>*<span class="kw">ncol</span>(Xsub)
-  }
-  BEST&lt;-sub_matrix[<span class="kw">which.min</span>(AIC),]
-  BEST[<span class="kw">is.na</span>(BEST)] &lt;-<span class="dv">0</span>
-  if(<span class="kw">sum</span>(BEST-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))==<span class="dv">0</span>){
-    
-    Exact[<span class="dv">1</span>]&lt;-Exact[<span class="dv">1</span>]+<span class="dv">1</span>
-    
-  }
-  if(<span class="kw">sum</span>((BEST[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))==<span class="dv">0</span>){
-    Correct[<span class="dv">1</span>]&lt;-Correct[<span class="dv">1</span>]+<span class="dv">1</span>
-  }
-    AverageN[l,<span class="dv">1</span>]&lt;-<span class="kw">sum</span>(BEST)
-  
-  
-### CV ###
-  index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:n, <span class="dt">size=</span><span class="fl">0.5</span>*n)
-  y_train&lt;-<span class="st"> </span>Y_hat[-index,]
-  x_train&lt;-X[-index,]
-  y_test&lt;-<span class="st"> </span>Y_hat[index,]
-  x_test&lt;-X[index,]
-  
-  for(j in <span class="dv">1</span>:k){
-    Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]
-    betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%y_train
-    new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]%*%betaMLE
-    cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test-new_Y)%*%(y_test-new_Y)
-    
-  }
-  
-  BEST_cv&lt;-sub_matrix[<span class="kw">which.min</span>(cv),]
-  BEST_cv[<span class="kw">is.na</span>(BEST_cv)] &lt;-<span class="dv">0</span>
-  if(<span class="kw">sum</span>(BEST_cv-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))==<span class="dv">0</span>){
-    
-    Exact[<span class="dv">2</span>]&lt;-Exact[<span class="dv">2</span>]+<span class="dv">1</span>
-    
-  }
-  if(<span class="kw">sum</span>((BEST_cv[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))==<span class="dv">0</span>){
-    Correct[<span class="dv">2</span>]&lt;-Correct[<span class="dv">2</span>]+<span class="dv">1</span>
-  }
-    AverageN[l,<span class="dv">2</span>]&lt;-<span class="kw">sum</span>(BEST_cv)
-   
-}
-
-Exact/<span class="dv">100</span></code></pre></div>
-<pre><code>##    AIC   CV
-## 1 0.82 0.34</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Correct/<span class="dv">100</span></code></pre></div>
-<pre><code>##   AIC CV
-## 1   1  1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colMeans</span>(AverageN)</code></pre></div>
-<pre><code>##  AIC   CV 
-## 3.20 3.86</code></pre>
-<p>In this part, we have simulated the AIC process and the CV process for 100 times and evaluated the three criteria. We have found that AIC gives better results than CV in terms of Exact models and it has a lower number of selected regressors on average. Both methods achieves model selection consistency in this simple setting as the proportion of correct models reaches the value of 1.</p>
-<p>This result is expected since AIC is derived from the likelihood which inherits all the nice properties (e.g. Cramer-Rao bound etc.) when the model is correct. On the other hand, CV is a non parametric method thus inferior by definition to the AIC in this setting. However in a real application our conjectured model maybe far from the truth and CV could be a better choice.</p>
-<blockquote>
-<ul>
 <li>In the same simulation setting outlined in the CV exercise section, generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span> but now fix the scale matrix with an autoregressive form <span class="math inline">\(\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}\)</span> with <span class="math inline">\(\sigma_{lm} = \rho^{\mid l - m\mid}\)</span>. Compare the performance of CV and AIC for <span class="math inline">\(\boldsymbol{\rho} = [0.2 \; 0.5\; 0.7]\)</span> (<span class="math inline">\(\rho = 0\)</span> corresponds to the identity case that you have already treated).<br />
 </li>
-</ul>
-</blockquote>
-<blockquote>
-<ul>
 <li>Upload the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda">Zambia dataset</a> and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: <em>leaps</em>, <em>glmulti</em>, <em>MuMIn</em> and <em>caret</em>.<br />
 </li>
-</ul>
+</ol>
 </blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load Zambia dataset </span>
-
-<span class="kw">load</span>(<span class="dt">file =</span> <span class="st">&quot;your_directory/data_zambia.Rda&quot;&quot;)</span>
-
-<span class="st">data_zambia = data_zambia[,c(1:7,21,22,24)] #exclude the factors from the analysis</span>
-
-
-<span class="st">### Exhaustive search with leaps (AIC case) ###</span>
-
-<span class="st">require(leaps)</span>
-
-<span class="st">regsubsets.out &lt;- regsubsets(data_zambia$`Height for age sd` ~ .,data = data_zambia,nbest = 1,</span>
-<span class="st">                             nvmax = NULL,    # NULL for no limit on number of variables</span>
-<span class="st">                             force.in = NULL, force.out = NULL,</span>
-<span class="st">                             method = &quot;</span>exhaustive<span class="st">&quot;)</span>
-
-<span class="st">summary(regsubsets.out)</span>
-
-
-<span class="st">plot(regsubsets.out) # BIC is default</span>
-
-<span class="st">plot(regsubsets.out,scale = &quot;</span>Cp<span class="st">&quot;) #C_p case which is equal to AIC with a linear model</span>
-
-
-<span class="st">### Exhaustive search with glmulti (AIC case) ### </span>
-
-
-<span class="st">glmulti.lm.out &lt;- glmulti::glmulti(data_zambia$`Height for age sd` ~ .,data = data_zambia,</span>
-<span class="st">          level = 1,               # No interaction considered</span>
-<span class="st">          method = &quot;</span>h<span class="st">&quot;,            # Exhaustive approach</span>
-<span class="st">          crit = &quot;</span>aic<span class="st">&quot;,            # AIC as criteria</span>
-<span class="st">          confsetsize = 5,         # Keep 5 best models</span>
-<span class="st">          plotty = F, report = F,  # No plot or interim reports</span>
-<span class="st">          fitfunction = &quot;</span>lm<span class="st">&quot;)      # lm function</span>
-
-
-
-<span class="st">### Exhaustive search with MumIn (AIC case) ###</span>
-
-<span class="st">require(MuMIn)</span>
-
-
-<span class="st">data_model &lt;- lm(data_zambia$`Height for age sd` ~ .,data = data_zambia)</span>
-
-
-<span class="st">combinations &lt;- dredge(data_model)</span>
-
-<span class="st">print(combinations)</span>
-
-
-<span class="st">### Exhaustive search with caret (CV case and AIC case) ###</span>
-
-<span class="st">require(caret)</span>
-
-<span class="st">attach(data_zambia)</span>
-
-<span class="st"># Unfortunately there is no exhaustive search based on CV in Caret, it is just stepwise.</span>
-
-<span class="st">#setting up 10-fold cross-validation</span>
-
-<span class="st">control &lt;- trainControl(method=&quot;</span>cv<span class="st">&quot;, number=10) </span>
-
-<span class="st">#finding the ideal model by AIC criterion</span>
-
-<span class="st">model_AIC = train(`Height for age sd`~.,data=data_zambia,method=&quot;</span>lmStepAIC<span class="st">&quot;,trControl=control)</span>
-
-<span class="st">#finding the ideal model by mean square error</span>
-
-<span class="st">modelCV = train(`Height for age sd`~.,data=data_zambia,method=&quot;</span>lm<span class="st">&quot;,trControl=control)</span>
-
-<span class="st">detach(data_zambia)</span>
-
-<span class="st"># In order to do a full exhaustive search with CV, we should exploit the codes produced in CV exercise. Of course </span>
-<span class="st"># as the number of variables increase, the task becomes impossible.</span></code></pre></div>
 <blockquote>
 <p>Exercise (optional):<br />
 Using the general result on covariance penalty measures based on Efron’s <span class="math inline">\(q\)</span>-class, show that the AIC is a suitable estimator of the prediction error.</p>
 </blockquote>
+<p><br></p>
 </div>
 <div id="bic-bayesian-information-criterion" class="section level3">
 <h3><span class="header-section-number">2.4.2</span> BIC: Bayesian Information Criterion</h3>
