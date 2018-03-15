@@ -1011,11 +1011,11 @@ for (i in <span class="dv">1</span>:<span class="dv">100</span>) {
 </div>
 <div id="roc" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> ROC curves</h3>
-<ul>
-<li>Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
-&gt; Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)<br />
-</li>
-</ul>
+<p>Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:</p>
+<blockquote>
+Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)<br />
+
+</blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;data_leukemia_reduced.Rda&quot;</span>)
 
 ## Part (a)
