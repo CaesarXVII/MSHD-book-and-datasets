@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-14">
+<meta name="date" content="2018-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -169,6 +169,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>4.2</b> Chapter 2</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="solutions.html"><a href="solutions.html#cv"><i class="fa fa-check"></i><b>4.2.1</b> Cross-validation</a></li>
 <li class="chapter" data-level="4.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>4.2.2</b> Akaike Information Criterion</a></li>
+<li class="chapter" data-level="4.2.3" data-path="solutions.html"><a href="solutions.html#roc"><i class="fa fa-check"></i><b>4.2.3</b> ROC curves</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -727,6 +728,206 @@ Exact/<span class="dv">100</span></code></pre></div>
 </li>
 </ul>
 </blockquote>
+<p>There are different sources of randomness: X matrix, epsilon (error), y (induced) and the split for CV.We need to choose what to preserve: we replicate every time only the randomness of epsilon and of course the split of the CV thus we need to set a seed for the X matrix. All this discussion on randomness is pivotal for a significant and controlled simulation setting.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MASS)
+
+<span class="kw">set.seed</span>(<span class="dv">5</span>) <span class="co"># For the X matrix</span>
+
+n =<span class="st"> </span><span class="dv">1000</span>
+
+p =<span class="st"> </span><span class="dv">5</span>
+
+rho =<span class="st"> </span><span class="fl">0.5</span> <span class="co"># change rho as you please to inspect other correlations among the predictors</span>
+
+mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
+
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p^<span class="dv">2</span>)
+
+sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
+
+
+<span class="co"># Autoregressive structure</span>
+
+for (i in <span class="dv">1</span>:p) {
+  
+  for (j in <span class="dv">1</span>:p) {
+    
+    
+    sigma[i,j] =<span class="st"> </span>rho^(<span class="kw">abs</span>(i-j))
+    
+    
+  }
+  
+  
+}
+
+X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)
+
+
+<span class="co"># beta = c(0,0,1,0,0) alternative beta to check bias properties</span>
+
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
+
+ind =<span class="st"> </span><span class="dv">1</span>:<span class="dv">1000</span>
+
+pos_CV =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+pos_AIC =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+
+for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
+  
+  
+  y_hat =<span class="st"> </span>X%*%beta +<span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) 
+  
+  data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(y_hat,X))
+  
+  <span class="kw">colnames</span>(data) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;x1&quot;</span>,<span class="st">&quot;x2&quot;</span>,<span class="st">&quot;x3&quot;</span>,<span class="st">&quot;x4&quot;</span>,<span class="st">&quot;x5&quot;</span>)
+  
+  index =<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> ind,<span class="dt">size =</span> <span class="dv">500</span>,<span class="dt">replace =</span> F)
+  
+  train_set =<span class="st"> </span>data[index,]
+  
+  test_set =<span class="st"> </span>data[-index,]
+  
+  cv_error =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">31</span>)
+  
+  aic_values =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">31</span>)
+  
+  <span class="co"># One regressor only models</span>
+  
+  for(i in <span class="dv">1</span>:<span class="dv">5</span>) {
+    
+    
+    m_1 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,i<span class="dv">+1</span>], <span class="dt">data =</span> train_set)
+    
+    cv_error[i] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span>(<span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,i<span class="dv">+1</span>])%*%<span class="st"> </span>m_1$coefficients))^<span class="dv">2</span>)
+    
+    m_1 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,i<span class="dv">+1</span>], data)
+    
+    aic_values[i] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_1) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">3</span>
+    
+  }
+  
+  <span class="co"># Two regressors models</span>
+  
+  x =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)
+  
+  M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">2</span>)
+  
+  
+  for(i in <span class="dv">1</span>:<span class="dv">10</span>) {
+    
+    
+    m_2 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    
+    cv_error[i<span class="dv">+5</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>])%*%m_2$coefficients)^<span class="dv">2</span>)
+    
+    m_2 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>], data)
+    
+    aic_values[i<span class="dv">+5</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_2) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">4</span>
+  }
+  
+  
+  <span class="co"># Three regressors models</span>
+  
+  M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">3</span>)
+  
+  
+  for(i in <span class="dv">1</span>:<span class="dv">10</span>) {
+    
+    
+    m_3 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    
+    cv_error[i+<span class="st"> </span><span class="dv">15</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>])%*%m_3$coefficients)^<span class="dv">2</span>)
+    
+    m_3 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>], data)
+    
+    aic_values[i<span class="dv">+15</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_3) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">5</span>
+    
+  }
+  
+  
+  <span class="co"># Four regressors models</span>
+  
+  M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">4</span>)
+  
+  
+  for(i in <span class="dv">1</span>:<span class="dv">5</span>) {
+    
+    
+    m_4 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">4</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    
+    cv_error[i<span class="dv">+25</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>])%*%<span class="st"> </span>m_4$coefficients)^<span class="dv">2</span>)
+    
+    m_4 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">4</span>,i]+<span class="dv">1</span>], data)
+    
+    aic_values[i<span class="dv">+25</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_4) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">6</span>
+    
+  }
+  
+  <span class="co"># Full model </span>
+  
+  full_model =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>., <span class="dt">data =</span> train_set)
+  
+  full_model$coefficients
+  
+  cv_error_full =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>), test_set$x1,test_set$x2,test_set$x3,test_set$x4,test_set$x5)%*%<span class="st"> </span>full_model$coefficients)^<span class="dv">2</span>)
+  
+  cv_error[<span class="dv">31</span>] =<span class="st"> </span>cv_error_full
+  
+  full_model =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>., data)
+  
+  aic_values[<span class="dv">31</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(full_model) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">7</span>
+  
+  pos_CV[z] =<span class="st"> </span><span class="kw">which.min</span>(cv_error)
+  
+  pos_AIC[z] =<span class="st"> </span><span class="kw">which.min</span>(aic_values)
+  
+}
+
+<span class="co"># We know that the right position should be 17 which is the exact model.</span>
+
+<span class="co"># Exact model proportion</span>
+
+<span class="kw">sum</span>(pos_CV ==<span class="st"> &quot;17&quot;</span>)/<span class="dv">100</span> </code></pre></div>
+<pre><code>## [1] 0.48</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC ==<span class="st"> &quot;17&quot;</span>)/<span class="dv">100</span> </code></pre></div>
+<pre><code>## [1] 0.71</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correct model proportion (linked to the consistency of the model selection procedure)</span>
+
+<span class="kw">sum</span>(pos_CV &gt;<span class="st"> </span><span class="dv">16</span>)/<span class="dv">100</span> </code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC &gt;<span class="st"> </span><span class="dv">16</span>)/<span class="dv">100</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Average number of regressors</span>
+
+counted =<span class="st"> </span><span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">5</span>),<span class="kw">rep</span>(<span class="dv">2</span>,<span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">3</span>,<span class="dv">10</span>), <span class="kw">rep</span>(<span class="dv">4</span>,<span class="dv">5</span>),<span class="dv">5</span>)
+
+result_cv =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+result_aic =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+
+for (i in <span class="dv">1</span>:<span class="dv">100</span>) {
+  
+  
+  result_cv[i] =<span class="st"> </span>counted[pos_CV[i]]
+
+  result_aic[i] =<span class="st"> </span>counted[pos_AIC[i]]  
+  
+}
+
+
+<span class="co"># CV CASE</span>
+
+<span class="kw">mean</span>(result_cv)</code></pre></div>
+<pre><code>## [1] 3.8</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># AIC case</span>
+
+<span class="kw">mean</span>(result_aic)</code></pre></div>
+<pre><code>## [1] 3.3</code></pre>
+<p>CONCLUSIONS: correlation does not play a role here because it biases our estimates but not that much that is necessary to make AIC (less so CV) fails to recognize the significant regressors. This holds especially in the presence of strong signal so for a beta with important components. The transition chain is: we create correlated X, we transmit correlation to the ys, the likelihood theory is not optimal anymore (y should be independent, X fixed) and I get biased estimates. However I need a really important bias to make AIC fails to recognize significant variables in the linear case. The GLM case is different: correlation is a real issue because of the link function. Even a small bias in that direction can alter the order of variables and thus AIC results.</p>
 <blockquote>
 <ul>
 <li>Upload the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda">Zambia dataset</a> and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: <em>leaps</em>, <em>glmulti</em>, <em>MuMIn</em> and <em>caret</em>.<br />
@@ -807,6 +1008,114 @@ Exact/<span class="dv">100</span></code></pre></div>
 
 <span class="st"># In order to do a full exhaustive search with CV, we should exploit the codes produced in CV exercise. Of course </span>
 <span class="st"># as the number of variables increase, the task becomes impossible.</span></code></pre></div>
+</div>
+<div id="roc" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> ROC curves</h3>
+<ul>
+<li>Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
+&gt; Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)<br />
+</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;data_leukemia_reduced.Rda&quot;</span>)
+
+## Part (a)
+
+mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</code></pre></div>
+<blockquote>
+Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve">ROC curve</a> section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value <span class="math inline">\(c = 0.5\)</span>.<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Confusion matrix</span>
+
+c0 =<span class="st"> </span><span class="fl">0.5</span>
+
+mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+
+
+conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced$y, mod_1$fitted.values &gt;<span class="st"> </span>c0) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
+
+conf_mat</code></pre></div>
+<pre><code>##    
+##     FALSE TRUE
+##   0    22    3
+##   1     3   44</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prop_confmat =<span class="st"> </span><span class="kw">prop.table</span>(conf_mat, <span class="dv">1</span>) <span class="co"># For ROC curve is on the line</span>
+
+prop_confmat</code></pre></div>
+<pre><code>##    
+##          FALSE       TRUE
+##   0 0.88000000 0.12000000
+##   1 0.06382979 0.93617021</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TNR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">1</span>]/(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># TRUE NEGATIVE (TNR)</span>
+
+FPR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]/(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>])  <span class="co"># FALSE POSITIVE (FPR)</span>
+
+FNR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">1</span>]/(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># FALSE NEGATIVE (FNR)</span>
+  
+TPR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>]/(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># TRUE POSITIVE (TPR)</span>
+                               
+<span class="co"># Also possible with caret but with train and test arguments. Not full dataset inquiry as in this case.</span>
+
+<span class="co"># require(caret)</span>
+
+<span class="co"># confusionMatrix()</span></code></pre></div>
+<blockquote>
+For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model.<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c0 =<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.1</span>,<span class="fl">0.9</span>,<span class="fl">0.1</span>)
+
+TP =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="kw">length</span>(c0))
+
+FP =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="kw">length</span>(c0))
+
+mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(c0)) {
+  
+  conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced$y, mod_1$fitted.values &gt;<span class="st"> </span>c0[i]) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
+  
+  prop_confmat =<span class="st"> </span><span class="kw">prop.table</span>(conf_mat, <span class="dv">1</span>) <span class="co"># For ROC curve is on the columns</span>
+  
+  TP[i] =<span class="st"> </span>prop_confmat[<span class="dv">2</span>,<span class="dv">2</span>]
+  
+  FP[i] =<span class="st"> </span>prop_confmat[<span class="dv">1</span>,<span class="dv">2</span>]
+  
+}
+
+FP =<span class="st"> </span><span class="kw">sort</span>(FP) <span class="co"># for a correct line</span>
+
+TP =<span class="st"> </span><span class="kw">sort</span>(TP) <span class="co"># for a correct line</span>
+
+<span class="co"># Every ROC curve passes towards (0,0) and (1,1)</span>
+
+TP =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,TP,<span class="dv">1</span>)
+
+
+FP =<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>,FP,<span class="dv">1</span>)
+
+
+<span class="kw">plot</span>(FP,TP, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>,<span class="dt">main =</span> <span class="st">&quot;ROC Curve&quot;</span>,<span class="dt">xlab =</span> <span class="st">&quot;1 - Specificity&quot;</span>,<span class="dt">ylab =</span> <span class="st">&quot;Sensitivity&quot;</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">type=</span><span class="st">&#39;l&#39;</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<blockquote>
+Check the quality of your result at point (c) with the R package <em>pROC</em>.<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;pROC&quot;)</span>
+
+<span class="kw">require</span>(pROC)</code></pre></div>
+<pre><code>## Loading required package: pROC</code></pre>
+<pre><code>## Type &#39;citation(&quot;pROC&quot;)&#39; for a citation.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;pROC&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     cov, smooth, var</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">roc_1 =<span class="st"> </span><span class="kw">roc</span>(<span class="dt">response=</span>data_leukemia_reduced$y, <span class="dt">predictor =</span> mod_1$fitted.values)
+
+<span class="kw">plot</span>(roc_1)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
 
 </div>
 </div>

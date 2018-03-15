@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 # Solutions
 
@@ -618,6 +618,214 @@ This result is expected since AIC is derived from the likelihood which inherits 
 
 > - In the same simulation setting outlined in the CV exercise section, generate from a MVN (multivariate normal) a matrix $\mathbf{X_{n*p}}$ with $n = 1000$ and $p = 5$ but now fix the scale matrix with an autoregressive form $\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}$  with $\sigma_{lm} = \rho^{\mid l - m\mid}$. Compare the performance of CV and AIC for $\boldsymbol{\rho} = [0.2 \; 0.5\; 0.7]$ ($\rho = 0$ corresponds to the identity case that you have already treated).\
 
+There are different sources of randomness: X matrix, epsilon (error), y (induced) and the split for CV.We need to choose what to preserve: we replicate every time only the randomness of epsilon and of course the split of the CV thus we need to set a seed for the X matrix. All this discussion on randomness is pivotal for a significant and controlled simulation setting. 
+
+```{r}
+
+require(MASS)
+
+set.seed(5) # For the X matrix
+
+n = 1000
+
+p = 5
+
+rho = 0.5 # change rho as you please to inspect other correlations among the predictors
+
+mu = rep(1,p)
+
+sigma = rep(0,p^2)
+
+sigma = matrix(data = sigma, ncol = p,nrow = p)
+
+
+# Autoregressive structure
+
+for (i in 1:p) {
+  
+  for (j in 1:p) {
+    
+    
+    sigma[i,j] = rho^(abs(i-j))
+    
+    
+  }
+  
+  
+}
+
+X = mvrnorm(n,mu,sigma)
+
+
+# beta = c(0,0,1,0,0) alternative beta to check bias properties
+
+beta = c(3,1.5,0,2,0)
+
+ind = 1:1000
+
+pos_CV = rep(0,100)
+
+pos_AIC = rep(0,100)
+
+
+for(z in 1:100) {
+  
+  
+  y_hat = X%*%beta + rnorm(n,0,1) 
+  
+  data = data.frame(cbind(y_hat,X))
+  
+  colnames(data) = c("y","x1","x2","x3","x4","x5")
+  
+  index = sample(x = ind,size = 500,replace = F)
+  
+  train_set = data[index,]
+  
+  test_set = data[-index,]
+  
+  cv_error = rep(0,31)
+  
+  aic_values = rep(0,31)
+  
+  # One regressor only models
+  
+  for(i in 1:5) {
+    
+    
+    m_1 = lm(train_set$y ~ train_set[,i+1], data = train_set)
+    
+    cv_error[i] = mean((test_set$y - (cbind(rep(1,500),test_set[,i+1])%*% m_1$coefficients))^2)
+    
+    m_1 = lm(data$y ~ data[,i+1], data)
+    
+    aic_values[i] = -2*logLik(m_1) + 2*3
+    
+  }
+  
+  # Two regressors models
+  
+  x = c(1,2,3,4,5)
+  
+  M = combn(x,2)
+  
+  
+  for(i in 1:10) {
+    
+    
+    m_2 = lm(train_set$y ~ train_set[,M[1,i]+1] + train_set[,M[2,i]+1], data = train_set)
+    
+    cv_error[i+5] = mean((test_set$y - cbind(rep(1,500),test_set[,M[1,i]+1], test_set[, M[2,i] +1])%*%m_2$coefficients)^2)
+    
+    m_2 = lm(data$y ~ data[,M[1,i]+1] + data[,M[2,i]+1], data)
+    
+    aic_values[i+5] = -2*logLik(m_2) + 2*4
+  }
+  
+  
+  # Three regressors models
+  
+  M = combn(x,3)
+  
+  
+  for(i in 1:10) {
+    
+    
+    m_3 = lm(train_set$y ~ train_set[,M[1,i]+1] + train_set[,M[2,i]+1] + train_set[,M[3,i]+1], data = train_set)
+    
+    cv_error[i+ 15] = mean((test_set$y - cbind(rep(1,500),test_set[,M[1,i]+1], test_set[, M[2,i] +1],test_set[, M[3,i]+1])%*%m_3$coefficients)^2)
+    
+    m_3 = lm(data$y ~ data[,M[1,i]+1] + data[,M[2,i]+1] + data[,M[3,i]+1], data)
+    
+    aic_values[i+15] = -2*logLik(m_3) + 2*5
+    
+  }
+  
+  
+  # Four regressors models
+  
+  M = combn(x,4)
+  
+  
+  for(i in 1:5) {
+    
+    
+    m_4 = lm(train_set$y ~ train_set[,M[1,i]+1] + train_set[,M[2,i]+1] + train_set[,M[3,i]+1] + train_set[,M[4,i]+1], data = train_set)
+    
+    cv_error[i+25] = mean((test_set$y - cbind(rep(1,500),test_set[,M[1,i]+1], test_set[, M[2,i] +1],test_set[, M[3,i]+1],test_set[, M[3,i]+1])%*% m_4$coefficients)^2)
+    
+    m_4 = lm(data$y ~ data[,M[1,i]+1] + data[,M[2,i]+1] + data[,M[3,i]+1] + data[,M[4,i]+1], data)
+    
+    aic_values[i+25] = -2*logLik(m_4) + 2*6
+    
+  }
+  
+  # Full model 
+  
+  full_model = lm(train_set$y ~ ., data = train_set)
+  
+  full_model$coefficients
+  
+  cv_error_full = mean((test_set$y - cbind(rep(1,500), test_set$x1,test_set$x2,test_set$x3,test_set$x4,test_set$x5)%*% full_model$coefficients)^2)
+  
+  cv_error[31] = cv_error_full
+  
+  full_model = lm(data$y ~ ., data)
+  
+  aic_values[31] = -2*logLik(full_model) + 2*7
+  
+  pos_CV[z] = which.min(cv_error)
+  
+  pos_AIC[z] = which.min(aic_values)
+  
+}
+
+# We know that the right position should be 17 which is the exact model.
+
+# Exact model proportion
+
+sum(pos_CV == "17")/100 
+
+sum(pos_AIC == "17")/100 
+
+# Correct model proportion (linked to the consistency of the model selection procedure)
+
+sum(pos_CV > 16)/100 
+
+sum(pos_AIC > 16)/100
+
+
+# Average number of regressors
+
+counted = c(rep(1,5),rep(2,10), rep(3,10), rep(4,5),5)
+
+result_cv = rep(0,100)
+
+result_aic = rep(0,100)
+
+
+for (i in 1:100) {
+  
+  
+  result_cv[i] = counted[pos_CV[i]]
+
+  result_aic[i] = counted[pos_AIC[i]]  
+  
+}
+
+
+# CV CASE
+
+mean(result_cv)
+
+# AIC case
+
+mean(result_aic)
+
+
+```
+
+CONCLUSIONS: correlation does not play a role here because it biases our estimates but not that much that is necessary to make AIC (less so CV) fails to recognize the significant regressors. This holds especially in the presence of strong signal so for a beta with important components. The transition chain is: we create correlated X, we transmit correlation to the ys, the likelihood theory is not optimal anymore (y should be independent, X fixed) and I get biased estimates. However I need a really important bias to make AIC fails to recognize significant variables in the linear case. The GLM case is different: correlation is a real issue because of the link function. Even a small bias in that direction can alter the order of variables and thus AIC results. 
+
 > - Upload the [Zambia dataset](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/malnutrion_zambia_cleaned.Rda) and perform an exhaustive search on the continuous covariates (i.e. avoiding factors) based on CV and AIC in order to find the best model. You can either employ your codes derived in previous exercises or make use of the existing R packages: *leaps*, *glmulti*, *MuMIn* and *caret*. \
 
 
@@ -700,7 +908,112 @@ detach(data_zambia)
 
 ```
 
+### ROC curves {#roc}
 
+- Read the information on the [Leukemia Dataset](https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia) in the first chapter of the book. Then load the [Leukemia dataset reduced](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda) which contains a subset of 11 eleven predictors among the 3571 present in the *leukemia_small.csv*. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:\
+> Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)\
+
+```{r}
+
+load("data_leukemia_reduced.Rda")
+
+## Part (a)
+
+mod_1 = glm(y ~ V457, data = data_leukemia_reduced,family = "binomial")
+
+```
+
+> Read the [ROC curve](https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve) section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value $c = 0.5$.\
+
+```{r}
+# Confusion matrix
+
+c0 = 0.5
+
+mod_1 = glm(y ~ V457, data = data_leukemia_reduced,family = "binomial")
+
+
+conf_mat = table(data_leukemia_reduced$y, mod_1$fitted.values > c0) #unbalanced sample 47 ones and 25 0s
+
+conf_mat
+
+prop_confmat = prop.table(conf_mat, 1) # For ROC curve is on the line
+
+prop_confmat
+
+TNR = conf_mat[1,1]/(conf_mat[1,1] + conf_mat[1,2]) # TRUE NEGATIVE (TNR)
+
+FPR = conf_mat[1,2]/(conf_mat[1,1] + conf_mat[1,2])  # FALSE POSITIVE (FPR)
+
+FNR = conf_mat[2,1]/(conf_mat[2,1] + conf_mat[2,2])  # FALSE NEGATIVE (FNR)
+  
+TPR = conf_mat[2,2]/(conf_mat[2,1] + conf_mat[2,2])  # TRUE POSITIVE (TPR)
+                               
+# Also possible with caret but with train and test arguments. Not full dataset inquiry as in this case.
+
+# require(caret)
+
+# confusionMatrix()
+
+```
+
+
+> For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model.\
+
+```{r}
+
+c0 = seq(0.1,0.9,0.1)
+
+TP = rep(0,length(c0))
+
+FP = rep(0,length(c0))
+
+mod_1 = glm(y ~ V457, data = data_leukemia_reduced,family = "binomial")
+
+for (i in 1:length(c0)) {
+  
+  conf_mat = table(data_leukemia_reduced$y, mod_1$fitted.values > c0[i]) #unbalanced sample 47 ones and 25 0s
+  
+  prop_confmat = prop.table(conf_mat, 1) # For ROC curve is on the columns
+  
+  TP[i] = prop_confmat[2,2]
+  
+  FP[i] = prop_confmat[1,2]
+  
+}
+
+FP = sort(FP) # for a correct line
+
+TP = sort(TP) # for a correct line
+
+# Every ROC curve passes towards (0,0) and (1,1)
+
+TP = c(0,TP,1)
+
+
+FP = c(0,FP,1)
+
+
+plot(FP,TP, col="green",main = "ROC Curve",xlab = "1 - Specificity",ylab = "Sensitivity",xlim=c(0, 1), ylim=c(0,1),type = "l")
+lines(c(0, 1), c(0, 1), type='l',col="red")
+
+
+```
+
+> Check the quality of your result at point (c) with the R package *pROC*.\
+
+```{r,warning=FALSE}
+
+# install.packages("pROC")
+
+require(pROC)
+
+roc_1 = roc(response=data_leukemia_reduced$y, predictor = mod_1$fitted.values)
+
+plot(roc_1)
+
+
+```
 
 
 

@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-14">
+<meta name="date" content="2018-03-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -169,6 +169,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>4.2</b> Chapter 2</a><ul>
 <li class="chapter" data-level="4.2.1" data-path="solutions.html"><a href="solutions.html#cv"><i class="fa fa-check"></i><b>4.2.1</b> Cross-validation</a></li>
 <li class="chapter" data-level="4.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>4.2.2</b> Akaike Information Criterion</a></li>
+<li class="chapter" data-level="4.2.3" data-path="solutions.html"><a href="solutions.html#roc"><i class="fa fa-check"></i><b>4.2.3</b> ROC curves</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -608,8 +609,11 @@ knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/R
 <p><img src="Figures/ROC_curves.png" style="display: block; margin: auto;" /></p>
 <p>The ROC curve is mostly used as a <em>diagnostic</em> tool to evaluate a selected model (classifier). Indeed, in subset selection, a set of predictors (say <span class="math inline">\(\mathbf{X}_S\)</span>) are chosen and from which, using the logistic regression, fitted probabilities <span class="math inline">\(\hat{\pi}_i(\mathbf{x}_{iS})\)</span> can be computed. The ROC curve is then computed by varying the threshold <span class="math inline">\(c\)</span> in predicting outcomes using <span class="math inline">\(\hat{y}_i=I(\hat{\pi}_i(\mathbf{x}_{iS})\geq c)\)</span>. Indeed, for different values of <span class="math inline">\(c\)</span>, the predictions <span class="math inline">\(\hat{y}_i\)</span> are different, hence leading to different measures for the sensitivity and the specificity. Conventionally, the sensitivity and specificity are computed at <span class="math inline">\(c=0.5\)</span>.</p>
 <blockquote>
-Exercise:<br />
-- Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
+Exercise (solutions presented in <a href="solutions.html#roc">4.2.3</a>)<br />
+
+</blockquote>
+<blockquote>
+Read the information on the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/index.html#prognostic-factors-in-childhood-leukemia">Leukemia Dataset</a> in the first chapter of the book. Then load the <a href="https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/data_leukemia_reduced.Rda">Leukemia dataset reduced</a> which contains a subset of 11 eleven predictors among the 3571 present in the <em>leukemia_small.csv</em>. These variables have been selected, because of their importance, by the binary lasso which is a shrinkage method that will be discussed later on in the course. Now perform the following steps:<br />
 (a) Fit the appropriate GLM for the situation using only one of the available predictors (e.g. V457)<br />
 (b) Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve">ROC curve</a> section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value <span class="math inline">\(c = 0.5\)</span>.<br />
 (c) For a given cut-off grid of values, that you can choose as you wish, plot the ROC curve relative to the estimated model at point (a).<br />
