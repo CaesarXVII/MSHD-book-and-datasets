@@ -48,7 +48,7 @@ Namely, let $\mathbf{X}_k$, of size $n\times q$, and $\mathbf{X}_{k+1}=[\mathbf{
 \begin{equation}
 \hat{\rho}_{X_jY,\mathbf{X}_k}=\frac{\mathbf{e}^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j}{\sqrt{\left(\mathbf{e}^T\mathbf{e}\right)\left(\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j\right)}}
 \end{equation}
-with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$, $\hat{\boldsymbol{\beta}}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}=\mathbf{H}\mathbf{y}$. The predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. @FoSt:04. In high dimensional settings, the sweep operator [@Good:79] can be used to obtain the partial correlations in a computationally fast manner.
+with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$, $\hat{\boldsymbol{\beta}}=\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}$, so that $\mathbf{e}=\left(\mathbf{I}-\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\right)\mathbf{y}=\left(\mathbf{I}-\mathbf{H}\right)\mathbf{y}$. The predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. @FoSt:04. In high dimensional settings, the sweep operator [@Good:79] can be used to obtain the partial correlations in a computationally fast manner.
 
 
 > Exercise (optional):\
@@ -58,7 +58,7 @@ Hint: Use the proof of Proposition I of @LiFoUn:11. \
 
 > Exercise (project): \
 > - Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>). \
-> - Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.
+> - Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.\
 > - Apply the $C_p$ as stopping criterion (or indeed another one) to both procedures and comment. \
 
 
@@ -69,16 +69,21 @@ However, with testing multiple hypothesis, one has to pay attention to the *fami
 
 Another concept is the *false discovery rate* (FDR) which is a measure that provides less stringent control of Type I errors compared to familywise error rate [@BeHo:95]. FDR actually controls the expected proportion of *discoveries* (rejected null hypotheses) that are false (incorrect rejections). When all hypotheses are true, the FDR is equal to the FWER, and smaller otherwise. Hence, substantial power can be gained when testing multiple hypothesis, while controlling the FDR.
 
-Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope $\beta_j, j=1,\ldots,p$ at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to find the (maximal number) $k$ of slopes that can be considered as significantly different from 0 using hypothesis testing while controlling the FDR. Namely, let $\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p$ a sequence of null hypotheses, one seeks to reject ALL null hypothesis up to the $k$th one and none of them after it. Usually, the  choice for $k$ should control the mFDR (a weaker
-criterion than the FRD), which is given by [@FoSt:08]
+Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope $\beta_j, j=1,\ldots,p$ at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to set the threshold $\alpha$ so that the proportion of false discoveries, i.e. the number of rejected hypothesis when they are true, is below this threshold.
+
+The proportion of false discovery is relative to the (unknown) number of $\beta_j\neq 0$, it is hence given by the ratio 
 \begin{equation}
-\mbox{mFDR}_\eta(p)=\sup_{\boldsymbol{\beta}}\frac{\mathbb{E}\left[V^{\boldsymbol{\beta}}(p)\right]}{\mathbb{E}\left[R(p)+\eta\right]}
+\mbox{frd}=\frac{V_p}{R_p(\alpha)}
 \end{equation}
-with $V^{\boldsymbol{\beta}}(p)$ denoting the (unknown) number of false positive results among the $p$ tests (the testing procedure incorrectly rejects a true null hypothesis), $R(p)$ denotes the (observed) number of rejected null hypotheses. Under the complete null hypothesis (all $p$ null hypothesis are true), when $\eta=1-\alpha$, $\mbox{mFRD}_\eta(p)\leq\alpha$ implies $V^{\boldsymbol{\beta}}(p)\leq\alpha$, hence controlling the FWER (see @FoSt:08).
+with $V_p$ the (unknown) number of false discoveries and $R_p(\alpha)$ the number of rejected hypothesis, among $p$ hypothesis. frd is set to 0 when $R_p(\alpha)=0$. For the later, given a level $\alpha$, one can compute a $p$-value associated to each null hypothesis $\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p$, say $p_j$, so that $R_p(\alpha)=\sum_{j=1}^pI(p_j>1-\alpha)$. The FRD is defined as the expected  value of frd (over the $p$-values distribution), i.e.
+\begin{equation}
+\mbox{FRD}=\mathbb{E}\left[\frac{V_p}{R_p(\alpha)}\right]
+\end{equation}
+If all $\mathbb{H}_{j0}$ are true, FDR is equivalent to FWER and in general controlling the FRD controls as well the FWER.  
 
-Let the sequence $\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p$ be ordered according to the variables that are ordered using the (maximum) partial correlation, for a general $\alpha$-level, at each iteration $k$, the $p$-value associated to the $t$-statistic computed on the added covariate, is compared to a level $\alpha_k$. A rule for $\alpha_k$ that controls the FDR ($\leq\alpha$) is $\alpha_k=\alpha(k+1)/p$ [@BeHo:95].
+In a sequential testing procedure in which the $p$-values $p_k,k=1,\ldots p$ (and associated null hypotheses) have been ordered in an ascending order, $\mathbb{H}_{0j}, j=k,\ldots,p$ are rejected if $p_k>1-\alpha_k$ with $$\alpha_k=\alpha(k+1)/p.$$ With this rejection rule, the FDR ($\leq\alpha$) is controlled  [@BeHo:95]. Hence, in a stepwise procedure for variable selection, the search stops at step $k-1$ if $p_k> 1-\alpha_k$, $p_k$ being associated to the variable to enter at step $k$.
 
-@GSWaChTi:16 propose two rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let $\hat{k}$ denote the last rejected null hypothesis (in the sequence), the rules are: \
+@GSWaChTi:16 propose two other rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let $\hat{k}$ denote the last rejected null hypothesis (in the sequence), the rules are: \
 - ForwardStop: $\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}$ \
 - StrongStop: $\hat{k}_S=\max\left\{k\in\{1,\ldots,p\}\vert \exp\left\{\sum_{j=k}^p\frac{\log\left(p_j\right)}{j}\right\}\leq\frac{k\alpha}{p}\right\}$ \
 with $p_j$ the $p$-value associated to $\mathbb{H}_j$ and by convention $\hat{k}=0$ whenever no rejections can be made. Both rules control the FDR at level $\alpha$.
@@ -101,3 +106,236 @@ using: \
 -- $\alpha_k=\alpha(k+1)/p$ [@BeHo:95] \
 -- the $C_p$
 
+### Orthogonal matching pursuit
+
+The Orthogonal Matching pursuit algorithm (OMP) is a greedy algorithms for least squares regression, often called forward greedy selection in the machine learning literature. @zhang2009 establishes the conditions for the algorithm (see below) to find the correct feature set $\{j\;\vert \; \beta_j\neq 0\}$ (when $n\rightarrow \infty$). 
+ 
+****
+**Orthogonal matching pursuit (OMP) algorithm**:\
+1. Inputs: $\mathbf{X}=[\mathbf{x}_{1},\dots,\mathbf{x}_{p}]$, of size $n\times p$, $\mathbf{y}$ and $\epsilon>0$ \
+2. Outputs: $S^{(\ell)}$ and $\boldsymbol{\beta}_{S^{(\ell)}}$ \
+3. Initial steps: \
+- $\mathbf{\tilde{x}}_j=\mathbf{x}_{j}/\|\mathbf{x}_{j}\|_2$, $\forall j=1,\dots,p$, \
+- $S^{(0)}=\emptyset$, \
+- $\mathcal{P}=\{1,\ldots,p\}$, \
+- $\hat{\boldsymbol{\beta}}_{S^{(0)}}=\mathbf{0}$\
+4. For$\ell = 1, 2, \ldots, p$, do: \
+- Set $j^{(\ell)}=\arg\max_{j\in \mathcal{P}\setminus S^{(l-1)}}|\mathbf{\tilde{x}}_j^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})|$, \
+- \textbf{if} $|\mathbf{\tilde{x}}_{j^{(\ell)}}^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})|\leq \epsilon$  **break**, \
+-- Set $S^{(\ell)}=\{j^{(\ell)}\}\cup S^{(\ell-1)}$ and $\mathbf{X}_{S^{(\ell)}}$ the column subset of $\mathbf{X}$ with all columns $j\in S^{(\ell)}$, \
+-- Set $\hat{\boldsymbol{\beta}}_{S^{(\ell)}}=\left(\mathbf{X}_{S^{(\ell)}}^T\mathbf{X}_{S^{(\ell)}}\right)^{-1}\mathbf{X}_{S^{(\ell)}}^T\mathbf{y}$. 
+
+****
+
+One can see that in the search loop (stage no 4), the variable to enter is chosen as the one to maximize the partial correlation with the response, conditioned on the current variables (selected until the previous step). Indeed $\mathbf{\tilde{x}}_{j^{(\ell)}}^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})=$ $\mathbf{\tilde{x}}_{j^{(\ell)}}^T\left(\mathbf{y}-\mathbf{X}_{S^{(\ell-1)}}\left(\mathbf{X}_{S^{(\ell-1)}}^T\mathbf{X}_{S^{(\ell-1)}}\right)^{-1}\mathbf{X}_{S^{(\ell-1)}}^T\mathbf{y}\right)=$ $\mathbf{\tilde{x}}_{j^{(\ell)}}^T\left(\mathbf{I}-\mathbf{H}_{S^{(\ell-1)}}\right)\mathbf{y}$, and hence $\mathbf{\tilde{x}}_{j^{(\ell)}}$ is selected to maximize the drop in the residual sum of squares based on $S^{(\ell)}$. Therefore, the OMP can be used in conjunction with a *model validity* estimator based on the residual sum of squares (L2 norm loss function) such as the $C_p$, i.e. instead of of $\epsilon$ in the OMP.
+
+There is therefore no difference between a stepwise forward regression and the OMP in terms of the variables that are chosen at each step. The only difference is that forward stepwise regression is associated with testing or optimizing a model validity criterion, while the OMP is associated to another criterion $\epsilon$.
+
+### Forward stagewise regression
+
+Forward stagewise regression is a *smoother* variation of stepwise regression that has been overlooked for a while but is coming back in high dimensional settings. It is also based on partial correlations, but at each step the chosen variable is not entered *fully*. It starts with all coefficients $\beta_j$ equal to zero, and iteratively updates the $\beta_j$ by a small amount $\epsilon$ of the variable $X_j$ that achieves the maximal absolute correlation with the current residuals.
+
+****
+**Forward Stagewise Regression algorithm**:\
+1. Inputs: $\mathbf{X}=[\mathbf{x}_{1},\dots,\mathbf{x}_{p}]$, of size $n\times p$, $\mathbf{y}$, $\epsilon>0$, $\Delta$ \
+2. Outputs: $\hat{\boldsymbol{\beta}}$ \
+3. Initial steps: \
+- standardize all covariates $\rightarrow \mathbf{\tilde{x}}_{j},j=1,\ldots,p$ \
+- Set $\hat{\boldsymbol{\beta}}^{(0)}=\mathbf{0}$\
+- Set $\mathbf{e}_0=\mathbf{y}-\bar{y}$, $\bar{y}=1/n\sum_{i=1}^n y_i$ \
+4. For $k =1, 2, \ldots$, do: \
+- $j=\arg\max_{j}|\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}|$, \
+- if $|\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}|\leq \Delta$ then stop
+- $\delta_j=\epsilon\;\mbox{sign}\left(\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}\right)$ \
+- Set $\hat{\beta}_l^{(k+1)}\leftarrow \beta_l^{(k)}+\delta_jI(l=j), l=1,\ldots,p$ \
+- Set $\mathbf{e}_k\leftarrow \mathbf{e}_{k-1}-\delta_j\mathbf{\tilde{x}}_j$ 
+
+****
+
+There is no clear rule for setting $\epsilon$ and $\Delta$, which makes the forward stagewise regression algorithm more an *exploratory* method. Obviously, $\Delta$ should be small (e.g. $0.0001$), while the smaller $\epsilon$, the more steps are needed to reach the end of the algorithm. There is actually a strong connection between the sequence of forward stagewise estimates and the solution path of the lasso; see @EfHaJoTi:04, and also @HaTaTiWa:07, @TibR:15.
+
+## Streamwise regression
+
+### Introduction
+
+Stepwise forward selection is a procedure that finds a good approximation of the the model (formed by a subset of the available covariates) that minimizes a chosen criterion (e.g. the $C_p$). It involves however, at each step $k$, the comparison of $p-k$ models which can be computationally very challenging.
+
+Streamwise regression (see e.g. @ZhFoStUn:06 and the references therein), is a variation of stepwise regression in which covariates (predictive features) are tested sequentially for addition to the current model (or not). Because it considers each potential covariate only once, it is extremely fast. 
+
+The question that arises then is, if stepwise regression is already an approximation to the *optimal* model in terms of *model validity*, how can streamwise regression, which is by construction less accurate (in terms of approximating the *optimum*) still be valid in some sense. There is trade-off between *usable* or *workable* procedures and reaching an *optimum* in high dimensions (where any, even reasonable, procedure can fail). This discussion, still widely open, goes beyond the scope of the focus of this eBook.
+
+Streamwise regression  can be bound to hypothesis testing, in that the focus is placed on selecting the largest set of covariates so that their significance (rejecting their associated null hypothesis) is valid up to a *global risk*. These procedures mimic somehow the situation in which a global model could be estimated (not possible, so far, when $n<p$) and the useful covariates, in terms of model validity, could be identified as the ones for which $\mathbb{H}_{0j}=0$ can be rejected. Care needs to be taken about not only the FWER (bound to multiple hypothesis testing) and the fact that any theoretical result (bound to the hypothesis to be tested) needs to be implemented using estimated quantities from the sample at hand, hence introducing bias and overfitting.
+
+### Sure Independence Screening
+
+@FaLi:08 introduce the concept of *sure screening* and propose a sure screening
+method based on *correlation learning* which filters out the features that have weak correlation with the response. The resulting method is called *sure independence screening* (SIS). Sure screening is a property that insures all the important variables survive after variable screening with probability tending to 1.
+
+An important feature in high dimensions is that spurious correlations (sample correlations) between predictors can be very large. This implies that using the (sample) correlations (partial or marginal) induces a form of decisional bias because the sample (observed) quantities are misleading. For example, important predictors can be found to be highly correlated with some unimportant ones, which then makes selection tend to include more predictors than necessary. @FaLi:08 provide a simulations study in which $p$ independent standard normal predictors are simulated and the maximum absolute sample correlation coefficient between predictors is considered. In the Figure below are represented these quantities computed on $500$ datasets with $n=60$ and $p=1000$ and $p=5000$. 
+
+> Reported from @FaLi:08
+![Top](Figures/FanLi08-Fig1.png) 
+
+In the SIS framework, all covariates $X_j,j=1,\ldots,p$ are standardized (mean 0, variance 1). It is also assumed that the true model is sparse, i.e. the true dimension $s$ is such that $s<<p$. Let $\mathcal{M}_s = \{j=1,\ldots,p \; \vert \; \beta_j \neq 0 \}$ be the true sparse model with non-sparsity size $s=\vert \mathcal{M}_s\vert$. Let also $\mathcal{M}_\gamma$ denote a model selected on the basis of a (streamwise) selection procedure, the sure screening property ensures that 
+\begin{equation}
+P\left(\mathcal{M}_s\ \subseteq \mathcal{M}_\gamma\right)\rightarrow 1
+\end{equation}
+
+The SIS procedure proposed by @FaLi:08 ranks the importance of covariates (features) according to their marginal correlation with the response variable and
+filters out those that have weak marginal correlations with the response variable. Let 
+\begin{equation}
+\boldsymbol{\omega}=(\omega_1,\ldots,\omega_p) = \mathbf{X}^T\mathbf{y}
+\end{equation}
+hence, the vector of marginal correlations of predictors with the response variable (rescaled by the standard deviation of the response $\mathbf{y}$). 
+For any given $\gamma\in (0,1)$, the SIS selected model is
+\begin{equation}
+\mathcal{M}_\gamma=\{j=1,\ldots,p \;\vert \; \vert \omega_j\;\vert \; \mbox{is among the first} \lfloor \gamma n \rfloor \; \mbox{largest}\}
+\end{equation}
+where $\lfloor \gamma n \rfloor$ denotes the integer part of $\gamma n$. The SIS  is actually used to shrink the full model of size $p$ down to a submodel $\mathcal{M}_\gamma$ with size $d =\lfloor \gamma n \rfloor<n$. There is a link between SIS and *ridge regression* (*Tikhonov regularization*), a shrinkage method that will be presented in Chapter 4.
+
+@FaLi:08 set up the conditions (Theorem 1) for the SIS to have the sure screening property, for suitable (technical) choices of $\gamma$. In particular, $\boldsymbol{\Sigma}^{^1/2}\mathbf{X}, \boldsymbol{\Sigma}=\mbox{cov}\left(\mathbf{X}\right), \mathbf{X}=\left[X_j\right]_{j=1,\ldots,p}$ has a spherically symmetric distribution.
+
+The SIS procedure can be combined with another (subset) selection method: apply the SIS to reduce the dimension, apply a selection method to the reduced dimension to get, say, $\mathcal{M}_{k_1}$ of size of order e.g. $n/log(n)$. The residuals from a regression of $Y$ on $\mathbf{X}=[X_j],j\in \mathcal{M}_{k_1}$ are then used as a new response vector and the SIS is applied to the left-aside $p-k_1$ covariates to get $\mathcal{M}_{k_2}$. The rationale behind is that using the residuals from the previous step, amounts to considering partial correlations which set aside the unimportant covariates that are highly correlated with the response through their associations with the covariates present in the set $\mathcal{M}_{k_1}$ and also makes those important predictors that are missed in the previous step possible to survive. The procedure is iterated until the $L$ disjoint subsets $\mathcal{M}_{k_l},l=1,\ldots,L$  whose union $\mathcal{M}_d$ has maximal size satisfying e.g. $\vert \mathcal{M}_d\vert<n$. This procedure is called the iterative sure independence screening (ISIS).
+
+> Exercise: \
+- Explain why stepwise regression based on partial correlations (for the inclusion criterion) is a special case of ISIS.
+
+
+### PC-simple algorithm
+
+@BuKaMa:10 use partial correlations to stream through the covariates and develop an algorithm that is a simplified version of the PC algorithm [@SpGlSc:00] used in Bayesian network modeling (Causal Bayesian Network). Moreover, they provide a criterion based on hypothesis testing to decide in a covariate is selected or not.
+
+The PC-simple algorithm is given by the following steps: \
+1. Set m = 1 and the *active set* $\mathcal{M}_0$ is empty. \
+2. Do correlation screening, and build the active set $\mathcal{M}_1 = \{j=1,\ldots,p \; \vert \; \rho_{X_jY}= 0 \}$. \
+3. m = m + 1. \
+4. Construct the $m$ active set $\mathcal{M}_m =\{j \in \mathcal{M}_{m-1}\; \vert \;\rho_{X_jY,\mathbf{X}_{C}}= 0, \; \mathbf{X}_{C}=[X_l],l\in\mathcal{M}_{m-1}\setminus\{j\}\}$. \
+5. Repeat from step 3 as long as $\vert \mathcal{M}_m\vert \leq m$. \
+6. Output: $m_S=\{m\;\vert\; \vert \mathcal{M}_m\vert \leq m\}$.
+
+The PC-simple algorithm hence starts with a streamwise regression based on marginal correlations which are a particular case of partial correlations with empty conditioning set. Since this starting set might result too large, it is used as (partial) conditioning set in the next step to remove covariates with low partial correlations. The procedure stops  when an equilibrium is reached, namely when the number of covariates at step $m$ is the closest (and inferior) to $m$. 
+
+Since partial correlations need to be estimated from the available data, they are subject to sampling error, hence even if $\rho_{\cdot\;\cdot,\cdot}= 0$, $\hat{\rho}_{\cdot\;\cdot,\cdot}\neq 0$. @BuKaMa:10 propose to apply Fisher's $Z$-transformation [@Fish:15]
+\begin{equation}
+Z_{X_jY,\mathbf{X}_C}=\frac{1}{2}\log\left(\frac{1+\hat{\rho}_{X_jY,\mathbf{X}_{C}}}{1-\hat{\rho}_{X_jY,\mathbf{X}_{C}}}\right)
+\end{equation}
+When testing (two-sided) $\mathbb{H}_0:\rho_{X_jY,\mathbf{X}_{C}}= 0$, $\mathbb{H}_0$ is rejected when [@Fish:21] $\sqrt{n-\vert \mathcal{M}_{C}\vert-3}Z_{X_jY,\mathbf{X}_C} > \Phi^{-1}\left(1-\alpha/2\right)$, where $\alpha$ is the significance level and $\Phi$ is the standard Normal cumulative distribution function. 
+
+Partial correlations can be calculated recursively [@BuKaMa:10] using
+\begin{equation}
+\hat{\rho}_{X_jY,\mathbf{X}_{C}}=\frac{\hat{\rho}_{X_jY,\mathbf{X}_{C\setminus\{k\}}}-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}}{\sqrt{\left(1-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}^2\right)\left(1-\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}^2\right)}}
+\end{equation}
+
+To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. $\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}$, @BuKaMa:10 make use of the *partial faithfulness* concept. It applies to models that are such that if $\forall j, j=1,\ldots,p$, $\rho_{X_jY,\mathbf{X}_{C}}= 0$ for some $\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}$ implies that $\beta_j=0$ (with  $\mathcal{M}_p=\{j=1,\ldots,p\}$). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.
+
+> Exercise (project): \
+- Write the PC-simple algorithm in R using the recursive formula for partial correlations. \
+- Perform a simulation study to evaluate the performance (model selection criteria) both when the covariates are normally distributed and when they are not (consider e.g. factors, i.e. dummies)
+- Study the sensitivity of the PC-simple as a function of $\alpha$.
+- Apply the algorithm for variable selection in a chosen dataset.
+- Compare with another variable selection method (implemented).
+
+
+
+
+
+## Classification And Regression Tree (CART) 
+
+Note: The Section is highly inspired from @HaTiFr:09, chapter 9.
+
+The regression model involves estimating the *conditional mean* of the response variable $Y$ given a set of predictors $X_j, j=1,\ldots,p$ (collected in the $n\times p$ *design matrix* $\mathbf{X}$), i.e. $\mu(\mathbf{X})=\mathbf{X}\beta, \dim(\beta)=p$. The parameters $\beta$ represent the slopes of the linear regression of $Y$ on $\mathbf{X}$. 
+
+The basis of CART [@Brei:84] is to approximate these slopes by partitioning the observed predictors realizations into consecutive sets, for which the observed mean response is computed. More precisely, tree-based methods partition the predictors' space (feature space) into a set of rectangles, and
+then fit a simple model (i.e. computes the mean) in each one.
+
+The partitioning is done sequentially, with usually a binary partitioning (i.e. in two consecutive parts), one predictor at the time. The Figure below shows such a sequence in the case of two predictors $X_1, X_2$, with splitting values $\theta_m$ and (split) regions $R_m, m=1,\ldots,M, M=5$. 
+
+****
+**Illustration of the recursive binary partitioning** \
+
+<br>
+
+<center>
+![Top](Figures/RecursiveBiPart.png)
+</center>
+****
+
+A regression tree algorithm has the following characteristics that need to be set:\
+- The choice of the splitting variable $X_j$ (from which the split is done)in each region) \
+- criterion for the splitting value $t_m:=\theta_m$ \
+- the model (predictor) that is fitted in each region $R_m$\
+- the size of the tree $M$ \
+
+
+### Regression tree
+
+In the linear regression model, a constant model is fitted in each region $R_m$, i.e. the *mth* stage of the algorithm is
+\begin{equation}
+\hat{\mu}(\mathbf{X})= \sum_{m=1}^M c_m(y_i\vert \mathbf{x}_i\in R_m)
+\end{equation}
+with 
+\begin{equation}
+c_m(y_i\vert \mathbf{x}_i\in R_m)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m), \\ n_m=\sum_i^n I(\mathbf{x}_i\in R_m)
+\end{equation}
+
+This amounts to consider, as predictor for the response, the sum of $m$ local predictors computed as the mean responses $c_m(y_i\vert \mathbf{x}_i\in R_m)$ in each region $R_m$. The slopes $\beta_j$ are then never estimated (even locally) which results in a important gain in computational time.
+
+
+At stage of the algorithm, two new regions are created, namely one of the former region is split into two parts. This is done for each region. A choice for the covariate $X_j$ to consider for the spiting as well as the splitting value $t_{mj}$ needs to be done, and the criterion is the minimization of the residual sum of squares (RSS) \begin{equation}
+\sum_{k=1}^m\sum_{i \in R_k}\left(y_i-c_k(y_i\vert \mathbf{x}_i\in R_k)\right)^2
+\end{equation}
+Since the contributions to the RSS of each region are computed separately (the $c_k(y_i\vert \mathbf{x}_i\in R_k)$), the search for an *optimum* can be conducted region by region, in which both the splitting variable  $X_j$ and value $t_{mj}$ are found that minimize the RSS in a given region. More precisely, let, at stage $m$, $R_{m_1}(j,t_{mj})$ and $R_{m_2}(j,t_{mj})$ the regions resulting from the split of one region on the basis of one of the covariates $X_j$ and according to a splitting scalar $t_{mj}$, then $j$ and $t_{mj}$ are found using
+\begin{eqnarray}
+\min_{j,t_{mj}}& \left\{\sum_{i \in R_{m_1}(j,t_{mj})} \left(y_i-c_m(y_i\vert \mathbf{x}_i\in R_{m_1}(j,t_{mj}))\right)^2 \right. \\  & \left.   + 
+\sum_{i \in R_{m_2}(j,t_{mj})} \left(y_i-c_m(y_i\vert \mathbf{x}_i \in R_{m_2}(j,t_{mj}))\right)^2\right\}
+\end{eqnarray}
+
+For the size of the tree, one approach is to grow the tree until each region is very small, say of size $n_m\approx 5$, and this large tree, say $T_0$, is then *prunned* using *cost-complexity pruning* based on a criterion $C_{\alpha}(T)$. 
+
+Pruning generates a series of trees $T_{k}\subset T_{k-1}\subset \ldots\subset T_{1}\subset T_0$, obtained (sequentially) removing a subtree from the previous tree. A subtree is removed by removing a splitting (and the following ones) to create a collapsed region, also called leaf. The choice for the subtree to split, hence the resulting tree, say $T$ of size $\vert T\vert$, is done using a criterion based on the RSS, i.e.
+\begin{equation}
+C(T)=\sum_{m=1}^{\vert T\vert}\sum_{i\in R_m(T)}\left(y_i-c_m(T)\right)^2 
+\end{equation}
+where $R_m(T)$ is the $m$th region (leaf) of tree $T$ and $c_m(T)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m(T))$ is the average response in region $R_m(T)$. $C(T)$ needs however to be constrained to avoid overfitting (since the largest possible tree is always the one that minimizes $C(T)$), so that one uses a penalized criterion given by [@HaTiFr:09]
+\begin{equation}
+C_{\alpha}(T)=C(T) - \alpha \vert T\vert
+\end{equation}
+Hence, the idea is to find, for each $\alpha_k>\alpha_{k-1}>\ldots > \alpha_1> \alpha_0=0$, the (unique) subtree $T_{\alpha_k} \subset T_{\alpha_{k-1}}$ that minimizes $C_{\alpha}(T)$. The tuning parameters $\alpha_k$ govern the trade off between tree size (to avoid overfitting) and its
+goodness of fit to the data. The sequence of $\alpha_k$ can be constructed starting from $\alpha_1$, and the sequence stops when a criterion such as tenfold cross-validation is optimized.
+
+One major problem with trees is their high variance. Often a small change
+in the data can result in a very different series of splits, making interpretation somewhat precarious. Averaging methods such as *bagging*, i.e. *bootstrap aggregating*, can be used to reduce the variability of the tree estimator [@Brei:96]. See @Sutt:05 for a survey.
+
+
+> Exercise: \
+- Analyse the malnutrition in Zambia dataset by means of the regression tree method. Use the rpart package in R (see also <https://www.statmethods.net/advstats/cart.html>).
+
+
+### Classification Trees
+
+Like for subset selection, if the target is a classification outcome taking values $q=1, 2,\ldots,Q$, the criterion for splitting (growing)
+and pruning the tree, , i.e. the RSS, needs to be adapted. 
+
+Let $p_{mq}=1/n_m\sum_{\mathbf{x}_i\in R_m}I(y_i= q)$ be the proportion of 
+class $q$ observations in region $R_m$ and let $q_m=\mbox{argmax}_q p_{mq}$, i.e. the most frequent class in region $R_m$. Different alternatives to the RSS (i.e. risk measures) exist and include the following ones, specified for the region $R_m$:\
+- *Misclassification error*: $\mbox{err}_m=\frac{1}{n_m}\sum_{i\in R_m}I(y_i\neq q_m)=1-p_{mq_m}$\
+- *Gini index*: $\mbox{err}_m=\sum_{q=1}^Qp_{mq}(1-p_{mq})= \sum_{q=1}^Q\sum_{q'\neq q}p_{mq}p_{mq'}$\
+- *Cross-entropy or deviance*: $\mbox{err}_m=- \sum_{q=1}^Qp_{mq}\log(p_{mq})$
+
+The total risk or error is obtained as $\sum_{m=1}^R\mbox{err}_m$. 
+The deviance and the Gini index have the advantage of being differentiable functions, and hence more amenable to numerical optimization. 
+
+
+> Exercise: \
+- Analyse the Leukemia dataset by means of the regression tree method. Use the rpart package in R (see also <https://www.statmethods.net/advstats/cart.html>).
+
+
+
+
+<!--
+### Properties 
+
+- consistency
+- as prob overfitting
+
+-->

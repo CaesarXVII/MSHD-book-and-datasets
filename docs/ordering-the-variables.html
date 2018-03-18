@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-15">
+<meta name="date" content="2018-03-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -159,6 +159,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#stepwise-forward-regression"><i class="fa fa-check"></i><b>3.2</b> Stepwise forward regression</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#partial-correlations"><i class="fa fa-check"></i><b>3.2.1</b> Partial correlations</a></li>
 <li class="chapter" data-level="3.2.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#selection-by-hypothesis-testing"><i class="fa fa-check"></i><b>3.2.2</b> Selection by hypothesis testing</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#orthogonal-matching-pursuit"><i class="fa fa-check"></i><b>3.2.3</b> Orthogonal matching pursuit</a></li>
+<li class="chapter" data-level="3.2.4" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#forward-stagewise-regression"><i class="fa fa-check"></i><b>3.2.4</b> Forward stagewise regression</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#streamwise-regression"><i class="fa fa-check"></i><b>3.3</b> Streamwise regression</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#introduction-4"><i class="fa fa-check"></i><b>3.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#sure-independence-screening"><i class="fa fa-check"></i><b>3.3.2</b> Sure Independence Screening</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#pc-simple-algorithm"><i class="fa fa-check"></i><b>3.3.3</b> PC-simple algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#classification-and-regression-tree-cart"><i class="fa fa-check"></i><b>3.4</b> Classification And Regression Tree (CART)</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#regression-tree"><i class="fa fa-check"></i><b>3.4.1</b> Regression tree</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#classification-trees"><i class="fa fa-check"></i><b>3.4.2</b> Classification Trees</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="solutions.html"><a href="solutions.html"><i class="fa fa-check"></i><b>4</b> Solutions</a><ul>
@@ -223,7 +234,7 @@ Namely, let <span class="math inline">\(\mathbf{X}_k\)</span>, of size <span cla
 <span class="math display">\[\begin{equation}
 \hat{\rho}_{X_jY,\mathbf{X}_k}=\frac{\mathbf{e}^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j}{\sqrt{\left(\mathbf{e}^T\mathbf{e}\right)\left(\mathbf{x}_j^T(\mathbf{I}-\mathbf{H})\mathbf{x}_j\right)}}
 \end{equation}\]</span>
-<p>with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}=\mathbf{H}\mathbf{y}\)</span>. The predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. <span class="citation">Foster and Stine (<a href="#ref-FoSt:04">2004</a>)</span>. In high dimensional settings, the sweep operator <span class="citation">(Goodnight <a href="#ref-Good:79">1979</a>)</span> can be used to obtain the partial correlations in a computationally fast manner.</p>
+<p>with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}=\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}\)</span>, so that <span class="math inline">\(\mathbf{e}=\left(\mathbf{I}-\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\right)\mathbf{y}=\left(\mathbf{I}-\mathbf{H}\right)\mathbf{y}\)</span>. The predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. <span class="citation">Foster and Stine (<a href="#ref-FoSt:04">2004</a>)</span>. In high dimensional settings, the sweep operator <span class="citation">(Goodnight <a href="#ref-Good:79">1979</a>)</span> can be used to obtain the partial correlations in a computationally fast manner.</p>
 <blockquote>
 Exercise (optional):<br />
 - Show that the predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares.<br />
@@ -233,7 +244,8 @@ Hint: Use the proof of Proposition I of <span class="citation">Lin, Foster, and 
 <blockquote>
 Exercise (project):<br />
 - Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>).<br />
-- Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different. - Apply the <span class="math inline">\(C_p\)</span> as stopping criterion (or indeed another one) to both procedures and comment.<br />
+- Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.<br />
+- Apply the <span class="math inline">\(C_p\)</span> as stopping criterion (or indeed another one) to both procedures and comment.<br />
 
 </blockquote>
 </div>
@@ -241,13 +253,18 @@ Exercise (project):<br />
 <h3><span class="header-section-number">3.2.2</span> Selection by hypothesis testing</h3>
 <p>Partial correlations have been used in several instances to <em>order</em> the covariates in stepwise forward regression, combined with a <em>stopping</em> criterion based on a test statistic, like the <span class="math inline">\(t\)</span>-test for significance testing. That is, the covariates are entered in the model using the partial correlation criterion (that is maximized) and the procedure stops when the <span class="math inline">\(t\)</span>-test is not significant. However, with testing multiple hypothesis, one has to pay attention to the <em>familywise error rate</em> (FWER), i.e. the probability of making one or more false discoveries, or type I errors (rejecting the null hypothesis when it is true). This probability increases very rapidly with the number of hypothesis to be tested.</p>
 <p>Another concept is the <em>false discovery rate</em> (FDR) which is a measure that provides less stringent control of Type I errors compared to familywise error rate <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>. FDR actually controls the expected proportion of <em>discoveries</em> (rejected null hypotheses) that are false (incorrect rejections). When all hypotheses are true, the FDR is equal to the FWER, and smaller otherwise. Hence, substantial power can be gained when testing multiple hypothesis, while controlling the FDR.</p>
-Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope <span class="math inline">\(\beta_j, j=1,\ldots,p\)</span> at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to find the (maximal number) <span class="math inline">\(k\)</span> of slopes that can be considered as significantly different from 0 using hypothesis testing while controlling the FDR. Namely, let <span class="math inline">\(\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p\)</span> a sequence of null hypotheses, one seeks to reject ALL null hypothesis up to the <span class="math inline">\(k\)</span>th one and none of them after it. Usually, the choice for <span class="math inline">\(k\)</span> should control the mFDR (a weaker criterion than the FRD), which is given by <span class="citation">(Foster and Stine <a href="#ref-FoSt:08">2008</a>)</span>
+<p>Basically, one can see model selection (subset selection) as a series of hypothesis to be tested, namely significance testing associated to each potential slope <span class="math inline">\(\beta_j, j=1,\ldots,p\)</span> at the full model. Because one cannot consider each test separately (FWER effect), what one actually seeks is to set the threshold <span class="math inline">\(\alpha\)</span> so that the proportion of false discoveries, i.e. the number of rejected hypothesis when they are true, is below this threshold.</p>
+The proportion of false discovery is relative to the (unknown) number of <span class="math inline">\(\beta_j\neq 0\)</span>, it is hence given by the ratio
 <span class="math display">\[\begin{equation}
-\mbox{mFDR}_\eta(p)=\sup_{\boldsymbol{\beta}}\frac{\mathbb{E}\left[V^{\boldsymbol{\beta}}(p)\right]}{\mathbb{E}\left[R(p)+\eta\right]}
+\mbox{frd}=\frac{V_p}{R_p(\alpha)}
 \end{equation}\]</span>
-<p>with <span class="math inline">\(V^{\boldsymbol{\beta}}(p)\)</span> denoting the (unknown) number of false positive results among the <span class="math inline">\(p\)</span> tests (the testing procedure incorrectly rejects a true null hypothesis), <span class="math inline">\(R(p)\)</span> denotes the (observed) number of rejected null hypotheses. Under the complete null hypothesis (all <span class="math inline">\(p\)</span> null hypothesis are true), when <span class="math inline">\(\eta=1-\alpha\)</span>, <span class="math inline">\(\mbox{mFRD}_\eta(p)\leq\alpha\)</span> implies <span class="math inline">\(V^{\boldsymbol{\beta}}(p)\leq\alpha\)</span>, hence controlling the FWER (see <span class="citation">Foster and Stine (<a href="#ref-FoSt:08">2008</a>)</span>).</p>
-<p>Let the sequence <span class="math inline">\(\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p\)</span> be ordered according to the variables that are ordered using the (maximum) partial correlation, for a general <span class="math inline">\(\alpha\)</span>-level, at each iteration <span class="math inline">\(k\)</span>, the <span class="math inline">\(p\)</span>-value associated to the <span class="math inline">\(t\)</span>-statistic computed on the added covariate, is compared to a level <span class="math inline">\(\alpha_k\)</span>. A rule for <span class="math inline">\(\alpha_k\)</span> that controls the FDR (<span class="math inline">\(\leq\alpha\)</span>) is <span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>.</p>
-<p><span class="citation">G’Sell et al. (<a href="#ref-GSWaChTi:16">2016</a>)</span> propose two rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let <span class="math inline">\(\hat{k}\)</span> denote the last rejected null hypothesis (in the sequence), the rules are:<br />
+with <span class="math inline">\(V_p\)</span> the (unknown) number of false discoveries and <span class="math inline">\(R_p(\alpha)\)</span> the number of rejected hypothesis, among <span class="math inline">\(p\)</span> hypothesis. frd is set to 0 when <span class="math inline">\(R_p(\alpha)=0\)</span>. For the later, given a level <span class="math inline">\(\alpha\)</span>, one can compute a <span class="math inline">\(p\)</span>-value associated to each null hypothesis <span class="math inline">\(\mathbb{H}_{j0}:\beta_j=0,j=1,\ldots,p\)</span>, say <span class="math inline">\(p_j\)</span>, so that <span class="math inline">\(R_p(\alpha)=\sum_{j=1}^pI(p_j&gt;1-\alpha)\)</span>. The FRD is defined as the expected value of frd (over the <span class="math inline">\(p\)</span>-values distribution), i.e.
+<span class="math display">\[\begin{equation}
+\mbox{FRD}=\mathbb{E}\left[\frac{V_p}{R_p(\alpha)}\right]
+\end{equation}\]</span>
+<p>If all <span class="math inline">\(\mathbb{H}_{j0}\)</span> are true, FDR is equivalent to FWER and in general controlling the FRD controls as well the FWER.</p>
+<p>In a sequential testing procedure in which the <span class="math inline">\(p\)</span>-values <span class="math inline">\(p_k,k=1,\ldots p\)</span> (and associated null hypotheses) have been ordered in an ascending order, <span class="math inline">\(\mathbb{H}_{0j}, j=k,\ldots,p\)</span> are rejected if <span class="math inline">\(p_k&gt;1-\alpha_k\)</span> with <span class="math display">\[\alpha_k=\alpha(k+1)/p.\]</span> With this rejection rule, the FDR (<span class="math inline">\(\leq\alpha\)</span>) is controlled <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>. Hence, in a stepwise procedure for variable selection, the search stops at step <span class="math inline">\(k-1\)</span> if <span class="math inline">\(p_k&gt; 1-\alpha_k\)</span>, <span class="math inline">\(p_k\)</span> being associated to the variable to enter at step <span class="math inline">\(k\)</span>.</p>
+<p><span class="citation">G’Sell et al. (<a href="#ref-GSWaChTi:16">2016</a>)</span> propose two other rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let <span class="math inline">\(\hat{k}\)</span> denote the last rejected null hypothesis (in the sequence), the rules are:<br />
 - ForwardStop: <span class="math inline">\(\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}\)</span><br />
 - StrongStop: <span class="math inline">\(\hat{k}_S=\max\left\{k\in\{1,\ldots,p\}\vert \exp\left\{\sum_{j=k}^p\frac{\log\left(p_j\right)}{j}\right\}\leq\frac{k\alpha}{p}\right\}\)</span><br />
 with <span class="math inline">\(p_j\)</span> the <span class="math inline">\(p\)</span>-value associated to <span class="math inline">\(\mathbb{H}_j\)</span> and by convention <span class="math inline">\(\hat{k}=0\)</span> whenever no rejections can be made. Both rules control the FDR at level <span class="math inline">\(\alpha\)</span>.</p>
@@ -267,6 +284,186 @@ with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsym
 – <span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span><br />
 – the <span class="math inline">\(C_p\)</span></p>
 </blockquote>
+</div>
+<div id="orthogonal-matching-pursuit" class="section level3">
+<h3><span class="header-section-number">3.2.3</span> Orthogonal matching pursuit</h3>
+<p>The Orthogonal Matching pursuit algorithm (OMP) is a greedy algorithms for least squares regression, often called forward greedy selection in the machine learning literature. <span class="citation">Zhang (<a href="#ref-zhang2009">2009</a>)</span> establishes the conditions for the algorithm (see below) to find the correct feature set <span class="math inline">\(\{j\;\vert \; \beta_j\neq 0\}\)</span> (when <span class="math inline">\(n\rightarrow \infty\)</span>).</p>
+<hr />
+<p><strong>Orthogonal matching pursuit (OMP) algorithm</strong>:<br />
+1. Inputs: <span class="math inline">\(\mathbf{X}=[\mathbf{x}_{1},\dots,\mathbf{x}_{p}]\)</span>, of size <span class="math inline">\(n\times p\)</span>, <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\epsilon&gt;0\)</span><br />
+2. Outputs: <span class="math inline">\(S^{(\ell)}\)</span> and <span class="math inline">\(\boldsymbol{\beta}_{S^{(\ell)}}\)</span><br />
+3. Initial steps:<br />
+- <span class="math inline">\(\mathbf{\tilde{x}}_j=\mathbf{x}_{j}/\|\mathbf{x}_{j}\|_2\)</span>, <span class="math inline">\(\forall j=1,\dots,p\)</span>,<br />
+- <span class="math inline">\(S^{(0)}=\emptyset\)</span>,<br />
+- <span class="math inline">\(\mathcal{P}=\{1,\ldots,p\}\)</span>,<br />
+- <span class="math inline">\(\hat{\boldsymbol{\beta}}_{S^{(0)}}=\mathbf{0}\)</span><br />
+4. For<span class="math inline">\(\ell = 1, 2, \ldots, p\)</span>, do:<br />
+- Set <span class="math inline">\(j^{(\ell)}=\arg\max_{j\in \mathcal{P}\setminus S^{(l-1)}}|\mathbf{\tilde{x}}_j^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})|\)</span>,<br />
+-  <span class="math inline">\(|\mathbf{\tilde{x}}_{j^{(\ell)}}^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})|\leq \epsilon\)</span> <strong>break</strong>,<br />
+– Set <span class="math inline">\(S^{(\ell)}=\{j^{(\ell)}\}\cup S^{(\ell-1)}\)</span> and <span class="math inline">\(\mathbf{X}_{S^{(\ell)}}\)</span> the column subset of <span class="math inline">\(\mathbf{X}\)</span> with all columns <span class="math inline">\(j\in S^{(\ell)}\)</span>,<br />
+– Set <span class="math inline">\(\hat{\boldsymbol{\beta}}_{S^{(\ell)}}=\left(\mathbf{X}_{S^{(\ell)}}^T\mathbf{X}_{S^{(\ell)}}\right)^{-1}\mathbf{X}_{S^{(\ell)}}^T\mathbf{y}\)</span>.</p>
+<hr />
+<p>One can see that in the search loop (stage no 4), the variable to enter is chosen as the one to maximize the partial correlation with the response, conditioned on the current variables (selected until the previous step). Indeed <span class="math inline">\(\mathbf{\tilde{x}}_{j^{(\ell)}}^T(\mathbf{y}-\mathbf{X}\hat{\boldsymbol{\beta}}_{S^{(\ell-1)}})=\)</span> <span class="math inline">\(\mathbf{\tilde{x}}_{j^{(\ell)}}^T\left(\mathbf{y}-\mathbf{X}_{S^{(\ell-1)}}\left(\mathbf{X}_{S^{(\ell-1)}}^T\mathbf{X}_{S^{(\ell-1)}}\right)^{-1}\mathbf{X}_{S^{(\ell-1)}}^T\mathbf{y}\right)=\)</span> <span class="math inline">\(\mathbf{\tilde{x}}_{j^{(\ell)}}^T\left(\mathbf{I}-\mathbf{H}_{S^{(\ell-1)}}\right)\mathbf{y}\)</span>, and hence <span class="math inline">\(\mathbf{\tilde{x}}_{j^{(\ell)}}\)</span> is selected to maximize the drop in the residual sum of squares based on <span class="math inline">\(S^{(\ell)}\)</span>. Therefore, the OMP can be used in conjunction with a <em>model validity</em> estimator based on the residual sum of squares (L2 norm loss function) such as the <span class="math inline">\(C_p\)</span>, i.e. instead of of <span class="math inline">\(\epsilon\)</span> in the OMP.</p>
+<p>There is therefore no difference between a stepwise forward regression and the OMP in terms of the variables that are chosen at each step. The only difference is that forward stepwise regression is associated with testing or optimizing a model validity criterion, while the OMP is associated to another criterion <span class="math inline">\(\epsilon\)</span>.</p>
+</div>
+<div id="forward-stagewise-regression" class="section level3">
+<h3><span class="header-section-number">3.2.4</span> Forward stagewise regression</h3>
+<p>Forward stagewise regression is a <em>smoother</em> variation of stepwise regression that has been overlooked for a while but is coming back in high dimensional settings. It is also based on partial correlations, but at each step the chosen variable is not entered <em>fully</em>. It starts with all coefficients <span class="math inline">\(\beta_j\)</span> equal to zero, and iteratively updates the <span class="math inline">\(\beta_j\)</span> by a small amount <span class="math inline">\(\epsilon\)</span> of the variable <span class="math inline">\(X_j\)</span> that achieves the maximal absolute correlation with the current residuals.</p>
+<hr />
+<p><strong>Forward Stagewise Regression algorithm</strong>:<br />
+1. Inputs: <span class="math inline">\(\mathbf{X}=[\mathbf{x}_{1},\dots,\mathbf{x}_{p}]\)</span>, of size <span class="math inline">\(n\times p\)</span>, <span class="math inline">\(\mathbf{y}\)</span>, <span class="math inline">\(\epsilon&gt;0\)</span>, <span class="math inline">\(\Delta\)</span><br />
+2. Outputs: <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span><br />
+3. Initial steps:<br />
+- standardize all covariates <span class="math inline">\(\rightarrow \mathbf{\tilde{x}}_{j},j=1,\ldots,p\)</span><br />
+- Set <span class="math inline">\(\hat{\boldsymbol{\beta}}^{(0)}=\mathbf{0}\)</span><br />
+- Set <span class="math inline">\(\mathbf{e}_0=\mathbf{y}-\bar{y}\)</span>, <span class="math inline">\(\bar{y}=1/n\sum_{i=1}^n y_i\)</span><br />
+4. For <span class="math inline">\(k =1, 2, \ldots\)</span>, do:<br />
+- <span class="math inline">\(j=\arg\max_{j}|\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}|\)</span>,<br />
+- if <span class="math inline">\(|\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}|\leq \Delta\)</span> then stop - <span class="math inline">\(\delta_j=\epsilon\;\mbox{sign}\left(\mathbf{\tilde{x}}_j^T\mathbf{e}_{k-1}\right)\)</span><br />
+- Set <span class="math inline">\(\hat{\beta}_l^{(k+1)}\leftarrow \beta_l^{(k)}+\delta_jI(l=j), l=1,\ldots,p\)</span><br />
+- Set <span class="math inline">\(\mathbf{e}_k\leftarrow \mathbf{e}_{k-1}-\delta_j\mathbf{\tilde{x}}_j\)</span></p>
+<hr />
+<p>There is no clear rule for setting <span class="math inline">\(\epsilon\)</span> and <span class="math inline">\(\Delta\)</span>, which makes the forward stagewise regression algorithm more an <em>exploratory</em> method. Obviously, <span class="math inline">\(\Delta\)</span> should be small (e.g. <span class="math inline">\(0.0001\)</span>), while the smaller <span class="math inline">\(\epsilon\)</span>, the more steps are needed to reach the end of the algorithm. There is actually a strong connection between the sequence of forward stagewise estimates and the solution path of the lasso; see <span class="citation">Efron et al. (<a href="#ref-EfHaJoTi:04">2004</a>)</span>, and also <span class="citation">Hastie et al. (<a href="#ref-HaTaTiWa:07">2007</a>)</span>, <span class="citation">Tibshirani (<a href="#ref-TibR:15">2015</a>)</span>.</p>
+</div>
+</div>
+<div id="streamwise-regression" class="section level2">
+<h2><span class="header-section-number">3.3</span> Streamwise regression</h2>
+<div id="introduction-4" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Introduction</h3>
+<p>Stepwise forward selection is a procedure that finds a good approximation of the the model (formed by a subset of the available covariates) that minimizes a chosen criterion (e.g. the <span class="math inline">\(C_p\)</span>). It involves however, at each step <span class="math inline">\(k\)</span>, the comparison of <span class="math inline">\(p-k\)</span> models which can be computationally very challenging.</p>
+<p>Streamwise regression (see e.g. <span class="citation">Zhou et al. (<a href="#ref-ZhFoStUn:06">2006</a>)</span> and the references therein), is a variation of stepwise regression in which covariates (predictive features) are tested sequentially for addition to the current model (or not). Because it considers each potential covariate only once, it is extremely fast.</p>
+<p>The question that arises then is, if stepwise regression is already an approximation to the <em>optimal</em> model in terms of <em>model validity</em>, how can streamwise regression, which is by construction less accurate (in terms of approximating the <em>optimum</em>) still be valid in some sense. There is trade-off between <em>usable</em> or <em>workable</em> procedures and reaching an <em>optimum</em> in high dimensions (where any, even reasonable, procedure can fail). This discussion, still widely open, goes beyond the scope of the focus of this eBook.</p>
+<p>Streamwise regression can be bound to hypothesis testing, in that the focus is placed on selecting the largest set of covariates so that their significance (rejecting their associated null hypothesis) is valid up to a <em>global risk</em>. These procedures mimic somehow the situation in which a global model could be estimated (not possible, so far, when <span class="math inline">\(n&lt;p\)</span>) and the useful covariates, in terms of model validity, could be identified as the ones for which <span class="math inline">\(\mathbb{H}_{0j}=0\)</span> can be rejected. Care needs to be taken about not only the FWER (bound to multiple hypothesis testing) and the fact that any theoretical result (bound to the hypothesis to be tested) needs to be implemented using estimated quantities from the sample at hand, hence introducing bias and overfitting.</p>
+</div>
+<div id="sure-independence-screening" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Sure Independence Screening</h3>
+<p><span class="citation">Fan and Lv (<a href="#ref-FaLi:08">2008</a>)</span> introduce the concept of <em>sure screening</em> and propose a sure screening method based on <em>correlation learning</em> which filters out the features that have weak correlation with the response. The resulting method is called <em>sure independence screening</em> (SIS). Sure screening is a property that insures all the important variables survive after variable screening with probability tending to 1.</p>
+<p>An important feature in high dimensions is that spurious correlations (sample correlations) between predictors can be very large. This implies that using the (sample) correlations (partial or marginal) induces a form of decisional bias because the sample (observed) quantities are misleading. For example, important predictors can be found to be highly correlated with some unimportant ones, which then makes selection tend to include more predictors than necessary. <span class="citation">Fan and Lv (<a href="#ref-FaLi:08">2008</a>)</span> provide a simulations study in which <span class="math inline">\(p\)</span> independent standard normal predictors are simulated and the maximum absolute sample correlation coefficient between predictors is considered. In the Figure below are represented these quantities computed on <span class="math inline">\(500\)</span> datasets with <span class="math inline">\(n=60\)</span> and <span class="math inline">\(p=1000\)</span> and <span class="math inline">\(p=5000\)</span>.</p>
+<blockquote>
+<p>Reported from <span class="citation">Fan and Lv (<a href="#ref-FaLi:08">2008</a>)</span> <img src="Figures/FanLi08-Fig1.png" alt="Top" /></p>
+</blockquote>
+In the SIS framework, all covariates <span class="math inline">\(X_j,j=1,\ldots,p\)</span> are standardized (mean 0, variance 1). It is also assumed that the true model is sparse, i.e. the true dimension <span class="math inline">\(s\)</span> is such that <span class="math inline">\(s&lt;&lt;p\)</span>. Let <span class="math inline">\(\mathcal{M}_s = \{j=1,\ldots,p \; \vert \; \beta_j \neq 0 \}\)</span> be the true sparse model with non-sparsity size <span class="math inline">\(s=\vert \mathcal{M}_s\vert\)</span>. Let also <span class="math inline">\(\mathcal{M}_\gamma\)</span> denote a model selected on the basis of a (streamwise) selection procedure, the sure screening property ensures that
+<span class="math display">\[\begin{equation}
+P\left(\mathcal{M}_s\ \subseteq \mathcal{M}_\gamma\right)\rightarrow 1
+\end{equation}\]</span>
+The SIS procedure proposed by <span class="citation">Fan and Lv (<a href="#ref-FaLi:08">2008</a>)</span> ranks the importance of covariates (features) according to their marginal correlation with the response variable and filters out those that have weak marginal correlations with the response variable. Let
+<span class="math display">\[\begin{equation}
+\boldsymbol{\omega}=(\omega_1,\ldots,\omega_p) = \mathbf{X}^T\mathbf{y}
+\end{equation}\]</span>
+hence, the vector of marginal correlations of predictors with the response variable (rescaled by the standard deviation of the response <span class="math inline">\(\mathbf{y}\)</span>). For any given <span class="math inline">\(\gamma\in (0,1)\)</span>, the SIS selected model is
+<span class="math display">\[\begin{equation}
+\mathcal{M}_\gamma=\{j=1,\ldots,p \;\vert \; \vert \omega_j\;\vert \; \mbox{is among the first} \lfloor \gamma n \rfloor \; \mbox{largest}\}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\lfloor \gamma n \rfloor\)</span> denotes the integer part of <span class="math inline">\(\gamma n\)</span>. The SIS is actually used to shrink the full model of size <span class="math inline">\(p\)</span> down to a submodel <span class="math inline">\(\mathcal{M}_\gamma\)</span> with size <span class="math inline">\(d =\lfloor \gamma n \rfloor&lt;n\)</span>. There is a link between SIS and <em>ridge regression</em> (<em>Tikhonov regularization</em>), a shrinkage method that will be presented in Chapter 4.</p>
+<p><span class="citation">Fan and Lv (<a href="#ref-FaLi:08">2008</a>)</span> set up the conditions (Theorem 1) for the SIS to have the sure screening property, for suitable (technical) choices of <span class="math inline">\(\gamma\)</span>. In particular, <span class="math inline">\(\boldsymbol{\Sigma}^{^1/2}\mathbf{X}, \boldsymbol{\Sigma}=\mbox{cov}\left(\mathbf{X}\right), \mathbf{X}=\left[X_j\right]_{j=1,\ldots,p}\)</span> has a spherically symmetric distribution.</p>
+<p>The SIS procedure can be combined with another (subset) selection method: apply the SIS to reduce the dimension, apply a selection method to the reduced dimension to get, say, <span class="math inline">\(\mathcal{M}_{k_1}\)</span> of size of order e.g. <span class="math inline">\(n/log(n)\)</span>. The residuals from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\mathbf{X}=[X_j],j\in \mathcal{M}_{k_1}\)</span> are then used as a new response vector and the SIS is applied to the left-aside <span class="math inline">\(p-k_1\)</span> covariates to get <span class="math inline">\(\mathcal{M}_{k_2}\)</span>. The rationale behind is that using the residuals from the previous step, amounts to considering partial correlations which set aside the unimportant covariates that are highly correlated with the response through their associations with the covariates present in the set <span class="math inline">\(\mathcal{M}_{k_1}\)</span> and also makes those important predictors that are missed in the previous step possible to survive. The procedure is iterated until the <span class="math inline">\(L\)</span> disjoint subsets <span class="math inline">\(\mathcal{M}_{k_l},l=1,\ldots,L\)</span> whose union <span class="math inline">\(\mathcal{M}_d\)</span> has maximal size satisfying e.g. <span class="math inline">\(\vert \mathcal{M}_d\vert&lt;n\)</span>. This procedure is called the iterative sure independence screening (ISIS).</p>
+<blockquote>
+<p>Exercise:<br />
+- Explain why stepwise regression based on partial correlations (for the inclusion criterion) is a special case of ISIS.</p>
+</blockquote>
+</div>
+<div id="pc-simple-algorithm" class="section level3">
+<h3><span class="header-section-number">3.3.3</span> PC-simple algorithm</h3>
+<p><span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> use partial correlations to stream through the covariates and develop an algorithm that is a simplified version of the PC algorithm <span class="citation">(Spirtes, Glymour, and Scheines <a href="#ref-SpGlSc:00">2000</a>)</span> used in Bayesian network modeling (Causal Bayesian Network). Moreover, they provide a criterion based on hypothesis testing to decide in a covariate is selected or not.</p>
+<p>The PC-simple algorithm is given by the following steps:<br />
+1. Set m = 1 and the <em>active set</em> <span class="math inline">\(\mathcal{M}_0\)</span> is empty.<br />
+2. Do correlation screening, and build the active set <span class="math inline">\(\mathcal{M}_1 = \{j=1,\ldots,p \; \vert \; \rho_{X_jY}= 0 \}\)</span>.<br />
+3. m = m + 1.<br />
+4. Construct the <span class="math inline">\(m\)</span> active set <span class="math inline">\(\mathcal{M}_m =\{j \in \mathcal{M}_{m-1}\; \vert \;\rho_{X_jY,\mathbf{X}_{C}}= 0, \; \mathbf{X}_{C}=[X_l],l\in\mathcal{M}_{m-1}\setminus\{j\}\}\)</span>.<br />
+5. Repeat from step 3 as long as <span class="math inline">\(\vert \mathcal{M}_m\vert \leq m\)</span>.<br />
+6. Output: <span class="math inline">\(m_S=\{m\;\vert\; \vert \mathcal{M}_m\vert \leq m\}\)</span>.</p>
+<p>The PC-simple algorithm hence starts with a streamwise regression based on marginal correlations which are a particular case of partial correlations with empty conditioning set. Since this starting set might result too large, it is used as (partial) conditioning set in the next step to remove covariates with low partial correlations. The procedure stops when an equilibrium is reached, namely when the number of covariates at step <span class="math inline">\(m\)</span> is the closest (and inferior) to <span class="math inline">\(m\)</span>.</p>
+Since partial correlations need to be estimated from the available data, they are subject to sampling error, hence even if <span class="math inline">\(\rho_{\cdot\;\cdot,\cdot}= 0\)</span>, <span class="math inline">\(\hat{\rho}_{\cdot\;\cdot,\cdot}\neq 0\)</span>. <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> propose to apply Fisher’s <span class="math inline">\(Z\)</span>-transformation <span class="citation">(Fisher <a href="#ref-Fish:15">1915</a>)</span>
+<span class="math display">\[\begin{equation}
+Z_{X_jY,\mathbf{X}_C}=\frac{1}{2}\log\left(\frac{1+\hat{\rho}_{X_jY,\mathbf{X}_{C}}}{1-\hat{\rho}_{X_jY,\mathbf{X}_{C}}}\right)
+\end{equation}\]</span>
+<p>When testing (two-sided) <span class="math inline">\(\mathbb{H}_0:\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span>, <span class="math inline">\(\mathbb{H}_0\)</span> is rejected when <span class="citation">(Fisher <a href="#ref-Fish:21">1921</a>)</span> <span class="math inline">\(\sqrt{n-\vert \mathcal{M}_{C}\vert-3}Z_{X_jY,\mathbf{X}_C} &gt; \Phi^{-1}\left(1-\alpha/2\right)\)</span>, where <span class="math inline">\(\alpha\)</span> is the significance level and <span class="math inline">\(\Phi\)</span> is the standard Normal cumulative distribution function.</p>
+Partial correlations can be calculated recursively <span class="citation">(Bühlmann, Kalisch, and Maathuis <a href="#ref-BuKaMa:10">2010</a>)</span> using
+<span class="math display">\[\begin{equation}
+\hat{\rho}_{X_jY,\mathbf{X}_{C}}=\frac{\hat{\rho}_{X_jY,\mathbf{X}_{C\setminus\{k\}}}-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}}{\sqrt{\left(1-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}^2\right)\left(1-\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}^2\right)}}
+\end{equation}\]</span>
+<p>To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. <span class="math inline">\(\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}\)</span>, <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> make use of the <em>partial faithfulness</em> concept. It applies to models that are such that if <span class="math inline">\(\forall j, j=1,\ldots,p\)</span>, <span class="math inline">\(\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span> for some <span class="math inline">\(\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}\)</span> implies that <span class="math inline">\(\beta_j=0\)</span> (with <span class="math inline">\(\mathcal{M}_p=\{j=1,\ldots,p\}\)</span>). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.</p>
+<blockquote>
+<p>Exercise (project):<br />
+- Write the PC-simple algorithm in R using the recursive formula for partial correlations.<br />
+- Perform a simulation study to evaluate the performance (model selection criteria) both when the covariates are normally distributed and when they are not (consider e.g. factors, i.e. dummies) - Study the sensitivity of the PC-simple as a function of <span class="math inline">\(\alpha\)</span>. - Apply the algorithm for variable selection in a chosen dataset. - Compare with another variable selection method (implemented).</p>
+</blockquote>
+</div>
+</div>
+<div id="classification-and-regression-tree-cart" class="section level2">
+<h2><span class="header-section-number">3.4</span> Classification And Regression Tree (CART)</h2>
+<p>Note: The Section is highly inspired from <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-HaTiFr:09">2009</a>)</span>, chapter 9.</p>
+<p>The regression model involves estimating the <em>conditional mean</em> of the response variable <span class="math inline">\(Y\)</span> given a set of predictors <span class="math inline">\(X_j, j=1,\ldots,p\)</span> (collected in the <span class="math inline">\(n\times p\)</span> <em>design matrix</em> <span class="math inline">\(\mathbf{X}\)</span>), i.e. <span class="math inline">\(\mu(\mathbf{X})=\mathbf{X}\beta, \dim(\beta)=p\)</span>. The parameters <span class="math inline">\(\beta\)</span> represent the slopes of the linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>The basis of CART <span class="citation">(Breiman <a href="#ref-Brei:84">1984</a>)</span> is to approximate these slopes by partitioning the observed predictors realizations into consecutive sets, for which the observed mean response is computed. More precisely, tree-based methods partition the predictors’ space (feature space) into a set of rectangles, and then fit a simple model (i.e. computes the mean) in each one.</p>
+<p>The partitioning is done sequentially, with usually a binary partitioning (i.e. in two consecutive parts), one predictor at the time. The Figure below shows such a sequence in the case of two predictors <span class="math inline">\(X_1, X_2\)</span>, with splitting values <span class="math inline">\(\theta_m\)</span> and (split) regions <span class="math inline">\(R_m, m=1,\ldots,M, M=5\)</span>.</p>
+<hr />
+<p><strong>Illustration of the recursive binary partitioning</strong><br />
+<br></p>
+<center>
+<img src="Figures/RecursiveBiPart.png" alt="Top" />
+</center>
+<hr />
+<p>A regression tree algorithm has the following characteristics that need to be set:<br />
+- The choice of the splitting variable <span class="math inline">\(X_j\)</span> (from which the split is done)in each region)<br />
+- criterion for the splitting value <span class="math inline">\(t_m:=\theta_m\)</span><br />
+- the model (predictor) that is fitted in each region <span class="math inline">\(R_m\)</span><br />
+- the size of the tree <span class="math inline">\(M\)</span><br />
+</p>
+<div id="regression-tree" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Regression tree</h3>
+In the linear regression model, a constant model is fitted in each region <span class="math inline">\(R_m\)</span>, i.e. the <em>mth</em> stage of the algorithm is
+<span class="math display">\[\begin{equation}
+\hat{\mu}(\mathbf{X})= \sum_{m=1}^M c_m(y_i\vert \mathbf{x}_i\in R_m)
+\end{equation}\]</span>
+with
+<span class="math display">\[\begin{equation}
+c_m(y_i\vert \mathbf{x}_i\in R_m)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m), \\ n_m=\sum_i^n I(\mathbf{x}_i\in R_m)
+\end{equation}\]</span>
+<p>This amounts to consider, as predictor for the response, the sum of <span class="math inline">\(m\)</span> local predictors computed as the mean responses <span class="math inline">\(c_m(y_i\vert \mathbf{x}_i\in R_m)\)</span> in each region <span class="math inline">\(R_m\)</span>. The slopes <span class="math inline">\(\beta_j\)</span> are then never estimated (even locally) which results in a important gain in computational time.</p>
+At stage of the algorithm, two new regions are created, namely one of the former region is split into two parts. This is done for each region. A choice for the covariate <span class="math inline">\(X_j\)</span> to consider for the spiting as well as the splitting value <span class="math inline">\(t_{mj}\)</span> needs to be done, and the criterion is the minimization of the residual sum of squares (RSS)
+<span class="math display">\[\begin{equation}
+\sum_{k=1}^m\sum_{i \in R_k}\left(y_i-c_k(y_i\vert \mathbf{x}_i\in R_k)\right)^2
+\end{equation}\]</span>
+Since the contributions to the RSS of each region are computed separately (the <span class="math inline">\(c_k(y_i\vert \mathbf{x}_i\in R_k)\)</span>), the search for an <em>optimum</em> can be conducted region by region, in which both the splitting variable <span class="math inline">\(X_j\)</span> and value <span class="math inline">\(t_{mj}\)</span> are found that minimize the RSS in a given region. More precisely, let, at stage <span class="math inline">\(m\)</span>, <span class="math inline">\(R_{m_1}(j,t_{mj})\)</span> and <span class="math inline">\(R_{m_2}(j,t_{mj})\)</span> the regions resulting from the split of one region on the basis of one of the covariates <span class="math inline">\(X_j\)</span> and according to a splitting scalar <span class="math inline">\(t_{mj}\)</span>, then <span class="math inline">\(j\)</span> and <span class="math inline">\(t_{mj}\)</span> are found using
+<span class="math display">\[\begin{eqnarray}
+\min_{j,t_{mj}}&amp; \left\{\sum_{i \in R_{m_1}(j,t_{mj})} \left(y_i-c_m(y_i\vert \mathbf{x}_i\in R_{m_1}(j,t_{mj}))\right)^2 \right. \\  &amp; \left.   + 
+\sum_{i \in R_{m_2}(j,t_{mj})} \left(y_i-c_m(y_i\vert \mathbf{x}_i \in R_{m_2}(j,t_{mj}))\right)^2\right\}
+\end{eqnarray}\]</span>
+<p>For the size of the tree, one approach is to grow the tree until each region is very small, say of size <span class="math inline">\(n_m\approx 5\)</span>, and this large tree, say <span class="math inline">\(T_0\)</span>, is then <em>prunned</em> using <em>cost-complexity pruning</em> based on a criterion <span class="math inline">\(C_{\alpha}(T)\)</span>.</p>
+Pruning generates a series of trees <span class="math inline">\(T_{k}\subset T_{k-1}\subset \ldots\subset T_{1}\subset T_0\)</span>, obtained (sequentially) removing a subtree from the previous tree. A subtree is removed by removing a splitting (and the following ones) to create a collapsed region, also called leaf. The choice for the subtree to split, hence the resulting tree, say <span class="math inline">\(T\)</span> of size <span class="math inline">\(\vert T\vert\)</span>, is done using a criterion based on the RSS, i.e.
+<span class="math display">\[\begin{equation}
+C(T)=\sum_{m=1}^{\vert T\vert}\sum_{i\in R_m(T)}\left(y_i-c_m(T)\right)^2 
+\end{equation}\]</span>
+where <span class="math inline">\(R_m(T)\)</span> is the <span class="math inline">\(m\)</span>th region (leaf) of tree <span class="math inline">\(T\)</span> and <span class="math inline">\(c_m(T)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m(T))\)</span> is the average response in region <span class="math inline">\(R_m(T)\)</span>. <span class="math inline">\(C(T)\)</span> needs however to be constrained to avoid overfitting (since the largest possible tree is always the one that minimizes <span class="math inline">\(C(T)\)</span>), so that one uses a penalized criterion given by <span class="citation">(Hastie, Tibshirani, and Friedman <a href="#ref-HaTiFr:09">2009</a>)</span>
+<span class="math display">\[\begin{equation}
+C_{\alpha}(T)=C(T) - \alpha \vert T\vert
+\end{equation}\]</span>
+<p>Hence, the idea is to find, for each <span class="math inline">\(\alpha_k&gt;\alpha_{k-1}&gt;\ldots &gt; \alpha_1&gt; \alpha_0=0\)</span>, the (unique) subtree <span class="math inline">\(T_{\alpha_k} \subset T_{\alpha_{k-1}}\)</span> that minimizes <span class="math inline">\(C_{\alpha}(T)\)</span>. The tuning parameters <span class="math inline">\(\alpha_k\)</span> govern the trade off between tree size (to avoid overfitting) and its goodness of fit to the data. The sequence of <span class="math inline">\(\alpha_k\)</span> can be constructed starting from <span class="math inline">\(\alpha_1\)</span>, and the sequence stops when a criterion such as tenfold cross-validation is optimized.</p>
+<p>One major problem with trees is their high variance. Often a small change in the data can result in a very different series of splits, making interpretation somewhat precarious. Averaging methods such as <em>bagging</em>, i.e. <em>bootstrap aggregating</em>, can be used to reduce the variability of the tree estimator <span class="citation">(Breiman <a href="#ref-Brei:96">1996</a>)</span>. See <span class="citation">Sutton (<a href="#ref-Sutt:05">2005</a>)</span> for a survey.</p>
+<blockquote>
+<p>Exercise:<br />
+- Analyse the malnutrition in Zambia dataset by means of the regression tree method. Use the rpart package in R (see also <a href="https://www.statmethods.net/advstats/cart.html" class="uri">https://www.statmethods.net/advstats/cart.html</a>).</p>
+</blockquote>
+</div>
+<div id="classification-trees" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> Classification Trees</h3>
+<p>Like for subset selection, if the target is a classification outcome taking values <span class="math inline">\(q=1, 2,\ldots,Q\)</span>, the criterion for splitting (growing) and pruning the tree, , i.e. the RSS, needs to be adapted.</p>
+<p>Let <span class="math inline">\(p_{mq}=1/n_m\sum_{\mathbf{x}_i\in R_m}I(y_i= q)\)</span> be the proportion of class <span class="math inline">\(q\)</span> observations in region <span class="math inline">\(R_m\)</span> and let <span class="math inline">\(q_m=\mbox{argmax}_q p_{mq}\)</span>, i.e. the most frequent class in region <span class="math inline">\(R_m\)</span>. Different alternatives to the RSS (i.e. risk measures) exist and include the following ones, specified for the region <span class="math inline">\(R_m\)</span>:<br />
+- <em>Misclassification error</em>: <span class="math inline">\(\mbox{err}_m=\frac{1}{n_m}\sum_{i\in R_m}I(y_i\neq q_m)=1-p_{mq_m}\)</span><br />
+- <em>Gini index</em>: <span class="math inline">\(\mbox{err}_m=\sum_{q=1}^Qp_{mq}(1-p_{mq})= \sum_{q=1}^Q\sum_{q&#39;\neq q}p_{mq}p_{mq&#39;}\)</span><br />
+- <em>Cross-entropy or deviance</em>: <span class="math inline">\(\mbox{err}_m=- \sum_{q=1}^Qp_{mq}\log(p_{mq})\)</span></p>
+<p>The total risk or error is obtained as <span class="math inline">\(\sum_{m=1}^R\mbox{err}_m\)</span>. The deviance and the Gini index have the advantage of being differentiable functions, and hence more amenable to numerical optimization.</p>
+<blockquote>
+<p>Exercise:<br />
+- Analyse the Leukemia dataset by means of the regression tree method. Use the rpart package in R (see also <a href="https://www.statmethods.net/advstats/cart.html" class="uri">https://www.statmethods.net/advstats/cart.html</a>).</p>
+</blockquote>
+<!--
+### Properties 
+
+- consistency
+- as prob overfitting
+
+-->
 
 </div>
 </div>
@@ -285,11 +482,50 @@ with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsym
 <div id="ref-BeHo:95">
 <p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
 </div>
-<div id="ref-FoSt:08">
-<p>Foster, D. P., and R. A. Stine. 2008. “Alpha-Investing: A Procedure for Sequential Control of Expected False Discoveries.” <em>Journal of the Royal Statistical Society, Ser. B</em> 70: 429–44.</p>
-</div>
 <div id="ref-GSWaChTi:16">
 <p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
+</div>
+<div id="ref-zhang2009">
+<p>Zhang, T. 2009. “On the Consistency of Feature Selection Using Greedy Least Squares Regression.” <em>Journal of Machine Learning Research</em> 10: 555–68.</p>
+</div>
+<div id="ref-EfHaJoTi:04">
+<p>Efron, B., T. Hastie, I. Johnstone, and R. Tibshirani. 2004. “Least Angle Regression (with Discussion).” <em>Annals of Statistics</em> 32: 407–99.</p>
+</div>
+<div id="ref-HaTaTiWa:07">
+<p>Hastie, T., J. Taylor, R. Tibshirani, and G. Walther. 2007. “Forward Stagewise Regression and the Monotone Lasso.” <em>Electronic Journal of Statistics</em> 1: 1–29.</p>
+</div>
+<div id="ref-TibR:15">
+<p>Tibshirani, R. J. 2015. “A General Framework for Fast Stagewise Algorithms.” <em>Journal of Machine Learning Research</em> 16: 2543–88.</p>
+</div>
+<div id="ref-ZhFoStUn:06">
+<p>Zhou, J., D. P. Foster, R. A. Stine, and L. H. Ungar. 2006. “Streamwise Feature Selection.” <em>Journal of Machine Learning Research</em> 7: 1861–85.</p>
+</div>
+<div id="ref-FaLi:08">
+<p>Fan, J., and J. Lv. 2008. “Sure Independence Screening for Ultrahigh Dimensional Feature Space.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 70 (5). Wiley Online Library: 849–911.</p>
+</div>
+<div id="ref-BuKaMa:10">
+<p>Bühlmann, P., M. Kalisch, and M. H. Maathuis. 2010. “Variable Selection in High-Dimensional Linear Models: Partially Faithful Distributions and the PC-Simple Algorithm.” <em>Biometrika</em> 97: 261–78.</p>
+</div>
+<div id="ref-SpGlSc:00">
+<p>Spirtes, P., C. Glymour, and R. Scheines. 2000. <em>Causation, Prediction, and Search</em>. MIT Press.</p>
+</div>
+<div id="ref-Fish:15">
+<p>Fisher, R. A. 1915. “Frequency Distribution of the Values of the Correlation Coeficient in Samples from an Indefinitely Large Population.” <em>Biometrika</em> 10: 507–21.</p>
+</div>
+<div id="ref-Fish:21">
+<p>Fisher, R. 1921. “On the ‘Probable Error’ of a Coefficient of Correlation Deduced from a Small Sample.” <em>Metron</em> 1: 3–32.</p>
+</div>
+<div id="ref-HaTiFr:09">
+<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
+</div>
+<div id="ref-Brei:84">
+<p>Breiman, L. 1984. <em>Classification and Regression Trees</em>. Chapman &amp; Hall.</p>
+</div>
+<div id="ref-Brei:96">
+<p>Breiman, L. 1996. “Bagging Predictors.” <em>Machine Learning</em> 24: 123–40.</p>
+</div>
+<div id="ref-Sutt:05">
+<p>Sutton, C. D. 2005. “11 - Classification and Regression Trees, Bagging, and Boosting.” In <em>Data Mining and Data Visualization</em>, edited by C.R. Rao, E.J. Wegman, and J.L. Solka, 24:303–29. Handbook of Statistics. Elsevier.</p>
 </div>
 </div>
             </section>
