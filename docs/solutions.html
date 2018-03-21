@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Model Selection in High Dimensions</title>
   <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-18">
+<meta name="date" content="2018-03-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -226,88 +226,88 @@ dat =<span class="st"> </span><span class="kw">read.spss</span>(<span class="st"
 <span class="co"># with a real problem. It is sensitive to say that 80% of the work is cleaning and only 20% is modeling.</span>
 
 <span class="co"># Extract response variable i.e. HW70 Height for age standard deviation (according to WHO)</span>
-y =<span class="st"> </span>dat$HW70
-y[y ==<span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-y[y ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
+y =<span class="st"> </span>dat<span class="op">$</span>HW70
+y[y <span class="op">==</span><span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
+y[y <span class="op">==</span><span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
+y[y <span class="op">==</span><span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
+y[y <span class="op">==</span><span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
 
 <span class="co"># Revert tranformation (i.e. z-score)</span>
-y =<span class="st"> </span>y/<span class="dv">100</span>
+y =<span class="st"> </span>y<span class="op">/</span><span class="dv">100</span>
 
 <span class="co"># Variable 1: The calculated months of breastfeeding gives the duration of breastfeeding</span>
-x1 =<span class="st"> </span>dat$M5
-x1[x1 ==<span class="st"> </span><span class="dv">94</span>] =<span class="st"> </span><span class="dv">0</span>
-x1[x1 ==<span class="st"> </span><span class="dv">97</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 ==<span class="st"> </span><span class="dv">98</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 ==<span class="st"> </span><span class="dv">99</span>] =<span class="st"> </span><span class="ot">NA</span>
-x1[x1 &gt;<span class="st"> </span><span class="dv">40</span>] =<span class="st"> </span><span class="ot">NA</span>
+x1 =<span class="st"> </span>dat<span class="op">$</span>M5
+x1[x1 <span class="op">==</span><span class="st"> </span><span class="dv">94</span>] =<span class="st"> </span><span class="dv">0</span>
+x1[x1 <span class="op">==</span><span class="st"> </span><span class="dv">97</span>] =<span class="st"> </span><span class="ot">NA</span>
+x1[x1 <span class="op">==</span><span class="st"> </span><span class="dv">98</span>] =<span class="st"> </span><span class="ot">NA</span>
+x1[x1 <span class="op">==</span><span class="st"> </span><span class="dv">99</span>] =<span class="st"> </span><span class="ot">NA</span>
+x1[x1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">40</span>] =<span class="st"> </span><span class="ot">NA</span>
 
 <span class="co"># Variable 2: Age in months of the child</span>
-x2 =<span class="st"> </span>dat$HW1
+x2 =<span class="st"> </span>dat<span class="op">$</span>HW1
 
 <span class="co"># Variable 3: Age of the mother at birth</span>
-x3 =<span class="st"> </span>dat$V012 -<span class="st"> </span>dat$B8
-x3[x3&gt;<span class="dv">45</span>] =<span class="st"> </span><span class="ot">NA</span>
+x3 =<span class="st"> </span>dat<span class="op">$</span>V012 <span class="op">-</span><span class="st"> </span>dat<span class="op">$</span>B8
+x3[x3<span class="op">&gt;</span><span class="dv">45</span>] =<span class="st"> </span><span class="ot">NA</span>
 
 <span class="co"># Variable 4: Body mass index (BMI) of the mother</span>
-x4 =<span class="st"> </span>dat$V445
+x4 =<span class="st"> </span>dat<span class="op">$</span>V445
 
-x4 =<span class="st"> </span>x4/<span class="dv">100</span>  <span class="co"># no sense without this division</span>
+x4 =<span class="st"> </span>x4<span class="op">/</span><span class="dv">100</span>  <span class="co"># no sense without this division</span>
 
 <span class="co"># Variable 5: Height of the mother in meters</span>
-x5 =<span class="st"> </span>dat$V438
-x5[x5 ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 &lt;<span class="st"> </span><span class="dv">1300</span>] =<span class="st"> </span><span class="ot">NA</span>
-x5[x5 &gt;<span class="st"> </span><span class="dv">1900</span>] =<span class="st"> </span><span class="ot">NA</span>
+x5 =<span class="st"> </span>dat<span class="op">$</span>V438
+x5[x5 <span class="op">==</span><span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
+x5[x5 <span class="op">==</span><span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
+x5[x5 <span class="op">&lt;</span><span class="st"> </span><span class="dv">1300</span>] =<span class="st"> </span><span class="ot">NA</span>
+x5[x5 <span class="op">&gt;</span><span class="st"> </span><span class="dv">1900</span>] =<span class="st"> </span><span class="ot">NA</span>
 
-x5 =<span class="st"> </span>x5/<span class="dv">1000</span>  <span class="co"># it was in mm, we need to transform from original</span>
+x5 =<span class="st"> </span>x5<span class="op">/</span><span class="dv">1000</span>  <span class="co"># it was in mm, we need to transform from original</span>
 
 <span class="co"># Variable 6: Weight of the mother in kilograms</span>
-x6 =<span class="st"> </span>dat$V437
+x6 =<span class="st"> </span>dat<span class="op">$</span>V437
 
-x6=x6/<span class="dv">10</span> <span class="co"># we need to go back to Kg</span>
+x6=x6<span class="op">/</span><span class="dv">10</span> <span class="co"># we need to go back to Kg</span>
 
 <span class="co"># Variable 7: De facto region of residence</span>
 
 <span class="co"># Creating dummies (i.e. indicator functions) for each level of an existing factor enables</span>
 <span class="co"># to check the coefficients of each level in a possible future model estimation</span>
 
-x7 =<span class="st"> </span><span class="kw">as.factor</span>(dat$V101)
+x7 =<span class="st"> </span><span class="kw">as.factor</span>(dat<span class="op">$</span>V101)
 
 
-x7 =<span class="st"> </span><span class="kw">model.matrix</span>(~x7<span class="dv">-1</span>)
+x7 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x7<span class="op">-</span><span class="dv">1</span>)
 
 <span class="kw">dim</span>(x7)
 
 <span class="co"># Variable 8: Mother highest education level attended</span>
-x8 =<span class="st"> </span><span class="kw">as.factor</span>(dat$V106)
-x8 =<span class="st"> </span><span class="kw">model.matrix</span>(~x8<span class="dv">-1</span>)
+x8 =<span class="st"> </span><span class="kw">as.factor</span>(dat<span class="op">$</span>V106)
+x8 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x8<span class="op">-</span><span class="dv">1</span>)
 
 <span class="kw">dim</span>(x8)
 
 <span class="co"># Variable 9: Wealth index factor score</span>
-x9 =<span class="st"> </span>dat$V191
+x9 =<span class="st"> </span>dat<span class="op">$</span>V191
 
 <span class="co"># Variable 10: Weight of child at birth given in kilograms with three implied decimal places</span>
-x10 =<span class="st"> </span>dat$M19
-x10[x10 ==<span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10[x10 ==<span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
-x10 =<span class="st"> </span>x10/<span class="dv">1000</span>
+x10 =<span class="st"> </span>dat<span class="op">$</span>M19
+x10[x10 <span class="op">==</span><span class="st"> </span><span class="dv">9996</span>] =<span class="st"> </span><span class="ot">NA</span>
+x10[x10 <span class="op">==</span><span class="st"> </span><span class="dv">9997</span>] =<span class="st"> </span><span class="ot">NA</span>
+x10[x10 <span class="op">==</span><span class="st"> </span><span class="dv">9998</span>] =<span class="st"> </span><span class="ot">NA</span>
+x10[x10 <span class="op">==</span><span class="st"> </span><span class="dv">9999</span>] =<span class="st"> </span><span class="ot">NA</span>
+x10 =<span class="st"> </span>x10<span class="op">/</span><span class="dv">1000</span>
 
 <span class="co"># Variable 11: Child Sex</span>
-x11 =<span class="st"> </span>dat$B4
+x11 =<span class="st"> </span>dat<span class="op">$</span>B4
 
 <span class="co"># Variable 12: Preceding birth interval is calculated as the difference in months between the current birth and the previous birth</span>
-x12 =<span class="st"> </span>dat$B11
-x12[x12 &gt;<span class="st"> </span><span class="dv">125</span>] =<span class="st"> </span><span class="ot">NA</span>
+x12 =<span class="st"> </span>dat<span class="op">$</span>B11
+x12[x12 <span class="op">&gt;</span><span class="st"> </span><span class="dv">125</span>] =<span class="st"> </span><span class="ot">NA</span>
 
 <span class="co"># Variable 13: Drinking Water</span>
-x13 =<span class="st"> </span>dat$V113
-x13 =<span class="st"> </span><span class="kw">model.matrix</span>(~x13<span class="dv">-1</span>)
+x13 =<span class="st"> </span>dat<span class="op">$</span>V113
+x13 =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span>x13<span class="op">-</span><span class="dv">1</span>)
 x13 =<span class="st"> </span>x13[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">13</span>,<span class="dv">17</span>,<span class="dv">18</span>)]
 
 <span class="kw">dim</span>(x13)
@@ -323,7 +323,7 @@ p =<span class="st"> </span><span class="kw">dim</span>(mat.sys)[<span class="dv
 
 <span class="co"># Construct X and Y</span>
 y =<span class="st"> </span>mat.sys[,<span class="dv">1</span>]
-X =<span class="st"> </span>mat.sys[,<span class="dv">2</span>:p]
+X =<span class="st"> </span>mat.sys[,<span class="dv">2</span><span class="op">:</span>p]
 
 <span class="co"># Create a dataframe</span>
 
@@ -343,12 +343,12 @@ data_zambia =<span class="st"> </span><span class="kw">data.frame</span>(data_za
 </blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach</span>(data_zambia)
 
-lm_zambia =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. -<span class="st">`</span><span class="dt">Region:Central</span><span class="st">`</span>-<span class="st"> `</span><span class="dt">Ed:No education</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia)
+lm_zambia =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st">`</span><span class="dt">Region:Central</span><span class="st">`</span><span class="op">-</span><span class="st"> `</span><span class="dt">Ed:No education</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia)
 
 <span class="co"># We take off two levels to avoid multicollinearity. This should always be done when you create dummies.</span>
 <span class="kw">summary</span>(lm_zambia) <span class="co"># read the output understand the benchmark of the factor</span>
 
-lm_zambia_full =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. , <span class="dt">data =</span> data_zambia)
+lm_zambia_full =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> <span class="op">~</span><span class="st"> </span>. , <span class="dt">data =</span> data_zambia)
 
 <span class="kw">summary</span>(lm_zambia_full) <span class="co">#here it is R who choses the benchmark for the factors (i.e. NA variables)</span>
 
@@ -362,7 +362,7 @@ lm_zambia_full =<span class="st"> </span><span class="kw">lm</span>(<span class=
 
 <span class="co"># Eliminate variables with t-test in a stepwise manner (fixed alfa = 0.05 in this case)</span>
 
-model_zambia_reduced =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>., <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span>:<span class="dv">16</span>,<span class="dv">21</span>:<span class="dv">23</span>)])
+model_zambia_reduced =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span><span class="op">:</span><span class="dv">16</span>,<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>)])
 
 
 <span class="kw">summary</span>(model_zambia_reduced) <span class="co"># notice what is happening to the age of the mother variable </span>
@@ -370,7 +370,7 @@ model_zambia_reduced =<span class="st"> </span><span class="kw">lm</span>(<span 
 
 <span class="co"># Introduce one interaction in the reduced model. We start with the childsex factor.</span>
 
-model_zambia_int =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> ~<span class="st"> </span>. +<span class="st"> `</span><span class="dt">Breastfeeding duration (months)</span><span class="st">`</span>*<span class="st">`</span><span class="dt">Child sex</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span>:<span class="dv">16</span>,<span class="dv">21</span>:<span class="dv">23</span>)])
+model_zambia_int =<span class="st"> </span><span class="kw">lm</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span> <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> `</span><span class="dt">Breastfeeding duration (months)</span><span class="st">`</span><span class="op">*</span><span class="st">`</span><span class="dt">Child sex</span><span class="st">`</span>, <span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">9</span><span class="op">:</span><span class="dv">16</span>,<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>)])
 
 
 <span class="kw">summary</span>(model_zambia_int) <span class="co">#We take out the interaction from the model as it is not significant</span>
@@ -457,7 +457,7 @@ X =<span class="st"> </span>leukemia_mat
 </ul>
 <!-- Since p>>n there are problems -->
 <div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_glm =<span class="st"> </span><span class="kw">glm</span>(<span class="dt">formula =</span> y ~<span class="st"> </span>X,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_glm =<span class="st"> </span><span class="kw">glm</span>(<span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span>X,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
 
 
 <span class="kw">summary</span>(model_glm)  <span class="co">#singularity issues in the IWLS algorithm of GLM. It is impossible to invert the matrix.</span>
@@ -494,7 +494,7 @@ X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
 e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
 
-SNR&lt;-<span class="kw">mean</span>(X%*%beta)/<span class="kw">sqrt</span>(<span class="kw">var</span>(e))
+SNR&lt;-<span class="kw">mean</span>(X<span class="op">%*%</span>beta)<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(e))
 
 SNR</code></pre></div>
 <pre><code>## [1] 27.90095</code></pre>
@@ -502,44 +502,44 @@ SNR</code></pre></div>
 <p><span class="math display">\[SNR_{eng} = \frac{Var(f(x))}{Var(\epsilon)}\]</span> where <span class="math inline">\(f(x)\)</span> is the chosen prediction rule (e.g. linear function in the OLS case) and <span class="math inline">\(\epsilon\)</span> is the noise. You can fix in advance your SNR with the following code and generate the data accordingly:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">signal_to_noise_ratio =<span class="st"> </span><span class="co">#number to fix as you wish#</span>
 
-data =<span class="st"> </span>X%*%beta
+data =<span class="st"> </span>X<span class="op">%*%</span>beta
 
 noise =<span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)
 
-k =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">var</span>(data)/(signal_to_noise_ratio*<span class="kw">var</span>(noise)))
+k =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">var</span>(data)<span class="op">/</span>(signal_to_noise_ratio<span class="op">*</span><span class="kw">var</span>(noise)))
 
 
-y_hat_eng =<span class="st"> </span>data +<span class="st"> </span>k*noise <span class="co"># how you generate data to retrieve your fixed signal to noise ratio</span></code></pre></div>
+y_hat_eng =<span class="st"> </span>data <span class="op">+</span><span class="st"> </span>k<span class="op">*</span>noise <span class="co"># how you generate data to retrieve your fixed signal to noise ratio</span></code></pre></div>
 <blockquote>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Generate <span class="math inline">\(\hat{\mathbf{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal, <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 5\)</span>. Suppose for simplicity that the errors are uncorrelated.<br />
 </li>
 </ol>
 </blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Y_hat&lt;-X%*%beta+e</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Y_hat&lt;-X<span class="op">%*%</span>beta<span class="op">+</span>e</code></pre></div>
 <blockquote>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Split the data randomly in two halves (k=2) and use the training set to determine <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Then, compute the squared loss function as prediction error measure for each possible model. Observe which model is the best model.<br />
 </li>
 </ol>
 </blockquote>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:n, <span class="dt">size=</span><span class="fl">0.5</span>*n)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dt">size=</span><span class="fl">0.5</span><span class="op">*</span>n)
 
 <span class="co"># Split data</span>
-y_train&lt;-<span class="st"> </span>Y_hat[-index,]
-x_train&lt;-X[-index,]
+y_train&lt;-<span class="st"> </span>Y_hat[<span class="op">-</span>index,]
+x_train&lt;-X[<span class="op">-</span>index,]
 y_test&lt;-<span class="st"> </span>Y_hat[index,]
 x_test&lt;-X[index,]
 
-index_sub_choose&lt;-<span class="kw">c</span>(<span class="dv">1</span>:p)
-sub_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>,<span class="dt">ncol =</span> p,<span class="dt">nrow =</span> <span class="dv">2</span>^p<span class="dv">-1</span>)
+index_sub_choose&lt;-<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>p)
+sub_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>,<span class="dt">ncol =</span> p,<span class="dt">nrow =</span> <span class="dv">2</span><span class="op">^</span>p<span class="op">-</span><span class="dv">1</span>)
 t=<span class="dv">0</span>
-for(i in <span class="dv">1</span>:<span class="dv">5</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)
 {
   index_matrix &lt;-<span class="st"> </span><span class="kw">combn</span>(index_sub_choose,i)
-  for(j in <span class="dv">1</span>:<span class="kw">ncol</span>(index_matrix))
+  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(index_matrix))
   {
-    t &lt;-<span class="st"> </span>t<span class="dv">+1</span>
+    t &lt;-<span class="st"> </span>t<span class="op">+</span><span class="dv">1</span>
     index_sub &lt;-<span class="st"> </span>index_matrix[,j]
     sub_matrix[t,<span class="kw">c</span>(index_sub)]  &lt;-<span class="st">  </span><span class="dv">1</span>
   }
@@ -547,19 +547,19 @@ for(i in <span class="dv">1</span>:<span class="dv">5</span>)
 
 k&lt;-<span class="kw">nrow</span>(sub_matrix)
 cv &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data=</span><span class="ot">NA</span>,<span class="dt">nrow =</span> k,<span class="dt">ncol =</span> <span class="dv">1</span>)
-for(j in <span class="dv">1</span>:k){
-  Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]
-  betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%y_train
-  new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]%*%betaMLE
-  cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test-new_Y)%*%(y_test-new_Y)
+<span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k){
+  Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)]
+  betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)<span class="op">%*%</span>Xsub)<span class="op">%*%</span><span class="kw">t</span>(Xsub)<span class="op">%*%</span>y_train
+  new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)]<span class="op">%*%</span>betaMLE
+  cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test<span class="op">-</span>new_Y)<span class="op">%*%</span>(y_test<span class="op">-</span>new_Y)
   
 }
 
-BEST_cv&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(cv),]==<span class="dv">1</span>)
+BEST_cv&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(cv),]<span class="op">==</span><span class="dv">1</span>)
 BEST_cv</code></pre></div>
 <pre><code>## [1] 1 2 4 5</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xsub_cv&lt;-x_train[,BEST_cv]
-betaMLE_cv&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub_cv)%*%Xsub_cv)%*%<span class="kw">t</span>(Xsub_cv)%*%y_train
+betaMLE_cv&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub_cv)<span class="op">%*%</span>Xsub_cv)<span class="op">%*%</span><span class="kw">t</span>(Xsub_cv)<span class="op">%*%</span>y_train
 betaMLE_cv</code></pre></div>
 <pre><code>##             [,1]
 ## [1,]  3.03433961
@@ -593,18 +593,18 @@ X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)
 
 beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
 e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
-SNR&lt;-<span class="kw">mean</span>(X%*%beta)/<span class="kw">var</span>(e)
+SNR&lt;-<span class="kw">mean</span>(X<span class="op">%*%</span>beta)<span class="op">/</span><span class="kw">var</span>(e)
 
-Y_hat&lt;-X%*%beta+e</code></pre></div>
+Y_hat&lt;-X<span class="op">%*%</span>beta<span class="op">+</span>e</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">index_sub_choose&lt;-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)
 sub_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>,<span class="dt">ncol =</span> <span class="dv">5</span>,<span class="dt">nrow =</span> <span class="dv">31</span>)
 t=<span class="dv">0</span>
-for(i in <span class="dv">1</span>:<span class="dv">5</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)
 {
   index_matrix &lt;-<span class="st"> </span><span class="kw">combn</span>(index_sub_choose,i)
-  for(j in <span class="dv">1</span>:<span class="kw">ncol</span>(index_matrix))
+  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(index_matrix))
   {
-    t &lt;-<span class="st"> </span>t<span class="dv">+1</span>
+    t &lt;-<span class="st"> </span>t<span class="op">+</span><span class="dv">1</span>
     index_sub &lt;-<span class="st"> </span>index_matrix[,j]
     sub_matrix[t,<span class="kw">c</span>(index_sub)]  &lt;-<span class="st">  </span><span class="dv">1</span>
   }
@@ -614,20 +614,20 @@ for(i in <span class="dv">1</span>:<span class="dv">5</span>)
 RSS&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
 AIC&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
 k&lt;-<span class="kw">nrow</span>(sub_matrix)
-for(j in <span class="dv">1</span>:k){
-Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)])
-betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
-new_Y&lt;-Xsub%*%betaMLE
-for(i in <span class="dv">1</span>:(n/<span class="dv">2</span>)){
-  RSS[j]&lt;-RSS[j]+(new_Y[i]-Y_hat[i])^<span class="dv">2</span>
+<span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k){
+Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)])
+betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)<span class="op">%*%</span>Xsub)<span class="op">%*%</span><span class="kw">t</span>(Xsub)<span class="op">%*%</span>Y_hat
+new_Y&lt;-Xsub<span class="op">%*%</span>betaMLE
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n<span class="op">/</span><span class="dv">2</span>)){
+  RSS[j]&lt;-RSS[j]<span class="op">+</span>(new_Y[i]<span class="op">-</span>Y_hat[i])<span class="op">^</span><span class="dv">2</span>
 }
-AIC[j]&lt;-RSS[j]/<span class="kw">var</span>(e)+<span class="dv">2</span>*<span class="kw">ncol</span>(Xsub)
+AIC[j]&lt;-RSS[j]<span class="op">/</span><span class="kw">var</span>(e)<span class="op">+</span><span class="dv">2</span><span class="op">*</span><span class="kw">ncol</span>(Xsub)
 }
-BEST&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(AIC),]==<span class="dv">1</span>)
+BEST&lt;-<span class="kw">which</span>(sub_matrix[<span class="kw">which.min</span>(AIC),]<span class="op">==</span><span class="dv">1</span>)
 BEST</code></pre></div>
 <pre><code>## [1] 1 2 4</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Xsub&lt;-<span class="kw">as.matrix</span>(X[,BEST])
-betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
+betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)<span class="op">%*%</span>Xsub)<span class="op">%*%</span><span class="kw">t</span>(Xsub)<span class="op">%*%</span>Y_hat
 betaMLE</code></pre></div>
 <pre><code>##          [,1]
 ## [1,] 2.982799
@@ -655,9 +655,9 @@ AverageN&lt;-<span class="kw">matrix</span>(<span class="ot">NA</span>,<span cla
 Correct&lt;-<span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)))
 <span class="kw">colnames</span>(Correct)&lt;-<span class="kw">c</span>(<span class="st">&quot;AIC&quot;</span>,<span class="st">&quot;CV&quot;</span>)
 
-for(l in <span class="dv">1</span>:<span class="dv">100</span>){
+<span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>){
   
-### SETTING ###
+### SETTING <span class="al">###</span>
   n&lt;-<span class="dv">1000</span>
   p&lt;-<span class="dv">5</span>
   Mu&lt;-<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>) <span class="co"># location vector</span>
@@ -665,67 +665,67 @@ for(l in <span class="dv">1</span>:<span class="dv">100</span>){
   X&lt;-<span class="kw">mvrnorm</span>(n , Mu, sigma)
   beta&lt;-<span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
   e&lt;-<span class="kw">rnorm</span>(n, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
-  Y_hat&lt;-X%*%beta+e
+  Y_hat&lt;-X<span class="op">%*%</span>beta<span class="op">+</span>e
 
-### AIC ###    
+### AIC <span class="al">###</span>    
   RSS&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
   AIC&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,k)
 
-  for(j in <span class="dv">1</span>:k){
-    Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)])
-    betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%Y_hat
-    new_Y&lt;-Xsub%*%betaMLE
-    for(i in <span class="dv">1</span>:(n/<span class="dv">2</span>)){
-      RSS[j]&lt;-RSS[j]+(new_Y[i]-Y_hat[i])^<span class="dv">2</span>
+  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k){
+    Xsub&lt;-<span class="kw">as.matrix</span>(X[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)])
+    betaMLE&lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)<span class="op">%*%</span>Xsub)<span class="op">%*%</span><span class="kw">t</span>(Xsub)<span class="op">%*%</span>Y_hat
+    new_Y&lt;-Xsub<span class="op">%*%</span>betaMLE
+    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n<span class="op">/</span><span class="dv">2</span>)){
+      RSS[j]&lt;-RSS[j]<span class="op">+</span>(new_Y[i]<span class="op">-</span>Y_hat[i])<span class="op">^</span><span class="dv">2</span>
     }
-    AIC[j]&lt;-RSS[j]/<span class="kw">var</span>(e)+<span class="dv">2</span>*<span class="kw">ncol</span>(Xsub)
+    AIC[j]&lt;-RSS[j]<span class="op">/</span><span class="kw">var</span>(e)<span class="op">+</span><span class="dv">2</span><span class="op">*</span><span class="kw">ncol</span>(Xsub)
   }
   BEST&lt;-sub_matrix[<span class="kw">which.min</span>(AIC),]
   BEST[<span class="kw">is.na</span>(BEST)] &lt;-<span class="dv">0</span>
-  if(<span class="kw">sum</span>(BEST-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))==<span class="dv">0</span>){
+  <span class="cf">if</span>(<span class="kw">sum</span>(BEST<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))<span class="op">==</span><span class="dv">0</span>){
     
-    Exact[<span class="dv">1</span>]&lt;-Exact[<span class="dv">1</span>]+<span class="dv">1</span>
+    Exact[<span class="dv">1</span>]&lt;-Exact[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>
     
   }
-  if(<span class="kw">sum</span>((BEST[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))==<span class="dv">0</span>){
-    Correct[<span class="dv">1</span>]&lt;-Correct[<span class="dv">1</span>]+<span class="dv">1</span>
+  <span class="cf">if</span>(<span class="kw">sum</span>((BEST[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))<span class="op">==</span><span class="dv">0</span>){
+    Correct[<span class="dv">1</span>]&lt;-Correct[<span class="dv">1</span>]<span class="op">+</span><span class="dv">1</span>
   }
     AverageN[l,<span class="dv">1</span>]&lt;-<span class="kw">sum</span>(BEST)
   
   
-### CV ###
-  index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span>:n, <span class="dt">size=</span><span class="fl">0.5</span>*n)
-  y_train&lt;-<span class="st"> </span>Y_hat[-index,]
-  x_train&lt;-X[-index,]
+### CV <span class="al">###</span>
+  index &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>n, <span class="dt">size=</span><span class="fl">0.5</span><span class="op">*</span>n)
+  y_train&lt;-<span class="st"> </span>Y_hat[<span class="op">-</span>index,]
+  x_train&lt;-X[<span class="op">-</span>index,]
   y_test&lt;-<span class="st"> </span>Y_hat[index,]
   x_test&lt;-X[index,]
   
-  for(j in <span class="dv">1</span>:k){
-    Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]
-    betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)%*%Xsub)%*%<span class="kw">t</span>(Xsub)%*%y_train
-    new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]==<span class="dv">1</span>)]%*%betaMLE
-    cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test-new_Y)%*%(y_test-new_Y)
+  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k){
+    Xsub    &lt;-x_train[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)]
+    betaMLE &lt;-<span class="kw">solve</span>(<span class="kw">t</span>(Xsub)<span class="op">%*%</span>Xsub)<span class="op">%*%</span><span class="kw">t</span>(Xsub)<span class="op">%*%</span>y_train
+    new_Y   &lt;-x_test[,<span class="kw">which</span>(sub_matrix[j,]<span class="op">==</span><span class="dv">1</span>)]<span class="op">%*%</span>betaMLE
+    cv[j,]      &lt;-<span class="st"> </span><span class="kw">t</span>(y_test<span class="op">-</span>new_Y)<span class="op">%*%</span>(y_test<span class="op">-</span>new_Y)
     
   }
   
   BEST_cv&lt;-sub_matrix[<span class="kw">which.min</span>(cv),]
   BEST_cv[<span class="kw">is.na</span>(BEST_cv)] &lt;-<span class="dv">0</span>
-  if(<span class="kw">sum</span>(BEST_cv-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))==<span class="dv">0</span>){
+  <span class="cf">if</span>(<span class="kw">sum</span>(BEST_cv<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))<span class="op">==</span><span class="dv">0</span>){
     
-    Exact[<span class="dv">2</span>]&lt;-Exact[<span class="dv">2</span>]+<span class="dv">1</span>
+    Exact[<span class="dv">2</span>]&lt;-Exact[<span class="dv">2</span>]<span class="op">+</span><span class="dv">1</span>
     
   }
-  if(<span class="kw">sum</span>((BEST_cv[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))==<span class="dv">0</span>){
-    Correct[<span class="dv">2</span>]&lt;-Correct[<span class="dv">2</span>]+<span class="dv">1</span>
+  <span class="cf">if</span>(<span class="kw">sum</span>((BEST_cv[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)))<span class="op">==</span><span class="dv">0</span>){
+    Correct[<span class="dv">2</span>]&lt;-Correct[<span class="dv">2</span>]<span class="op">+</span><span class="dv">1</span>
   }
     AverageN[l,<span class="dv">2</span>]&lt;-<span class="kw">sum</span>(BEST_cv)
    
 }
 
-Exact/<span class="dv">100</span></code></pre></div>
+Exact<span class="op">/</span><span class="dv">100</span></code></pre></div>
 <pre><code>##    AIC   CV
 ## 1 0.84 0.47</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Correct/<span class="dv">100</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Correct<span class="op">/</span><span class="dv">100</span></code></pre></div>
 <pre><code>##   AIC CV
 ## 1   1  1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colMeans</span>(AverageN)</code></pre></div>
@@ -752,19 +752,19 @@ rho =<span class="st"> </span><span class="fl">0.5</span> <span class="co"># cha
 
 mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
 
-sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p^<span class="dv">2</span>)
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p<span class="op">^</span><span class="dv">2</span>)
 
 sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
 
 
 <span class="co"># Autoregressive structure</span>
 
-for (i in <span class="dv">1</span>:p) {
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
   
-  for (j in <span class="dv">1</span>:p) {
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
     
     
-    sigma[i,j] =<span class="st"> </span>rho^(<span class="kw">abs</span>(i-j))
+    sigma[i,j] =<span class="st"> </span>rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))
     
     
   }
@@ -779,17 +779,17 @@ X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)
 
 beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="dv">0</span>)
 
-ind =<span class="st"> </span><span class="dv">1</span>:<span class="dv">1000</span>
+ind =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>
 
 pos_CV =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
 
 pos_AIC =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
 
 
-for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
+<span class="cf">for</span>(z <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {
   
   
-  y_hat =<span class="st"> </span>X%*%beta +<span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) 
+  y_hat =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) 
   
   data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(y_hat,X))
   
@@ -799,7 +799,7 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
   
   train_set =<span class="st"> </span>data[index,]
   
-  test_set =<span class="st"> </span>data[-index,]
+  test_set =<span class="st"> </span>data[<span class="op">-</span>index,]
   
   cv_error =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">31</span>)
   
@@ -807,16 +807,16 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
   
   <span class="co"># One regressor only models</span>
   
-  for(i in <span class="dv">1</span>:<span class="dv">5</span>) {
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
     
     
-    m_1 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,i<span class="dv">+1</span>], <span class="dt">data =</span> train_set)
+    m_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(train_set<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>train_set[,i<span class="op">+</span><span class="dv">1</span>], <span class="dt">data =</span> train_set)
     
-    cv_error[i] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span>(<span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,i<span class="dv">+1</span>])%*%<span class="st"> </span>m_1$coefficients))^<span class="dv">2</span>)
+    cv_error[i] =<span class="st"> </span><span class="kw">mean</span>((test_set<span class="op">$</span>y <span class="op">-</span><span class="st"> </span>(<span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,i<span class="op">+</span><span class="dv">1</span>])<span class="op">%*%</span><span class="st"> </span>m_<span class="dv">1</span><span class="op">$</span>coefficients))<span class="op">^</span><span class="dv">2</span>)
     
-    m_1 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,i<span class="dv">+1</span>], data)
+    m_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(data<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>data[,i<span class="op">+</span><span class="dv">1</span>], data)
     
-    aic_values[i] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_1) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">3</span>
+    aic_values[i] =<span class="st"> </span><span class="op">-</span><span class="dv">2</span><span class="op">*</span><span class="kw">logLik</span>(m_<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">3</span>
     
   }
   
@@ -827,16 +827,16 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
   M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">2</span>)
   
   
-  for(i in <span class="dv">1</span>:<span class="dv">10</span>) {
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
     
     
-    m_2 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    m_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(train_set<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>], <span class="dt">data =</span> train_set)
     
-    cv_error[i<span class="dv">+5</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>])%*%m_2$coefficients)^<span class="dv">2</span>)
+    cv_error[i<span class="op">+</span><span class="dv">5</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set<span class="op">$</span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] <span class="op">+</span><span class="dv">1</span>])<span class="op">%*%</span>m_<span class="dv">2</span><span class="op">$</span>coefficients)<span class="op">^</span><span class="dv">2</span>)
     
-    m_2 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>], data)
+    m_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(data<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>data[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>], data)
     
-    aic_values[i<span class="dv">+5</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_2) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">4</span>
+    aic_values[i<span class="op">+</span><span class="dv">5</span>] =<span class="st"> </span><span class="op">-</span><span class="dv">2</span><span class="op">*</span><span class="kw">logLik</span>(m_<span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">4</span>
   }
   
   
@@ -845,16 +845,16 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
   M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">3</span>)
   
   
-  for(i in <span class="dv">1</span>:<span class="dv">10</span>) {
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
     
     
-    m_3 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    m_<span class="dv">3</span> =<span class="st"> </span><span class="kw">lm</span>(train_set<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>], <span class="dt">data =</span> train_set)
     
-    cv_error[i+<span class="st"> </span><span class="dv">15</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>])%*%m_3$coefficients)^<span class="dv">2</span>)
+    cv_error[i<span class="op">+</span><span class="st"> </span><span class="dv">15</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set<span class="op">$</span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] <span class="op">+</span><span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>])<span class="op">%*%</span>m_<span class="dv">3</span><span class="op">$</span>coefficients)<span class="op">^</span><span class="dv">2</span>)
     
-    m_3 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>], data)
+    m_<span class="dv">3</span> =<span class="st"> </span><span class="kw">lm</span>(data<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>data[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>], data)
     
-    aic_values[i<span class="dv">+15</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_3) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">5</span>
+    aic_values[i<span class="op">+</span><span class="dv">15</span>] =<span class="st"> </span><span class="op">-</span><span class="dv">2</span><span class="op">*</span><span class="kw">logLik</span>(m_<span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">5</span>
     
   }
   
@@ -864,32 +864,32 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
   M =<span class="st"> </span><span class="kw">combn</span>(x,<span class="dv">4</span>)
   
   
-  for(i in <span class="dv">1</span>:<span class="dv">5</span>) {
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
     
     
-    m_4 =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>train_set[,M[<span class="dv">4</span>,i]+<span class="dv">1</span>], <span class="dt">data =</span> train_set)
+    m_<span class="dv">4</span> =<span class="st"> </span><span class="kw">lm</span>(train_set<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>train_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>train_set[,M[<span class="dv">4</span>,i]<span class="op">+</span><span class="dv">1</span>], <span class="dt">data =</span> train_set)
     
-    cv_error[i<span class="dv">+25</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] +<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]+<span class="dv">1</span>])%*%<span class="st"> </span>m_4$coefficients)^<span class="dv">2</span>)
+    cv_error[i<span class="op">+</span><span class="dv">25</span>] =<span class="st"> </span><span class="kw">mean</span>((test_set<span class="op">$</span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>),test_set[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>], test_set[, M[<span class="dv">2</span>,i] <span class="op">+</span><span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>],test_set[, M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>])<span class="op">%*%</span><span class="st"> </span>m_<span class="dv">4</span><span class="op">$</span>coefficients)<span class="op">^</span><span class="dv">2</span>)
     
-    m_4 =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>data[,M[<span class="dv">1</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">2</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">3</span>,i]+<span class="dv">1</span>] +<span class="st"> </span>data[,M[<span class="dv">4</span>,i]+<span class="dv">1</span>], data)
+    m_<span class="dv">4</span> =<span class="st"> </span><span class="kw">lm</span>(data<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>data[,M[<span class="dv">1</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">2</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">3</span>,i]<span class="op">+</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>data[,M[<span class="dv">4</span>,i]<span class="op">+</span><span class="dv">1</span>], data)
     
-    aic_values[i<span class="dv">+25</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(m_4) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">6</span>
+    aic_values[i<span class="op">+</span><span class="dv">25</span>] =<span class="st"> </span><span class="op">-</span><span class="dv">2</span><span class="op">*</span><span class="kw">logLik</span>(m_<span class="dv">4</span>) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">6</span>
     
   }
   
   <span class="co"># Full model </span>
   
-  full_model =<span class="st"> </span><span class="kw">lm</span>(train_set$y ~<span class="st"> </span>., <span class="dt">data =</span> train_set)
+  full_model =<span class="st"> </span><span class="kw">lm</span>(train_set<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_set)
   
-  full_model$coefficients
+  full_model<span class="op">$</span>coefficients
   
-  cv_error_full =<span class="st"> </span><span class="kw">mean</span>((test_set$y -<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>), test_set$x1,test_set$x2,test_set$x3,test_set$x4,test_set$x5)%*%<span class="st"> </span>full_model$coefficients)^<span class="dv">2</span>)
+  cv_error_full =<span class="st"> </span><span class="kw">mean</span>((test_set<span class="op">$</span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">500</span>), test_set<span class="op">$</span>x1,test_set<span class="op">$</span>x2,test_set<span class="op">$</span>x3,test_set<span class="op">$</span>x4,test_set<span class="op">$</span>x5)<span class="op">%*%</span><span class="st"> </span>full_model<span class="op">$</span>coefficients)<span class="op">^</span><span class="dv">2</span>)
   
   cv_error[<span class="dv">31</span>] =<span class="st"> </span>cv_error_full
   
-  full_model =<span class="st"> </span><span class="kw">lm</span>(data$y ~<span class="st"> </span>., data)
+  full_model =<span class="st"> </span><span class="kw">lm</span>(data<span class="op">$</span>y <span class="op">~</span><span class="st"> </span>., data)
   
-  aic_values[<span class="dv">31</span>] =<span class="st"> </span>-<span class="dv">2</span>*<span class="kw">logLik</span>(full_model) +<span class="st"> </span><span class="dv">2</span>*<span class="dv">7</span>
+  aic_values[<span class="dv">31</span>] =<span class="st"> </span><span class="op">-</span><span class="dv">2</span><span class="op">*</span><span class="kw">logLik</span>(full_model) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">7</span>
   
   pos_CV[z] =<span class="st"> </span><span class="kw">which.min</span>(cv_error)
   
@@ -901,15 +901,15 @@ for(z in <span class="dv">1</span>:<span class="dv">100</span>) {
 
 <span class="co"># Exact model proportion</span>
 
-<span class="kw">sum</span>(pos_CV ==<span class="st"> &quot;17&quot;</span>)/<span class="dv">100</span> </code></pre></div>
+<span class="kw">sum</span>(pos_CV <span class="op">==</span><span class="st"> &quot;17&quot;</span>)<span class="op">/</span><span class="dv">100</span> </code></pre></div>
 <pre><code>## [1] 0.48</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC ==<span class="st"> &quot;17&quot;</span>)/<span class="dv">100</span> </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC <span class="op">==</span><span class="st"> &quot;17&quot;</span>)<span class="op">/</span><span class="dv">100</span> </code></pre></div>
 <pre><code>## [1] 0.71</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Correct model proportion (linked to the consistency of the model selection procedure)</span>
 
-<span class="kw">sum</span>(pos_CV &gt;<span class="st"> </span><span class="dv">16</span>)/<span class="dv">100</span> </code></pre></div>
+<span class="kw">sum</span>(pos_CV <span class="op">&gt;</span><span class="st"> </span><span class="dv">16</span>)<span class="op">/</span><span class="dv">100</span> </code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC &gt;<span class="st"> </span><span class="dv">16</span>)/<span class="dv">100</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pos_AIC <span class="op">&gt;</span><span class="st"> </span><span class="dv">16</span>)<span class="op">/</span><span class="dv">100</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Average number of regressors</span>
 
@@ -920,7 +920,7 @@ result_cv =<span class="st"> </span><span class="kw">rep</span>(<span class="dv"
 result_aic =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
 
 
-for (i in <span class="dv">1</span>:<span class="dv">100</span>) {
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {
   
   
   result_cv[i] =<span class="st"> </span>counted[pos_CV[i]]
@@ -1031,7 +1031,7 @@ Fit the appropriate GLM for the situation using only one of the available predic
 
 ## Part (a)
 
-mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</code></pre></div>
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</code></pre></div>
 <blockquote>
 Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-the-validity-of-a-model.html#the-roc-curve">ROC curve</a> section of the e-book. Then find the TPR (i.e. true positive rate), FPR (i.e. false positive rate), TNR (i.e. true negative rate), FNR (i.e. false negative rate) of the fitted values found at point (a) with a cut-off value <span class="math inline">\(c = 0.5\)</span>.<br />
 
@@ -1040,10 +1040,10 @@ Read the <a href="https://caesarxvii.github.io/MSHD-book-and-datasets/assessing-
 
 c0 =<span class="st"> </span><span class="fl">0.5</span>
 
-mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
 
 
-conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced$y, mod_1$fitted.values &gt;<span class="st"> </span>c0) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
+conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced<span class="op">$</span>y, mod_<span class="dv">1</span><span class="op">$</span>fitted.values <span class="op">&gt;</span><span class="st"> </span>c0) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
 
 conf_mat</code></pre></div>
 <pre><code>##    
@@ -1057,13 +1057,13 @@ prop_confmat</code></pre></div>
 ##          FALSE       TRUE
 ##   0 0.88000000 0.12000000
 ##   1 0.06382979 0.93617021</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TNR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">1</span>]/(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># TRUE NEGATIVE (TNR)</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TNR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">1</span>]<span class="op">/</span>(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]) <span class="co"># TRUE NEGATIVE (TNR)</span>
 
-FPR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]/(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>])  <span class="co"># FALSE POSITIVE (FPR)</span>
+FPR =<span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>]<span class="op">/</span>(conf_mat[<span class="dv">1</span>,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>conf_mat[<span class="dv">1</span>,<span class="dv">2</span>])  <span class="co"># FALSE POSITIVE (FPR)</span>
 
-FNR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">1</span>]/(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># FALSE NEGATIVE (FNR)</span>
+FNR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">/</span>(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># FALSE NEGATIVE (FNR)</span>
   
-TPR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>]/(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] +<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># TRUE POSITIVE (TPR)</span>
+TPR =<span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>]<span class="op">/</span>(conf_mat[<span class="dv">2</span>,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>conf_mat[<span class="dv">2</span>,<span class="dv">2</span>])  <span class="co"># TRUE POSITIVE (TPR)</span>
                                
 <span class="co"># Also possible with caret but with train and test arguments. Not full dataset inquiry as in this case.</span>
 
@@ -1080,11 +1080,11 @@ TP =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</spa
 
 FP =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="kw">length</span>(c0))
 
-mod_1 =<span class="st"> </span><span class="kw">glm</span>(y ~<span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>V457, <span class="dt">data =</span> data_leukemia_reduced,<span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)
 
-for (i in <span class="dv">1</span>:<span class="kw">length</span>(c0)) {
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(c0)) {
   
-  conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced$y, mod_1$fitted.values &gt;<span class="st"> </span>c0[i]) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
+  conf_mat =<span class="st"> </span><span class="kw">table</span>(data_leukemia_reduced<span class="op">$</span>y, mod_<span class="dv">1</span><span class="op">$</span>fitted.values <span class="op">&gt;</span><span class="st"> </span>c0[i]) <span class="co">#unbalanced sample 47 ones and 25 0s</span>
   
   prop_confmat =<span class="st"> </span><span class="kw">prop.table</span>(conf_mat, <span class="dv">1</span>) <span class="co"># For ROC curve is on the columns</span>
   
@@ -1123,9 +1123,9 @@ Check the quality of your result at point (c) with the R package <em>pROC</em>.<
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
 ## 
 ##     cov, smooth, var</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">roc_1 =<span class="st"> </span><span class="kw">roc</span>(<span class="dt">response=</span>data_leukemia_reduced$y, <span class="dt">predictor =</span> mod_1$fitted.values)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">roc_<span class="dv">1</span> =<span class="st"> </span><span class="kw">roc</span>(<span class="dt">response=</span>data_leukemia_reduced<span class="op">$</span>y, <span class="dt">predictor =</span> mod_<span class="dv">1</span><span class="op">$</span>fitted.values)
 
-<span class="kw">plot</span>(roc_1)</code></pre></div>
+<span class="kw">plot</span>(roc_<span class="dv">1</span>)</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
 
 </div>
@@ -1155,10 +1155,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -1182,9 +1183,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

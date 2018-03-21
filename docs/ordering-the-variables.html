@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Model Selection in High Dimensions</title>
   <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-18">
+<meta name="date" content="2018-03-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -236,16 +236,34 @@ Namely, let <span class="math inline">\(\mathbf{X}_k\)</span>, of size <span cla
 \end{equation}\]</span>
 <p>with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}=\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}\)</span>, so that <span class="math inline">\(\mathbf{e}=\left(\mathbf{I}-\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\right)\mathbf{y}=\left(\mathbf{I}-\mathbf{H}\right)\mathbf{y}\)</span>. The predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. <span class="citation">Foster and Stine (<a href="#ref-FoSt:04">2004</a>)</span>. In high dimensional settings, the sweep operator <span class="citation">(Goodnight <a href="#ref-Good:79">1979</a>)</span> can be used to obtain the partial correlations in a computationally fast manner.</p>
 <blockquote>
-Exercise (optional):<br />
-- Show that the predictor <span class="math inline">\(\mathbf{X}_j\)</span> with the largest partial correlation offers the greatest reduction in the residual sum of squares.<br />
-Hint: Use the proof of Proposition I of <span class="citation">Lin, Foster, and Ungar (<a href="#ref-LiFoUn:11">2011</a>)</span>.<br />
-
+<p>Exercise:<br />
+- Prove that optimization problem <a href="ordering-the-variables.html#eq:minRSS">(3.1)</a> (i.e. min RSS at a given step) and <a href="ordering-the-variables.html#eq:maxPC">(3.2)</a> (i.e. max partial correlations) are equivalent:</p>
+</blockquote>
+<span class="math display" id="eq:minRSS">\[\begin{equation}
+\begin{aligned}
+&amp; \underset{j \in P\backslash S}{\text{min}}
+&amp; &amp; \| \mathbf{y} - \mathbf{X}^{\star} \hat{\beta}^{\star} - \mathbf{x}_j \beta_{j} \|_{2}^{2} \\
+\end{aligned}\tag{3.1}
+\end{equation}\]</span>
+<span class="math display" id="eq:maxPC">\[\begin{equation}
+\begin{aligned}
+&amp; \underset{j \in P\backslash S}{\text{max}}
+&amp; &amp; \mid \mathbf{x}_{j}^{T} (\mathbf{y} - \mathbf{X}^{\star} \hat{\beta}^{\star}) \mid \\
+\end{aligned}\tag{3.2}
+\end{equation}\]</span>
+<blockquote>
+<p>where:<br />
+a) <span class="math inline">\(P = \{1,..,p\}\)</span> is the set of all available predictors.<br />
+b) <span class="math inline">\(S = \{a \in P : \; \mid S \mid = q\}\)</span> is the solution set at the current step of the procedure.<br />
+c) <span class="math inline">\(\mathbf{X}^{\star}\)</span> is the <span class="math inline">\(n \;x\; q\)</span> matrix of predictors selected at previous steps.<br />
+d) <span class="math inline">\(\hat{\beta}^{\star}\)</span> is the OLS estimator of the model <span class="math inline">\(\mathbf{y} = \mathbf{X}^{\star} {\beta}^{\star} + \boldsymbol{\epsilon}\)</span>.<br />
+e) <span class="math inline">\(\mathbf{x}_{j}\)</span> is one of the <span class="math inline">\(p - q\)</span> predictors left at the current step.<br />
+Assume also that all the predictors have unitary norm (i.e. <span class="math inline">\(\mathbf{x}_{l}^{T}\mathbf{x}_{l} = 1 \; \forall \;l \in P\)</span>).</p>
 </blockquote>
 <blockquote>
-Exercise (project):<br />
+Exercise (optional):<br />
 - Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>).<br />
 - Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.<br />
-- Apply the <span class="math inline">\(C_p\)</span> as stopping criterion (or indeed another one) to both procedures and comment.<br />
 
 </blockquote>
 </div>
@@ -278,11 +296,28 @@ with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsym
 \end{equation}\]</span>
 <p>and <span class="math inline">\(\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\)</span>. <span class="math inline">\(p\)</span>-values associated to <span class="math inline">\(\beta_j\)</span> (<span class="math inline">\(\forall j\)</span> corresponding to the columns of <span class="math inline">\(\mathbf{X}_{k+1}\)</span>) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).</p>
 <blockquote>
-<p>Exercise :<br />
-- Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>) and compare the selected models when using:   – the ForwardStop<br />
-– the StrongStop<br />
-– <span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span><br />
-– the <span class="math inline">\(C_p\)</span></p>
+Exercise :<br />
+- First of all we retrieve the simulation setting used in <em>Practical 3</em>. Now, after having read the documentation of the R package <em>selectiveInference</em> and installed it, perform the following steps:<br />
+a) Use the functions <em>fs()</em>, <em>fsInf()</em> and <em>forwardStop()</em> to do a stepwise regression based on partial correlations and a model selection phase with the ForwardStop rule on your generated data. Try different values for the type one error: how does the choice of <span class="math inline">\(\alpha\)</span> impact the model selection technique?<br />
+b) Given the order of variables produced by <em>fs()</em>, use AIC and BIC criteria for model selection to retrieve your final model (<em>Hint: you do not need to program them, use an existing function of the selectiveInference package</em>).<br />
+c) Calculate how many models are needed for an exhaustive search in this simulation setting. Use your previous results obtained in <em>Practical 3</em> to understand the computational time gained by stepwise regression with respect to exhaustive search. Use the package <em>tictoc</em> for this comparison.  d) (<em>Optional</em>) Change the simulation setting outlined above to an high dimensional one: generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{nxp}}\)</span> with <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 150\)</span>. Evaluate the performance of the ForwardStop rule in this high dimensional setting (i.e. by replicating the model selection task 100 times) thanks to the usual three specific criteria: the proportion of times the correct model is selected (<em>Exact</em>), the proportion of times the selected model contains the correct one (<em>Correct</em>) and the average number of selected regressors (<em>Average</em> <span class="math inline">\(\sharp\)</span>}). What do you observe? What is the role of <span class="math inline">\(\alpha\)</span> in this case?<br />
+
+</blockquote>
+<blockquote>
+<p>Consider the Malnutrition in Zambia dataset. For simplicity work only on the continuous covariates (i.e. avoiding factors) and order them according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>). Compare the selected models when using:  </p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>the ForwardStop<br />
+</li>
+<li>the StrongStop<br />
+</li>
+<li><span class="math inline">\(\alpha_k=\alpha(k+1)/p\)</span> <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span><br />
+</li>
+<li>the <span class="math inline">\(C_p\)</span> or AIC (equal in linear case)<br />
+</li>
+<li>the BIC</li>
+</ol>
 </blockquote>
 </div>
 <div id="orthogonal-matching-pursuit" class="section level3">
@@ -324,6 +359,12 @@ with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsym
 - Set <span class="math inline">\(\mathbf{e}_k\leftarrow \mathbf{e}_{k-1}-\delta_j\mathbf{\tilde{x}}_j\)</span></p>
 <hr />
 <p>There is no clear rule for setting <span class="math inline">\(\epsilon\)</span> and <span class="math inline">\(\Delta\)</span>, which makes the forward stagewise regression algorithm more an <em>exploratory</em> method. Obviously, <span class="math inline">\(\Delta\)</span> should be small (e.g. <span class="math inline">\(0.0001\)</span>), while the smaller <span class="math inline">\(\epsilon\)</span>, the more steps are needed to reach the end of the algorithm. There is actually a strong connection between the sequence of forward stagewise estimates and the solution path of the lasso; see <span class="citation">Efron et al. (<a href="#ref-EfHaJoTi:04">2004</a>)</span>, and also <span class="citation">Hastie et al. (<a href="#ref-HaTaTiWa:07">2007</a>)</span>, <span class="citation">Tibshirani (<a href="#ref-TibR:15">2015</a>)</span>.</p>
+<blockquote>
+Exercise (optional):<br />
+- Show that an ordering procedure based on stagewise regression is biased and calculate this bias for the OLS coefficient of the <span class="math inline">\(x_j\)</span> predictor.<br />
+Hint: Use the proof of Proposition I of <span class="citation">Lin, Foster, and Ungar (<a href="#ref-LiFoUn:11">2011</a>)</span>.<br />
+
+</blockquote>
 </div>
 </div>
 <div id="streamwise-regression" class="section level2">
@@ -476,14 +517,14 @@ C_{\alpha}(T)=C(T) - \alpha \vert T\vert
 <div id="ref-Good:79">
 <p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
 </div>
-<div id="ref-LiFoUn:11">
-<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
-</div>
 <div id="ref-BeHo:95">
 <p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
 </div>
 <div id="ref-GSWaChTi:16">
 <p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
+</div>
+<div id="ref-LiFoUn:11">
+<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
 </div>
 <div id="ref-zhang2009">
 <p>Zhang, T. 2009. “On the Consistency of Feature Selection Using Greedy Least Squares Regression.” <em>Journal of Machine Learning Research</em> 10: 555–68.</p>
@@ -552,10 +593,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -579,9 +621,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

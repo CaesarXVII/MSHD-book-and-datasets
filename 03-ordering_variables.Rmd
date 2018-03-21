@@ -50,17 +50,34 @@ Namely, let $\mathbf{X}_k$, of size $n\times q$, and $\mathbf{X}_{k+1}=[\mathbf{
 \end{equation}
 with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$, $\hat{\boldsymbol{\beta}}=\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}$, so that $\mathbf{e}=\left(\mathbf{I}-\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\right)\mathbf{y}=\left(\mathbf{I}-\mathbf{H}\right)\mathbf{y}$. The predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. @FoSt:04. In high dimensional settings, the sweep operator [@Good:79] can be used to obtain the partial correlations in a computationally fast manner.
 
+> Exercise:\
+> - Prove that optimization problem \@ref(eq:minRSS) (i.e. min RSS at a given step) and \@ref(eq:maxPC) (i.e. max partial correlations) are equivalent:
 
-> Exercise (optional):\
-> - Show that the predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares. \
-Hint: Use the proof of Proposition I of @LiFoUn:11. \
+\begin{equation}
+\begin{aligned}
+& \underset{j \in P\backslash S}{\text{min}}
+& & \| \mathbf{y} - \mathbf{X}^{\star} \hat{\beta}^{\star} - \mathbf{x}_j \beta_{j} \|_{2}^{2} \\
+\end{aligned}(\#eq:minRSS)
+\end{equation}
 
+\begin{equation}
+\begin{aligned}
+& \underset{j \in P\backslash S}{\text{max}}
+& & \mid \mathbf{x}_{j}^{T} (\mathbf{y} - \mathbf{X}^{\star} \hat{\beta}^{\star}) \mid \\
+\end{aligned}(\#eq:maxPC)
+\end{equation}
 
-> Exercise (project): \
+> where:\
+  a) $P = \{1,..,p\}$ is the set of all available predictors.\
+  b) $S = \{a \in P : \; \mid S \mid = q\}$ is the solution set at the current step of the procedure.\
+  c) $\mathbf{X}^{\star}$ is the $n \;x\; q$ matrix of predictors selected at previous steps.\
+  d) $\hat{\beta}^{\star}$ is the OLS estimator of the model $\mathbf{y} = \mathbf{X}^{\star} {\beta}^{\star} + \boldsymbol{\epsilon}$.\
+  e) $\mathbf{x}_{j}$ is one of the $p - q$ predictors left at the current step.\
+Assume also that all the predictors have unitary norm (i.e. $\mathbf{x}_{l}^{T}\mathbf{x}_{l} = 1 \; \forall \;l \in P$).
+
+> Exercise (optional): \
 > - Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>). \
 > - Compare the ordering with the one obtained by the lasso (LARS) and discuss why they are different.\
-> - Apply the $C_p$ as stopping criterion (or indeed another one) to both procedures and comment. \
-
 
 ### Selection by hypothesis testing
 
@@ -99,12 +116,19 @@ with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$ and $\hat{\bol
 and $\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T$. $p$-values associated to $\beta_j$ ($\forall j$ corresponding to the columns of $\mathbf{X}_{k+1}$) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).
 
 > Exercise : \
-- Consider the Malnutrition in Zambia dataset and order the covariates according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>) and compare the selected models when 
-using: \ 
--- the ForwardStop  \
--- the StrongStop \
--- $\alpha_k=\alpha(k+1)/p$ [@BeHo:95] \
--- the $C_p$
+- First of all we retrieve the simulation setting used in *Practical 3*. Now, after having read the documentation of the R package *selectiveInference* and installed it, perform the following steps:\
+a) Use the functions *fs()*, *fsInf()* and *forwardStop()* to do a stepwise regression based on partial correlations and a model selection phase with the ForwardStop rule on your generated data. Try different values for the type one error: how does the choice of $\alpha$ impact the model selection technique?\
+b) Given the order of variables produced by *fs()*, use AIC and BIC criteria for model selection to retrieve your final model (*Hint: you do not need to program them, use an existing function of the selectiveInference package*).\
+c) Calculate how many models are needed for an exhaustive search in this simulation setting. Use your previous results obtained in *Practical 3* to understand the computational time gained by stepwise regression with respect to exhaustive search. Use the package *tictoc* for this comparison.\  
+d) (*Optional*) Change the simulation setting outlined above to an high dimensional one: generate from a MVN (multivariate normal) a matrix $\mathbf{X_{nxp}}$ with $n = 100$ and $p = 150$. Evaluate the performance of the ForwardStop rule in this high dimensional setting (i.e. by replicating the model selection task 100 times) thanks to the usual three specific criteria: the proportion of times the correct model is selected (*Exact*), the proportion of times the selected model contains the correct one (*Correct*) and the average number of selected regressors (*Average* $\sharp$}). What do you observe? What is the role of $\alpha$ in this case?\
+
+> Consider the Malnutrition in Zambia dataset. For simplicity work only on the continuous covariates (i.e. avoiding factors) and order them according to their partial correlations using the R function *fs* of the *Selective Inference* R Package (<https://cran.r-project.org/web/packages/selectiveInference/index.html>). Compare the selected models when using: \ 
+  
+  > a) the ForwardStop \
+  b) the StrongStop \
+  c) $\alpha_k=\alpha(k+1)/p$ [@BeHo:95] \
+  d) the $C_p$ or AIC (equal in linear case) \
+  e) the BIC
 
 ### Orthogonal matching pursuit
 
@@ -153,6 +177,10 @@ Forward stagewise regression is a *smoother* variation of stepwise regression th
 ****
 
 There is no clear rule for setting $\epsilon$ and $\Delta$, which makes the forward stagewise regression algorithm more an *exploratory* method. Obviously, $\Delta$ should be small (e.g. $0.0001$), while the smaller $\epsilon$, the more steps are needed to reach the end of the algorithm. There is actually a strong connection between the sequence of forward stagewise estimates and the solution path of the lasso; see @EfHaJoTi:04, and also @HaTaTiWa:07, @TibR:15.
+
+> Exercise (optional):\
+> - Show that an ordering procedure based on stagewise regression is biased and calculate this bias for the OLS coefficient of the $x_j$ predictor. \
+Hint: Use the proof of Proposition I of @LiFoUn:11. \
 
 ## Streamwise regression
 

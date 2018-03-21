@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Model Selection in High Dimensions</title>
   <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-18">
+<meta name="date" content="2018-03-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -224,7 +224,7 @@ Example of overfitting situation<br />
 <span class="co"># the linear function would make better predictions. This is because the polynomial</span>
 <span class="co"># function it is too dependent on the data which contains sampling error. </span>
 <span class="co">#</span>
-knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/OverfitEx1.png&quot;</span>)</code></pre></div>
+knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;Figures/OverfitEx1.png&quot;</span>)</code></pre></div>
 <p><img src="Figures/OverfitEx1.png" style="display: block; margin: auto;" /></p>
 <p>More formally, consider a random variable <span class="math inline">\(Y\)</span> distributed according to model <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span>, possibly conditionally on a set of fixed covariates <span class="math inline">\(\mathbf{X}=[x_1 \ldots \, x_p]\)</span>. We observe a random sample <span class="math inline">\(\mathbf{y} = (Y_i)_{i = 1, \ldots , n}\)</span> supposedly generated from <span class="math inline">\(F_{\boldsymbol{\theta}}\)</span> together with a non-random <span class="math inline">\(n\times p\)</span> full rank matrix of predictors <span class="math inline">\(\mathbf{X}\)</span>. Define the prediction function <span class="math inline">\(\hat{\mathbf{y}}\)</span> that depends on the considered model, for example <span class="math inline">\(\hat{\mathbf{y}}=\hat{\boldsymbol{\beta}}\mathbf{x}\)</span> for the linear regression model. The inferential task is to assess the accuracy of the prediction function, so that it can be compared to alternative prediction functions.</p>
 Quantifying the prediction error of a prediction function requires specification of a discrepancy <span class="math inline">\(D\)</span> between a prediction <span class="math inline">\(\hat{\mathbf{y}}\)</span> and the actual response <span class="math inline">\(\mathbf{y}\)</span>. A natural choice is the mean squared error (mean residual squared error)
@@ -616,7 +616,7 @@ Example: ROC curve and associated trade-off measures<br />
 <span class="co">#</span>
 <span class="co"># The ideal model (classifier) would reach the (0,100)% point.</span>
 <span class="co">#</span>
-knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;Figures/ROC_curves.png&quot;</span>)</code></pre></div>
+knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;Figures/ROC_curves.png&quot;</span>)</code></pre></div>
 <p><img src="Figures/ROC_curves.png" style="display: block; margin: auto;" /></p>
 <p>The ROC curve is mostly used as a <em>diagnostic</em> tool to evaluate a selected model (classifier). Indeed, in subset selection, a set of predictors (say <span class="math inline">\(\mathbf{X}_S\)</span>) are chosen and from which, using the logistic regression, fitted probabilities <span class="math inline">\(\hat{\pi}_i(\mathbf{x}_{iS})\)</span> can be computed. The ROC curve is then computed by varying the threshold <span class="math inline">\(c\)</span> in predicting outcomes using <span class="math inline">\(\hat{y}_i=I(\hat{\pi}_i(\mathbf{x}_{iS})\geq c)\)</span>. Indeed, for different values of <span class="math inline">\(c\)</span>, the predictions <span class="math inline">\(\hat{y}_i\)</span> are different, hence leading to different measures for the sensitivity and the specificity. Conventionally, the sensitivity and specificity are computed at <span class="math inline">\(c=0.5\)</span>.</p>
 <blockquote>
@@ -719,10 +719,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -746,9 +747,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
