@@ -8,7 +8,7 @@ In this repository all the datasets and the updated book versions will be publis
  
 # E-book guide
 
-Anyone is invited to use any part of this eBook as long as credit is given. To cite this book, please use:
+Anyone is invited to use any part of this [eBook](https://caesarxvii.github.io/MSHD-book-and-datasets/) as long as credit is given. To cite this book, please use:
 Victoria-Feser, M.-P. (2018). A Lecture in Model Selection in High Dimensions, Research Center for Statistics, GSEM, University of Geneva, Switzerland.
 If you use this eBook as a reference for a course, please inform the author (maria-pia.victoriafeser@unige.ch).
 The content of this eBook is dynamic and changes as the lectures take place. Students participating to the classes can contribute to the content, with for example the analysis of real data sets, the resolution of exercises, simulations to explore methods in particular settings, etc. Their contribution is acknowledge where it is due.
