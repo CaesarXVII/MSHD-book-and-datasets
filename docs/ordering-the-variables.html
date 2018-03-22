@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-21">
+<meta name="date" content="2018-03-22">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -281,7 +281,7 @@ with <span class="math inline">\(V_p\)</span> the (unknown) number of false disc
 \mbox{FRD}=\mathbb{E}\left[\frac{V_p}{R_p(\alpha)}\right]
 \end{equation}\]</span>
 <p>If all <span class="math inline">\(\mathbb{H}_{j0}\)</span> are true, FDR is equivalent to FWER and in general controlling the FRD controls as well the FWER.</p>
-<p>In a sequential testing procedure in which the <span class="math inline">\(p\)</span>-values <span class="math inline">\(p_k,k=1,\ldots p\)</span> (and associated null hypotheses) have been ordered in an ascending order, <span class="math inline">\(\mathbb{H}_{0j}, j=k,\ldots,p\)</span> are rejected if <span class="math inline">\(p_k&gt;1-\alpha_k\)</span> with <span class="math display">\[\alpha_k=\alpha(k+1)/p.\]</span> With this rejection rule, the FDR (<span class="math inline">\(\leq\alpha\)</span>) is controlled <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>. Hence, in a stepwise procedure for variable selection, the search stops at step <span class="math inline">\(k-1\)</span> if <span class="math inline">\(p_k&gt; 1-\alpha_k\)</span>, <span class="math inline">\(p_k\)</span> being associated to the variable to enter at step <span class="math inline">\(k\)</span>.</p>
+<p>In a sequential testing procedure in which the <span class="math inline">\(p\)</span>-values <span class="math inline">\(p_k,k=1,\ldots p\)</span> (and associated null hypotheses) have been ordered in an ascending order, <span class="math inline">\(\mathbb{H}_{0j}, j=k,\ldots,p\)</span> are rejected if <span class="math inline">\(p_k&lt;\alpha_k\)</span> with <span class="math display">\[\alpha_k=\alpha(k+1)/p.\]</span> With this rejection rule, the FDR (<span class="math inline">\(\leq\alpha\)</span>) is controlled <span class="citation">(Benjamini and Hochberg <a href="#ref-BeHo:95">1995</a>)</span>. Hence, in a stepwise procedure for variable selection, the search stops at step <span class="math inline">\(k-1\)</span> if <span class="math inline">\(p_k&gt;\alpha_k\)</span>, <span class="math inline">\(p_k\)</span> being associated to the variable to enter at step <span class="math inline">\(k\)</span>.</p>
 <p><span class="citation">G’Sell et al. (<a href="#ref-GSWaChTi:16">2016</a>)</span> propose two other rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let <span class="math inline">\(\hat{k}\)</span> denote the last rejected null hypothesis (in the sequence), the rules are:<br />
 - ForwardStop: <span class="math inline">\(\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}\)</span><br />
 - StrongStop: <span class="math inline">\(\hat{k}_S=\max\left\{k\in\{1,\ldots,p\}\vert \exp\left\{\sum_{j=k}^p\frac{\log\left(p_j\right)}{j}\right\}\leq\frac{k\alpha}{p}\right\}\)</span><br />

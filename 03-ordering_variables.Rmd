@@ -98,7 +98,7 @@ with $V_p$ the (unknown) number of false discoveries and $R_p(\alpha)$ the numbe
 \end{equation}
 If all $\mathbb{H}_{j0}$ are true, FDR is equivalent to FWER and in general controlling the FRD controls as well the FWER.  
 
-In a sequential testing procedure in which the $p$-values $p_k,k=1,\ldots p$ (and associated null hypotheses) have been ordered in an ascending order, $\mathbb{H}_{0j}, j=k,\ldots,p$ are rejected if $p_k>1-\alpha_k$ with $$\alpha_k=\alpha(k+1)/p.$$ With this rejection rule, the FDR ($\leq\alpha$) is controlled  [@BeHo:95]. Hence, in a stepwise procedure for variable selection, the search stops at step $k-1$ if $p_k> 1-\alpha_k$, $p_k$ being associated to the variable to enter at step $k$.
+In a sequential testing procedure in which the $p$-values $p_k,k=1,\ldots p$ (and associated null hypotheses) have been ordered in an ascending order, $\mathbb{H}_{0j}, j=k,\ldots,p$ are rejected if $p_k<\alpha_k$ with $$\alpha_k=\alpha(k+1)/p.$$ With this rejection rule, the FDR ($\leq\alpha$) is controlled  [@BeHo:95]. Hence, in a stepwise procedure for variable selection, the search stops at step $k-1$ if $p_k>\alpha_k$, $p_k$ being associated to the variable to enter at step $k$.
 
 @GSWaChTi:16 propose two other rules to find the cutoff when stopping the stepwise forward search, namely when stopping to reject the null hypothesis. Let $\hat{k}$ denote the last rejected null hypothesis (in the sequence), the rules are: \
 - ForwardStop: $\hat{k}_F=\max\left\{k\in\{1,\ldots,p\}\vert-\frac{1}{k}\sum_{j=1}^k\log\left(1-p_j\right)\leq\alpha\right\}$ \
