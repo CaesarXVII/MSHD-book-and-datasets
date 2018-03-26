@@ -326,7 +326,7 @@ C(T)=\sum_{m=1}^{\vert T\vert}\sum_{i\in R_m(T)}\left(y_i-c_m(T)\right)^2
 \end{equation}
 where $R_m(T)$ is the $m$th region (leaf) of tree $T$ and $c_m(T)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m(T))$ is the average response in region $R_m(T)$. $C(T)$ needs however to be constrained to avoid overfitting (since the largest possible tree is always the one that minimizes $C(T)$), so that one uses a penalized criterion given by [@HaTiFr:09]
 \begin{equation}
-C_{\alpha}(T)=C(T) - \alpha \vert T\vert
+C_{\alpha}(T)=C(T) + \alpha \vert T\vert
 \end{equation}
 Hence, the idea is to find, for each $\alpha_k>\alpha_{k-1}>\ldots > \alpha_1> \alpha_0=0$, the (unique) subtree $T_{\alpha_k} \subset T_{\alpha_{k-1}}$ that minimizes $C_{\alpha}(T)$. The tuning parameters $\alpha_k$ govern the trade off between tree size (to avoid overfitting) and its
 goodness of fit to the data. The sequence of $\alpha_k$ can be constructed starting from $\alpha_1$, and the sequence stops when a criterion such as tenfold cross-validation is optimized.

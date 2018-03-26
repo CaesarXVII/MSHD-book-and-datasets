@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-22">
+<meta name="date" content="2018-03-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -477,7 +477,7 @@ C(T)=\sum_{m=1}^{\vert T\vert}\sum_{i\in R_m(T)}\left(y_i-c_m(T)\right)^2
 \end{equation}\]</span>
 where <span class="math inline">\(R_m(T)\)</span> is the <span class="math inline">\(m\)</span>th region (leaf) of tree <span class="math inline">\(T\)</span> and <span class="math inline">\(c_m(T)=\frac{1}{n_m}\sum_i^n y_i I(\mathbf{x}_i\in R_m(T))\)</span> is the average response in region <span class="math inline">\(R_m(T)\)</span>. <span class="math inline">\(C(T)\)</span> needs however to be constrained to avoid overfitting (since the largest possible tree is always the one that minimizes <span class="math inline">\(C(T)\)</span>), so that one uses a penalized criterion given by <span class="citation">(Hastie, Tibshirani, and Friedman <a href="#ref-HaTiFr:09">2009</a>)</span>
 <span class="math display">\[\begin{equation}
-C_{\alpha}(T)=C(T) - \alpha \vert T\vert
+C_{\alpha}(T)=C(T) + \alpha \vert T\vert
 \end{equation}\]</span>
 <p>Hence, the idea is to find, for each <span class="math inline">\(\alpha_k&gt;\alpha_{k-1}&gt;\ldots &gt; \alpha_1&gt; \alpha_0=0\)</span>, the (unique) subtree <span class="math inline">\(T_{\alpha_k} \subset T_{\alpha_{k-1}}\)</span> that minimizes <span class="math inline">\(C_{\alpha}(T)\)</span>. The tuning parameters <span class="math inline">\(\alpha_k\)</span> govern the trade off between tree size (to avoid overfitting) and its goodness of fit to the data. The sequence of <span class="math inline">\(\alpha_k\)</span> can be constructed starting from <span class="math inline">\(\alpha_1\)</span>, and the sequence stops when a criterion such as tenfold cross-validation is optimized.</p>
 <p>One major problem with trees is their high variance. Often a small change in the data can result in a very different series of splits, making interpretation somewhat precarious. Averaging methods such as <em>bagging</em>, i.e. <em>bootstrap aggregating</em>, can be used to reduce the variability of the tree estimator <span class="citation">(Breiman <a href="#ref-Brei:96">1996</a>)</span>. See <span class="citation">Sutton (<a href="#ref-Sutt:05">2005</a>)</span> for a survey.</p>
