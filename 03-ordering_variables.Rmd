@@ -235,9 +235,9 @@ The SIS procedure can be combined with another (subset) selection method: apply 
 
 The PC-simple algorithm is given by the following steps: \
 1. Set m = 1 and the *active set* $\mathcal{M}_0$ is empty. \
-2. Do correlation screening, and build the active set $\mathcal{M}_1 = \{j=1,\ldots,p \; \vert \; \rho_{X_jY}= 0 \}$. \
+2. Do correlation screening, and build the active set $\mathcal{M}_1 = \{j=1,\ldots,p \; \vert \; \rho_{X_jY}\neq 0 \}$. \
 3. m = m + 1. \
-4. Construct the $m$ active set $\mathcal{M}_m =\{j \in \mathcal{M}_{m-1}\; \vert \;\rho_{X_jY,\mathbf{X}_{C}}= 0, \; \mathbf{X}_{C}=[X_l],l\in\mathcal{M}_{m-1}\setminus\{j\}\}$. \
+4. Construct the $m$ active set $\mathcal{M}_m =\{j \in \mathcal{M}_{m-1}\; \vert \;\rho_{X_jY,\mathbf{X}_{C}}\neq 0, \; \mathbf{X}_{C}=[X_l],l\in\mathcal{M}_{m-1}\setminus\{j\}\}$. \
 5. Repeat from step 3 as long as $\vert \mathcal{M}_m\vert \leq m$. \
 6. Output: $m_S=\{m\;\vert\; \vert \mathcal{M}_m\vert \leq m\}$.
 
