@@ -118,6 +118,9 @@ The R packages that will be used throughout this class are the following (to be 
 - tictoc
 - pROC
 - selectiveInference
+- SIS 
+- rpart
+- rpart.plot
 - glmnet
 
 To install a package, use the R command `install.packages("chosen.package.name")` (see also <https://cran.r-project.org/web/packages/>). Visit the [CRAN R project](<https://cran.r-project.org/>) to get useful information about all the available R packages (<https://cran.r-project.org/web/packages/available_packages_by_name.html>)
@@ -126,7 +129,7 @@ To install all packages at once, run the following code with administrator right
 
 ```{r echo=T, eval=FALSE}
 packages.required <- c("rmarkdown", "quantmod", "plotly", "tidyr", "dplyr", "RODBC", "pool", "RMySQL", 
-                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc","pROC","selectiveInference","glmnet")
+                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc", "pROC", "selectiveInference", "SIS", "rpart", "rpart.plot", "glmnet")
 packages.missing  <- packages.required[!(packages.required %in% rownames(installed.packages()))]
 if(length(packages.missing)!=0) install.packages(packages.missing)
 ```

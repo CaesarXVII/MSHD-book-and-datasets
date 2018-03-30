@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-03-26">
+<meta name="date" content="2018-03-30">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -400,7 +400,11 @@ hence, the vector of marginal correlations of predictors with the response varia
 <p>The SIS procedure can be combined with another (subset) selection method: apply the SIS to reduce the dimension, apply a selection method to the reduced dimension to get, say, <span class="math inline">\(\mathcal{M}_{k_1}\)</span> of size of order e.g. <span class="math inline">\(n/log(n)\)</span>. The residuals from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\mathbf{X}=[X_j],j\in \mathcal{M}_{k_1}\)</span> are then used as a new response vector and the SIS is applied to the left-aside <span class="math inline">\(p-k_1\)</span> covariates to get <span class="math inline">\(\mathcal{M}_{k_2}\)</span>. The rationale behind is that using the residuals from the previous step, amounts to considering partial correlations which set aside the unimportant covariates that are highly correlated with the response through their associations with the covariates present in the set <span class="math inline">\(\mathcal{M}_{k_1}\)</span> and also makes those important predictors that are missed in the previous step possible to survive. The procedure is iterated until the <span class="math inline">\(L\)</span> disjoint subsets <span class="math inline">\(\mathcal{M}_{k_l},l=1,\ldots,L\)</span> whose union <span class="math inline">\(\mathcal{M}_d\)</span> has maximal size satisfying e.g. <span class="math inline">\(\vert \mathcal{M}_d\vert&lt;n\)</span>. This procedure is called the iterative sure independence screening (ISIS).</p>
 <blockquote>
 <p>Exercise:<br />
-- Explain why stepwise regression based on partial correlations (for the inclusion criterion) is a special case of ISIS.</p>
+After having read the documentation of the R package <em>SIS</em> and installed it, perform the following steps:<br />
+a) Load the <em>Leukemia</em> dataset as explained in Chapter 1.<br />
+b) Split the dataset randomly in two halves (i.e. 36 observations each) and create a <em>train</em> and <em>test</em> sample.<br />
+c) The functions SIS() performs first a screening procedure based on marginal correlations and then applies a penalized method (forthcoming <em>Chapter 4</em> of the e-book) to obtain the final model. Choose among all the available options (i.e. in terms both of penalized methods and tuning constants) three candidates and evaluate the predictions of the selected models on the <em>test</em> sample. Which penalized method performs best in this specific example after the SIS?<br />
+(optional) Explain why stepwise regression based on partial correlations (for the inclusion criterion) is a special case of ISIS.</p>
 </blockquote>
 </div>
 <div id="pc-simple-algorithm" class="section level3">
@@ -425,9 +429,23 @@ Partial correlations can be calculated recursively <span class="citation">(Bühl
 \end{equation}\]</span>
 <p>To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. <span class="math inline">\(\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}\)</span>, <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> make use of the <em>partial faithfulness</em> concept. It applies to models that are such that if <span class="math inline">\(\forall j, j=1,\ldots,p\)</span>, <span class="math inline">\(\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span> for some <span class="math inline">\(\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}\)</span> implies that <span class="math inline">\(\beta_j=0\)</span> (with <span class="math inline">\(\mathcal{M}_p=\{j=1,\ldots,p\}\)</span>). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.</p>
 <blockquote>
+<p>Exercise:<br />
+First of all build a simulation setting as explained below:<br />
+- Generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 10\)</span>. Choose the location but set the scale matrix with an autoregressive form <span class="math inline">\(\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}\)</span> with <span class="math inline">\(\sigma_{lm} = \rho^{\mid l - m\mid}\)</span>.  - Fix <span class="math inline">\(\rho = 0.5\)</span> and set the seed equal to 11 (i.e. set.seed(11)).<br />
+- Choose the generating vector <span class="math inline">\(\boldsymbol{\beta }= [3 \; 1.5 \; 0 \; 2 \; rep(0,6)]\)</span>.<br />
+- Generate <span class="math inline">\(\mathbf{\hat{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal. Suppose for simplicity that the errors are uncorrelated.<br />
+Now perform the following passages on your simulated data:<br />
+a) Find the active set <span class="math inline">\(M_{1}\)</span> using the Fisher’s Z transformation and the associated correlation coefficient test (fix <span class="math inline">\(\alpha = 0.05\)</span> for the rest of the exercise).<br />
+b) Calculate all the partial correlations of order 1 (i.e. one variable at the time) of the active set <span class="math inline">\(M_{1}\)</span>, test them and retrieve <span class="math inline">\(M_{2} \subseteq M_1\)</span> which is the new active set.<br />
+c) Find the partial correlations of higher order and test them until your reach the condition <span class="math inline">\(M_{m-1} = M_{m}\)</span> which implies the convergence of the PC-simple algorithm. Do you obtain the exact model?</p>
+</blockquote>
+<blockquote>
 <p>Exercise (project):<br />
 - Write the PC-simple algorithm in R using the recursive formula for partial correlations.<br />
-- Perform a simulation study to evaluate the performance (model selection criteria) both when the covariates are normally distributed and when they are not (consider e.g. factors, i.e. dummies) - Study the sensitivity of the PC-simple as a function of <span class="math inline">\(\alpha\)</span>. - Apply the algorithm for variable selection in a chosen dataset. - Compare with another variable selection method (implemented).</p>
+- Perform a simulation study to evaluate the performance (model selection criteria) both when the covariates are normally distributed and when they are not (consider e.g. factors, i.e. dummies).<br />
+- Study the sensitivity of the PC-simple as a function of <span class="math inline">\(\alpha\)</span>.<br />
+- Apply the algorithm for variable selection in a chosen dataset.<br />
+- Compare with another variable selection method (implemented).</p>
 </blockquote>
 </div>
 </div>
@@ -483,7 +501,23 @@ C_{\alpha}(T)=C(T) + \alpha \vert T\vert
 <p>One major problem with trees is their high variance. Often a small change in the data can result in a very different series of splits, making interpretation somewhat precarious. Averaging methods such as <em>bagging</em>, i.e. <em>bootstrap aggregating</em>, can be used to reduce the variability of the tree estimator <span class="citation">(Breiman <a href="#ref-Brei:96">1996</a>)</span>. See <span class="citation">Sutton (<a href="#ref-Sutt:05">2005</a>)</span> for a survey.</p>
 <blockquote>
 <p>Exercise:<br />
-- Analyse the malnutrition in Zambia dataset by means of the regression tree method. Use the rpart package in R (see also <a href="https://www.statmethods.net/advstats/cart.html" class="uri">https://www.statmethods.net/advstats/cart.html</a>).</p>
+After having read the documentation of the <em>rpart</em> package and having installed it, perform the following steps:  </p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Load the <em>Zambia</em> dataset, split it randomly in a <em>train</em> and <em>test</em> sample (common choice is <span class="math inline">\(\frac{2}{3}\)</span> train and <span class="math inline">\(\frac{1}{3}\)</span> test). For simplicity, you can consider only the continuous variables.<br />
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a regression tree with the function rpart() and plot the tree. Have a look at <em>rpart.plot</em> package if you want to improve the appearance of the fitted tree.  </li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>After having pruned the tree, evaluate its prediction on the <em>test</em> sample (i.e. use predict() on a tree object.</li>
+</ol>
 </blockquote>
 </div>
 <div id="classification-trees" class="section level3">
@@ -496,7 +530,25 @@ C_{\alpha}(T)=C(T) + \alpha \vert T\vert
 <p>The total risk or error is obtained as <span class="math inline">\(\sum_{m=1}^R\mbox{err}_m\)</span>. The deviance and the Gini index have the advantage of being differentiable functions, and hence more amenable to numerical optimization.</p>
 <blockquote>
 <p>Exercise:<br />
-- Analyse the Leukemia dataset by means of the regression tree method. Use the rpart package in R (see also <a href="https://www.statmethods.net/advstats/cart.html" class="uri">https://www.statmethods.net/advstats/cart.html</a>).</p>
+- After having read the documentation of the <em>rpart</em> package and having installed it, perform the following steps: </p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Load the <em>Iris</em> dataset already present in R, split it randomly in a <em>train</em> and <em>test</em> sample (common choice is <span class="math inline">\(\frac{2}{3}\)</span> train and <span class="math inline">\(\frac{1}{3}\)</span> test). </li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a classification tree with the function rpart() and plot the tree. Have a look at <em>rpart.plot</em> package if you want to improve the appearance of the fitted tree. </li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>After having pruned the tree, evaluate its prediction on the <em>test</em> sample (i.e. use predict() on a tree object). </li>
+</ol>
+<ul>
+<li>(Optional) Analyse the Leukemia dataset by means of the regression tree method. Use the <em>rpart</em> package in R (see also <a href="https://www.statmethods.net/advstats/cart.html" class="uri">https://www.statmethods.net/advstats/cart.html</a>).</li>
+</ul>
 </blockquote>
 <!--
 ### Properties 
