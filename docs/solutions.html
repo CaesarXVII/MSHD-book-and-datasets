@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-08">
+<meta name="date" content="2018-04-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -186,6 +186,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2.1" data-path="solutions.html"><a href="solutions.html#cv"><i class="fa fa-check"></i><b>5.2.1</b> Cross-validation</a></li>
 <li class="chapter" data-level="5.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>5.2.2</b> Akaike Information Criterion</a></li>
 <li class="chapter" data-level="5.2.3" data-path="solutions.html"><a href="solutions.html#roc"><i class="fa fa-check"></i><b>5.2.3</b> ROC curves</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="solutions.html"><a href="solutions.html#chapter-3"><i class="fa fa-check"></i><b>5.3</b> Chapter 3</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="solutions.html"><a href="solutions.html#HT"><i class="fa fa-check"></i><b>5.3.1</b> Selection by Hypothesis Testing</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -1132,6 +1135,500 @@ Check the quality of your result at point (c) with the R package <em>pROC</em>.<
 
 <span class="kw">plot</span>(roc_<span class="dv">1</span>)</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+</div>
+</div>
+<div id="chapter-3" class="section level2">
+<h2><span class="header-section-number">5.3</span> Chapter 3</h2>
+<div id="HT" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Selection by Hypothesis Testing</h3>
+<blockquote>
+First of all we retrieve the simulation setting used in <em>Practical 3</em>.<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;selectiveInference&quot;)</span>
+
+<span class="kw">require</span>(selectiveInference)
+
+<span class="kw">require</span>(MASS)
+
+<span class="co"># Create the simulation setting</span>
+
+<span class="kw">set.seed</span>(<span class="dv">11</span>)
+
+n =<span class="st"> </span><span class="dv">1000</span>
+
+p =<span class="st"> </span><span class="dv">10</span>
+
+<span class="co"># change rho as you please to inspect other correlations among the predictors</span>
+
+rho =<span class="st"> </span><span class="dv">0</span> 
+
+mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
+
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p<span class="op">^</span><span class="dv">2</span>)
+
+sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
+
+
+<span class="co"># Autoregressive structure</span>
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+  
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+    
+    
+    sigma[i,j] =<span class="st"> </span>rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))
+    
+    
+  }
+  
+  
+}
+
+X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)
+
+
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">6</span>))
+
+
+y =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) <span class="co">#for us sigma is 1</span></code></pre></div>
+<blockquote>
+Now, after having read the documentation of the R package <em>selectiveInference</em> and installed it, perform the following steps:<br />
+a) Use the functions <em>fs()</em>, <em>fsInf()</em> and <em>forwardStop()</em> to do a stepwise regression based on partial correlations and a model selection phase with the ForwardStop rule on your generated data. Try different values for the type one error: how does the choice of <span class="math inline">\(\alpha\)</span> impact the model selection technique?<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part a ##
+
+
+fsfit =<span class="st"> </span><span class="kw">fs</span>(X,y) <span class="co">#partial correlations like OMP or stagewise</span>
+
+fsfit<span class="op">$</span>action <span class="co">#order of regressors</span></code></pre></div>
+<pre><code>##  [1]  1  4  2 10  9  3  8  7  6  5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fsfit<span class="op">$</span>beta <span class="co">#the beta estimation at each step</span></code></pre></div>
+<pre><code>##       1        2        3        4           5           6           7
+##  [1,] 0 3.047019 3.014175 2.965561  2.96179608  2.96371055  2.96277233
+##  [2,] 0 0.000000 0.000000 1.486185  1.48523930  1.48682723  1.48759323
+##  [3,] 0 0.000000 0.000000 0.000000  0.00000000  0.00000000  0.04017513
+##  [4,] 0 0.000000 2.061130 2.020475  2.02252158  2.02605822  2.02658398
+##  [5,] 0 0.000000 0.000000 0.000000  0.00000000  0.00000000  0.00000000
+##  [6,] 0 0.000000 0.000000 0.000000  0.00000000  0.00000000  0.00000000
+##  [7,] 0 0.000000 0.000000 0.000000  0.00000000  0.00000000  0.00000000
+##  [8,] 0 0.000000 0.000000 0.000000  0.00000000  0.00000000  0.00000000
+##  [9,] 0 0.000000 0.000000 0.000000  0.00000000  0.07326696  0.07269192
+## [10,] 0 0.000000 0.000000 0.000000 -0.07675033 -0.07526561 -0.07532284
+##                 8           9          10
+##  [1,]  2.96311034  2.96286548  2.96191272
+##  [2,]  1.48716658  1.48859575  1.48770072
+##  [3,]  0.03987444  0.03973915  0.04053624
+##  [4,]  2.02693788  2.02776730  2.02659795
+##  [5,]  0.00000000  0.00000000  0.00000000
+##  [6,]  0.00000000  0.00000000  0.01967913
+##  [7,]  0.00000000 -0.02997558 -0.02864951
+##  [8,] -0.03210415 -0.03298970 -0.03201230
+##  [9,]  0.07351783  0.07405473  0.07443275
+## [10,] -0.07361395 -0.07454985 -0.07369007</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compute sequential p-values and confidence intervals  (sigma estimated from full model) </span>
+
+out =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">alpha =</span> <span class="fl">0.1</span>) <span class="co">#default</span>
+
+out <span class="co"># the value of forward stop is the last regressor which is active</span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, alpha = 0.1)
+## 
+## Standard deviation of noise (specified or estimated) sigma = 0.997
+## 
+## Sequential testing results with alpha = 0.100
+##  Step Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##     1   1  3.047  97.561   0.000     2.995    3.099       0.048      0.048
+##     2   4  2.061  65.227   0.000     2.009    2.113       0.049      0.049
+##     3   2  1.486  47.535   0.000     1.435    1.538       0.049      0.049
+##     4  10 -0.077  -2.420   0.834    -0.077    1.345       0.050      0.050
+##     5   9  0.073   2.306   0.019     0.052    1.527       0.050      0.050
+##     6   3  0.040   1.267   0.567    -0.334    0.193       0.050      0.050
+##     7   8 -0.032  -1.003   0.660    -0.368    0.857       0.050      0.050
+##     8   7 -0.030  -0.922   0.261    -0.906    0.291       0.050      0.050
+##     9   6  0.020   0.614   0.621    -0.694    0.377       0.050      0.050
+##    10   5  0.016   0.482   0.223    -0.175    0.737       0.050      0.050
+## 
+## Estimated stopping point from ForwardStop rule = 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># estimate optimal stopping point </span>
+
+last =<span class="st"> </span><span class="kw">forwardStop</span>(out<span class="op">$</span>pv, <span class="dt">alpha=</span><span class="fl">0.4</span>) <span class="co"># you want to reject more often fixing higher alfa</span>
+
+stop_point =<span class="st"> </span><span class="kw">forwardStop</span>(out<span class="op">$</span>pv,<span class="dt">alpha =</span> <span class="fl">0.85</span>)
+
+fsfit<span class="op">$</span>action[<span class="dv">1</span><span class="op">:</span>last] <span class="co"># to catch right components</span></code></pre></div>
+<pre><code>## [1]  1  4  2 10  9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Conclusions: fixing a higher alfa will let you include on average more regressors as you will reject more often H0 the null hypothesis. </span></code></pre></div>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Given the order of variables produced by <em>fs()</em>, use AIC and BIC criteria for model selection to retrieve your final model (<em>Hint: you do not need to program them, use an existing function of the selectiveInference package</em>).<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part b ##
+
+<span class="co"># We use the same fit, the k step is decided by AIC penalty</span>
+
+out_<span class="dv">2</span> =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">type =</span> <span class="st">&quot;aic&quot;</span>,<span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="co">#akaike case, the fixed value of alfa is 0.1</span>
+
+out_<span class="dv">2</span> <span class="co">#be careful check with classic AIC evaluation (sometimes is not correct)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, alpha = 0.05, type = &quot;aic&quot;)
+## 
+## Standard deviation of noise (specified or estimated) sigma = 0.997
+## 
+## Testing results at step = 5, with alpha = 0.050
+##  Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##    1  2.964  94.680   0.000     2.903    3.103       0.025      0.025
+##    4  2.026  63.996   0.000     1.964    2.091       0.024      0.025
+##    2  1.487  47.540   0.000     1.425    1.563       0.025      0.024
+##   10 -0.075  -2.373   0.839    -0.099    1.711       0.025      0.025
+##    9  0.073   2.306   0.024     0.001    1.863       0.025      0.025
+## 
+## Estimated stopping point from AIC rule = 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We have already an idea that AIC tends to overfit</span>
+
+
+### YOU CAN PROGRAM AIC USING ORDER IN fsfit$action <span class="al">###</span>
+
+
+<span class="co"># We use the same fit, the k step is decided by BIC penalty</span>
+
+
+out_<span class="dv">3</span> =<span class="st"> </span><span class="kw">fsInf</span>(fsfit, <span class="dt">type =</span> <span class="st">&quot;aic&quot;</span>, <span class="dt">mult =</span> <span class="kw">log</span>(n)) <span class="co">#bic case</span>
+
+out_<span class="dv">3</span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, type = &quot;aic&quot;, mult = log(n))
+## 
+## Standard deviation of noise (specified or estimated) sigma = 0.997
+## 
+## Testing results at step = 3, with alpha = 0.100
+##  Var  Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##    1 2.966  94.889       0     2.914    3.018       0.048      0.048
+##    4 2.020  63.917       0     1.968    2.073       0.050      0.049
+##    2 1.486  47.535       0     1.435    1.538       0.049      0.049
+## 
+## Estimated stopping point from AIC rule = 3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Another nice evidence, BIC has harsh penalty than AIC.</span>
+
+<span class="co"># Other possibilities of fsInf() function</span>
+
+out_<span class="dv">4</span> =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">type =</span> <span class="st">&quot;all&quot;</span>,<span class="dt">k =</span> <span class="dv">4</span>,<span class="dt">mult =</span> <span class="kw">log</span>(n)) 
+
+<span class="co"># this is just to stop at a fixed number of steps</span>
+
+out_<span class="dv">4</span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, k = 4, type = &quot;all&quot;, mult = log(n))
+## 
+## Standard deviation of noise (specified or estimated) sigma = 0.997
+## 
+## Testing results at step = 4, with alpha = 0.100
+##  Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##    1  2.962  94.652   0.000     2.910    3.040       0.048      0.049
+##    4  2.023  63.959   0.000     1.967    2.075       0.050      0.049
+##    2  1.485  47.501   0.000     1.433    1.537       0.049      0.050
+##   10 -0.077  -2.420   0.834    -0.077    1.345       0.050      0.050</code></pre>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Calculate how many models are needed for an exhaustive search in this simulation setting. Use your previous results obtained in <em>Practical 3</em> to understand the computational time gained by stepwise regression with respect to exhaustive search. Use the package <em>tictoc</em> for this comparison.<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part c ##
+
+
+<span class="co"># Look at Practical 3, see your exhaustive search time for p=10. </span>
+
+<span class="co"># In my case around 17 minutes for 1023 models (2^10 -1) since I used 1sec per model</span>
+
+<span class="kw">require</span>(tictoc)
+
+<span class="kw">tic</span>()
+
+fsfit =<span class="st"> </span><span class="kw">fs</span>(X,y)
+
+out =<span class="st"> </span><span class="kw">fsInf</span>(fsfit) <span class="co">#default</span>
+
+last =<span class="st"> </span><span class="kw">forwardStop</span>(out<span class="op">$</span>pv, <span class="dt">alpha=</span><span class="fl">0.05</span>) <span class="co"># you want to reject more often fixing higher alfa</span>
+
+<span class="kw">Sys.sleep</span>(<span class="dv">1</span>)
+<span class="kw">toc</span>()
+
+<span class="co"># 1.81 against 17 minutes... Exhaustive vs stepwise, a huge gain indeed!</span></code></pre></div>
+<blockquote>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>(<em>Optional</em>) Change the simulation setting outlined above to an high dimensional one: generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{nxp}}\)</span> with <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 150\)</span>. Evaluate the performance of the ForwardStop rule in this high dimensional setting (i.e. by replicating the model selection task 100 times) thanks to the usual three specific criteria: the proportion of times the correct model is selected (<em>Exact</em>), the proportion of times the selected model contains the correct one (<em>Correct</em>) and the average number of selected regressors (<em>Average</em> <span class="math inline">\(\sharp\)</span>}). What do you observe? What is the role of <span class="math inline">\(\alpha\)</span> in this case?<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part d ##
+
+<span class="co"># Create the simulation setting</span>
+
+<span class="kw">set.seed</span>(<span class="dv">11</span>)
+
+n =<span class="st"> </span><span class="dv">100</span>
+
+p =<span class="st"> </span><span class="dv">100</span>  
+
+<span class="co">#p = 150 --&gt; It does not work as we can not invert this kind of matrix thus we need n &gt; or = than p</span>
+
+<span class="co"># change rho as you please to inspect other correlations among the predictors</span>
+
+rho =<span class="st"> </span><span class="dv">0</span> 
+
+mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
+
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p<span class="op">^</span><span class="dv">2</span>)
+
+sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
+
+
+<span class="co"># Autoregressive structure</span>
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+  
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+    
+    
+    sigma[i,j] =<span class="st"> </span>rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))
+    
+    
+  }
+  
+  
+}
+
+X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)
+
+
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">96</span>))
+
+
+y =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) <span class="co">#for us sigma is 1</span>
+
+
+fsfit =<span class="st"> </span><span class="kw">fs</span>(X,y) <span class="co">#partial correlations like OMP or stagewise</span>
+
+
+<span class="co"># You need to have p &lt; n to work with this kind of package. Or you can do a first screening based on</span>
+
+<span class="co"># marginal correlations (like in SIS): order them and take the first n. </span>
+
+
+sigma_hat =<span class="st"> </span><span class="kw">estimateSigma</span>(X,y) 
+
+
+<span class="co"># You need to estimate sigma in this big models. If not there is bad estimation by default since sigma</span>
+
+<span class="co"># is estimated on the full model.</span>
+
+
+<span class="co"># compute sequential p-values and confidence intervals</span>
+
+out =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">sigma =</span> <span class="fl">0.977</span>) 
+
+
+out <span class="co"># the value of forward stop is the last regressor which is active</span>
+
+<span class="co"># estimate optimal stopping point </span>
+
+
+last =<span class="st"> </span><span class="kw">forwardStop</span>(out<span class="op">$</span>pv, <span class="dt">alpha=</span><span class="fl">0.05</span>) <span class="co"># you want to reject more often fixing higher alfa</span>
+
+fsfit<span class="op">$</span>action[<span class="dv">1</span><span class="op">:</span>last] <span class="co"># to catch right components</span>
+
+
+<span class="co"># Evaluation with model selection criteria</span>
+
+order =<span class="st"> </span><span class="kw">list</span>()
+
+<span class="cf">for</span> (z <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {
+  
+  y =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) 
+  
+  
+  fsfit =<span class="st"> </span><span class="kw">fs</span>(X,y) 
+  
+  
+  sigma_hat =<span class="st"> </span><span class="kw">estimateSigma</span>(X,y) 
+  
+  a =<span class="st"> </span>sigma_hat<span class="op">$</span>sigmahat
+  
+  out =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">sigma =</span> a) 
+  
+  last =<span class="st"> </span><span class="kw">forwardStop</span>(out<span class="op">$</span>pv, <span class="dt">alpha=</span><span class="fl">0.05</span>) <span class="co"># you want to reject more often fixing higher alfa</span>
+  
+  order[[z]] =<span class="st"> </span>fsfit<span class="op">$</span>action[<span class="dv">1</span><span class="op">:</span>last] 
+  
+}
+
+### Exact models <span class="al">###</span>
+
+exact =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {
+  
+  <span class="cf">if</span> (<span class="kw">identical</span>(order[[i]],<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">2</span>)) <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>){
+    
+    exact[i] =<span class="st"> </span><span class="dv">1</span>
+    
+    
+  }
+  
+  
+}
+
+<span class="kw">sum</span>(exact)<span class="op">/</span><span class="dv">100</span>  
+
+### Correct (related to consistency in model selection) <span class="al">###</span>
+
+prop_cor =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">100</span>)
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>) {
+  
+  <span class="cf">if</span> (<span class="kw">length</span>(order[[i]]) <span class="op">&gt;=</span><span class="st"> </span><span class="dv">3</span>) {
+    
+    
+    prop_cor[i] =<span class="st"> </span><span class="dv">1</span>
+    
+  } 
+}
+
+<span class="kw">sum</span>(prop_cor)<span class="op">/</span><span class="dv">100</span>  <span class="co">#Due to the low number of observations n=100</span>
+
+  
+### Average number of regressors <span class="al">###</span>
+
+
+<span class="co"># Find the number of elements in each order[[z]]</span>
+
+num.el =<span class="st"> </span><span class="kw">sapply</span>(order, length)
+
+<span class="kw">sum</span>(num.el)<span class="op">/</span><span class="dv">100</span>
+
+<span class="co"># The role of alfa is the same as before, as you increase it you get overfitting while if you lower it</span>
+
+<span class="co"># you will reject more often thus leading to a sparser model. </span></code></pre></div>
+<blockquote>
+<p>Consider the Malnutrition in Zambia dataset. For simplicity work only on the continuous covariates (i.e. avoiding factors) and order them according to their partial correlations using the R function <em>fs</em> of the <em>Selective Inference</em> R Package (<a href="https://cran.r-project.org/web/packages/selectiveInference/index.html" class="uri">https://cran.r-project.org/web/packages/selectiveInference/index.html</a>). Compare the selected models when using:  </p>
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>the ForwardStop<br />
+</li>
+<li>the <span class="math inline">\(C_p\)</span> or AIC (equal in linear case)<br />
+</li>
+<li>the BIC</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;malnutrion_zambia_cleaned.Rda&quot;</span>)
+
+
+data_zambia =<span class="st"> </span>data_zambia[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>,<span class="dv">21</span>,<span class="dv">22</span>,<span class="dv">24</span>)] <span class="co">#exclude the factors from the analysis</span>
+
+### selective inference package <span class="al">###</span>
+
+## ForwardStop rule ##
+
+X =<span class="st"> </span><span class="kw">as.matrix</span>(data_zambia[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])
+
+y =<span class="st"> </span>data_zambia[,<span class="dv">1</span>]
+
+fsfit =<span class="st"> </span><span class="kw">fs</span>(X,y) 
+
+fsfit<span class="op">$</span>action <span class="co">#order by partial correlations</span></code></pre></div>
+<pre><code>## [1] 1 5 8 7 6 3 2 9 4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compute sequential p-values and confidence intervals # (sigma estimated from full model)</span>
+
+out =<span class="st"> </span><span class="kw">fsInf</span>(fsfit) 
+
+<span class="co"># The above function is using forward stop and pvalue evaluated at each step with forwardstop </span>
+
+<span class="co"># It is a formula to control FDR.</span>
+
+out </code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit)
+## 
+## Standard deviation of noise (specified or estimated) sigma = 1.592
+## 
+## Sequential testing results with alpha = 0.100
+##  Step Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##     1   1 -0.062 -12.229   0.000    -0.070   -0.053       0.049      0.050
+##     2   5  5.209   8.937   0.000     3.812    6.179       0.049      0.049
+##     3   8  0.283   4.901   0.400    -0.662    0.337       0.050      0.050
+##     4   7  0.000   4.719   0.126     0.000    0.000       0.050      0.050
+##     5   6  0.011   2.902   0.369    -0.051    0.074       0.050      0.050
+##     6   3  0.015   2.380   0.182    -0.029    0.131       0.050      0.050
+##     7   2 -0.005  -1.865   0.422    -0.029    0.026       0.050      0.050
+##     8   9  0.003   1.616   0.107    -0.002    0.025       0.050      0.050
+##     9   4 -0.081  -0.683   0.478    -0.451    0.529       0.050      0.050
+## 
+## Estimated stopping point from ForwardStop rule = 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">forwardStop</span>(out<span class="op">$</span>pv, <span class="dt">alpha=</span>.<span class="dv">10</span>) <span class="co">#only breastfeeding and height of the mother matters</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## AIC and BIC penalty to decide step k ##
+
+out_<span class="dv">2</span> =<span class="st"> </span><span class="kw">fsInf</span>(fsfit,<span class="dt">type =</span> <span class="st">&quot;aic&quot;</span>) <span class="co">#akaike case, the fixed value of alfa is 0.1</span>
+
+out_<span class="dv">2</span> <span class="co">#estimated stopping point is correct. </span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, type = &quot;aic&quot;)
+## 
+## Standard deviation of noise (specified or estimated) sigma = 1.592
+## 
+## Testing results at step = 9, with alpha = 0.100
+##  Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##    1 -0.053  -7.681   0.016    -0.105   -0.015       0.050       0.05
+##    5  1.348   0.394   0.552   -27.065   17.845       0.000       0.05
+##    8  0.285   4.904   0.418    -0.716    0.340       0.050       0.05
+##    7  0.000   3.178   0.330     0.000    0.000       0.050       0.05
+##    6  0.043   0.909   0.401    -0.196    0.236       0.050       0.05
+##    3  0.012   1.804   0.266    -0.048    0.127       0.050       0.05
+##    2 -0.006  -1.904   0.414    -0.029    0.026       0.050       0.05
+##    9  0.003   1.636   0.483    -0.026    0.024       0.050       0.05
+##    4 -0.081  -0.683   0.436    -0.575    0.527       0.049       0.05
+## 
+## Estimated stopping point from AIC rule = 9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You notice that AIC tends to overfit in this framework. Remember that we were doing </span>
+
+<span class="co"># exhaustive search and not stepwise with AIC in the other Practicals.</span>
+
+out_<span class="dv">3</span> =<span class="st"> </span><span class="kw">fsInf</span>(fsfit, <span class="dt">type =</span> <span class="st">&quot;aic&quot;</span>, <span class="dt">mult =</span> <span class="kw">log</span>(n)) <span class="co">#bic case</span>
+
+out_<span class="dv">3</span> <span class="co"># BIC has a harsh penalty that correct AIC tendency to overfit (in this applied context)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## fsInf(obj = fsfit, type = &quot;aic&quot;, mult = log(n))
+## 
+## Standard deviation of noise (specified or estimated) sigma = 1.592
+## 
+## Testing results at step = 5, with alpha = 0.100
+##  Var   Coef Z-score P-value LowConfPt UpConfPt LowTailArea UpTailArea
+##    1 -0.061 -12.032   0.000    -0.070   -0.053       0.049      0.049
+##    5  3.735   5.775   0.060    -0.271    7.845       0.050      0.050
+##    8  0.285   4.917   0.417    -0.716    0.345       0.050      0.049
+##    7  0.000   3.292   0.340     0.000    0.000       0.050      0.050
+##    6  0.011   2.902   0.369    -0.051    0.074       0.050      0.050
+## 
+## Estimated stopping point from AIC rule = 5</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here we are in a reality case so AIC is not optimal anymore as in our simulation setting, we expect</span>
+
+<span class="co"># something different while forward stop control the FRD. BIC has a harsh penalty that is why it </span>
+
+<span class="co"># selects less variables. Moreover we know that, from previous practicals, our residuals inspection</span>
+
+<span class="co"># told us that we had a right tail with respect to the Normal QQ plot (see ebook corrections). </span></code></pre></div>
 
 </div>
 </div>

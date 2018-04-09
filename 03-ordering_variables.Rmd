@@ -115,7 +115,7 @@ with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$ and $\hat{\bol
 \end{equation}
 and $\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T$. $p$-values associated to $\beta_j$ ($\forall j$ corresponding to the columns of $\mathbf{X}_{k+1}$) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).
 
-> Exercise : \
+> Exercise (solutions presented in \@ref(HT)): \
 - First of all we retrieve the simulation setting used in *Practical 3*. Now, after having read the documentation of the R package *selectiveInference* and installed it, perform the following steps:\
 a) Use the functions *fs()*, *fsInf()* and *forwardStop()* to do a stepwise regression based on partial correlations and a model selection phase with the ForwardStop rule on your generated data. Try different values for the type one error: how does the choice of $\alpha$ impact the model selection technique?\
 b) Given the order of variables produced by *fs()*, use AIC and BIC criteria for model selection to retrieve your final model (*Hint: you do not need to program them, use an existing function of the selectiveInference package*).\

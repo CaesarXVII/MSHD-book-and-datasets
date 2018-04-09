@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-08">
+<meta name="date" content="2018-04-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -187,6 +187,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>5.2.2</b> Akaike Information Criterion</a></li>
 <li class="chapter" data-level="5.2.3" data-path="solutions.html"><a href="solutions.html#roc"><i class="fa fa-check"></i><b>5.2.3</b> ROC curves</a></li>
 </ul></li>
+<li class="chapter" data-level="5.3" data-path="solutions.html"><a href="solutions.html#chapter-3"><i class="fa fa-check"></i><b>5.3</b> Chapter 3</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="solutions.html"><a href="solutions.html#HT"><i class="fa fa-check"></i><b>5.3.1</b> Selection by Hypothesis Testing</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -301,7 +304,7 @@ with <span class="math inline">\(\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsym
 \end{equation}\]</span>
 <p>and <span class="math inline">\(\mathbf{H}=\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\)</span>. <span class="math inline">\(p\)</span>-values associated to <span class="math inline">\(\beta_j\)</span> (<span class="math inline">\(\forall j\)</span> corresponding to the columns of <span class="math inline">\(\mathbf{X}_{k+1}\)</span>) can be calculated without re-estimating each potential model at a given step and selection is made on the basis their size (in absolute value).</p>
 <blockquote>
-Exercise :<br />
+Exercise (solutions presented in <a href="solutions.html#HT">5.3.1</a>):<br />
 - First of all we retrieve the simulation setting used in <em>Practical 3</em>. Now, after having read the documentation of the R package <em>selectiveInference</em> and installed it, perform the following steps:<br />
 a) Use the functions <em>fs()</em>, <em>fsInf()</em> and <em>forwardStop()</em> to do a stepwise regression based on partial correlations and a model selection phase with the ForwardStop rule on your generated data. Try different values for the type one error: how does the choice of <span class="math inline">\(\alpha\)</span> impact the model selection technique?<br />
 b) Given the order of variables produced by <em>fs()</em>, use AIC and BIC criteria for model selection to retrieve your final model (<em>Hint: you do not need to program them, use an existing function of the selectiveInference package</em>).<br />
