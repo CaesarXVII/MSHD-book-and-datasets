@@ -50,7 +50,7 @@ Namely, let $\mathbf{X}_k$, of size $n\times q$, and $\mathbf{X}_{k+1}=[\mathbf{
 \end{equation}
 with $\mathbf{e}=\mathbf{y}-\mathbf{X}_k\hat{\boldsymbol{\beta}}$, $\hat{\boldsymbol{\beta}}=\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\mathbf{y}$, so that $\mathbf{e}=\left(\mathbf{I}-\mathbf{X}_k\left(\mathbf{X}_k^T\mathbf{X}_k\right)^{-1}\mathbf{X}_k^T\right)\mathbf{y}=\left(\mathbf{I}-\mathbf{H}\right)\mathbf{y}$. The predictor $\mathbf{X}_j$ with the largest partial correlation offers the greatest reduction in the residual sum of squares; see e.g. @FoSt:04. In high dimensional settings, the sweep operator [@Good:79] can be used to obtain the partial correlations in a computationally fast manner.
 
-> Exercise:\
+> Exercise ([solution](https://github.com/CaesarXVII/Model-Selection-in-High-Dimensions/blob/master/Practicals/Practical%205/TP5.ex1_GROUP_A.pdf) provided by *Talia Béatrice Kimber*):\
 > - Prove that optimization problem \@ref(eq:minRSS) (i.e. min RSS at a given step) and \@ref(eq:maxPC) (i.e. max partial correlations) are equivalent:
 
 \begin{equation}
