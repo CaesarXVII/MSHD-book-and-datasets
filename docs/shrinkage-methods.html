@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="solutions.html">
-
+<link rel="prev" href="ordering-the-variables.html">
+<link rel="next" href="solutions.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -209,179 +209,103 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="shrinkage-methods" class="section level1">
+<h1><span class="header-section-number">4</span> Shrinkage Methods</h1>
+<div id="introduction-5" class="section level2">
+<h2><span class="header-section-number">4.1</span> Introduction</h2>
+Shrinkage methods denote estimation methods under constraints that <em>shrink</em> estimators toward a given value. The origin goes back to the James–Stein estimator <span class="citation">(James and Stein <a href="#ref-JaSt:61">1961</a>)</span>. The rationale is that one can sacrifice <em>bias</em> for <em>variance</em>, i.e. optimize in some sense the Mean Squared Error (MSE), which, for an estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is
+<span class="math display">\[\begin{equation}
+\mbox{MSE}\left(\hat{\boldsymbol{\beta}}\right)=\mathbb{E}\left[\left\Vert\hat{\boldsymbol{\beta}}-\boldsymbol{\beta}\right\Vert^2\right]=\mathbb{E}\left[\left(\hat{\boldsymbol{\beta}}-\boldsymbol{\beta}\right)^T\left(\hat{\boldsymbol{\beta}}-\boldsymbol{\beta}\right)\right]
+\end{equation}\]</span>
+<p>(see <span class="citation">Efron and Hastie (<a href="#ref-EfHa:16">2016</a>)</span>, Section 7.1, for details on the James–Stein estimator)</p>
+<p>For the least squares (LS) estimator of the linear model <span class="math inline">\(\mathbf{y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}\)</span>, <span class="math inline">\(\boldsymbol{\varepsilon}\sim N\left(\mathbf{0},\sigma^2\mathbf{I}\right)\)</span>, and supposing without loss of generality that <span class="math inline">\(\mathbf{y}\)</span> is centered and the covariates (columns in <span class="math inline">\(\mathbf{X}\)</span>) are standardized, we have <span class="math inline">\(\mbox{MSE}\left(\hat{\boldsymbol{\beta}}_{LS}\right)=\sigma^2\mbox{tr}\left[\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\right]\)</span>, which obviously grows with the dimension <span class="math inline">\(p\)</span>.</p>
+In terms of out-of-sample prediction error (PE), we have the following result
+<span class="math display">\[\begin{eqnarray}
+\mbox{PE}\left(\mathbf{x}_0,\hat{\boldsymbol{\beta}}\right)
+&amp;=&amp;\sigma^2+\mathbb{E}_{Y\vert\mathbf{X}=\mathbf{x}_0}\left[\left(Y-\mathbf{x}_0\hat{\boldsymbol{\beta}}\right)\right]^2
++\mathbb{E}_{Y\vert \mathbf{X}=\mathbf{x}_0}\left[\left(Y-\mathbf{x}_0\hat{\boldsymbol{\beta}}\right)^2\right] \\
+&amp;=&amp; \sigma^2+\mbox{Bias}^2\left(\mathbf{x}_0,\hat{\boldsymbol{\beta}}\right)+
+\mbox{var}\left(\mathbf{x}_0,\hat{\boldsymbol{\beta}}\right)
+\end{eqnarray}\]</span>
+<p>As model becomes more complex (more terms included), on one hand, local structure/curvature can be picked up, but on the other hand, coefficient estimates suffer from high variance as more terms are included in the model (see overfitting phenomenon).</p>
+<blockquote>
+<p>Reported from <a href="http://statweb.stanford.edu/~tibs/sta305files/Rudyregularization.pdf" class="uri">http://statweb.stanford.edu/~tibs/sta305files/Rudyregularization.pdf</a> <img src="Figures/BiasVarTradeOff.png" alt="Top" /></p>
+</blockquote>
+<p>Hence, introducing a little bias in the estimators might lead to a substantial decrease in variance, and hence to a substantial decrease in PE. The idea is then not to let the <span class="math inline">\(\hat{\beta}_j\)</span> take too large values in order to avoid too large variances. To control the variance, the slope coefficients are <em>regularized</em> in that a constraint is added to the optimization problem (e.g. LS) that controls how large the coefficients can be.</p>
+</div>
+<div id="ridge-regression" class="section level2">
+<h2><span class="header-section-number">4.2</span> Ridge regression</h2>
+The first proposed regularization method is the <em>ridge</em> constraint (or Tikhonov regularization <a href="https://en.wikipedia.org/wiki/Tikhonov_regularization" class="uri">https://en.wikipedia.org/wiki/Tikhonov_regularization</a>), which amounts to set the constraint <span class="math inline">\(\sum_{i=1}^p\beta_j^2&lt;t_{\lambda}\)</span>. In terms of optimization, for a given value of <span class="math inline">\(\lambda\)</span>, the ridge estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}(\lambda)\)</span> is given by
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\lambda\Vert\boldsymbol{\beta}\Vert^2
+\end{equation}\]</span>
+The solution is
+<span class="math display">\[\begin{eqnarray}
+\hat{\boldsymbol{\beta}}(\lambda)&amp;=&amp;\left(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I}\right)^{-1}\mathbf{X}^T\mathbf{y}\\
+&amp;=&amp; \left(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I}\right)^{-1}\left(\mathbf{X}^T\mathbf{X}\right)\hat{\boldsymbol{\beta}}_{LS}
+\end{eqnarray}\]</span>
+<p>Hence, the variance of <span class="math inline">\(\hat{\boldsymbol{\beta}}_{LS}\)</span> is <em>shrunk</em> by an amount of <span class="math inline">\(\left(\mathbf{X}^T\mathbf{X}+\lambda\mathbf{I}\right)^{-1}\left(\mathbf{X}^T\mathbf{X}\right)\)</span> which depends on <span class="math inline">\(\lambda\)</span>. With <span class="math inline">\(\lambda=0\)</span>, there is no shrinkage and <span class="math inline">\(\hat{\boldsymbol{\beta}}(0)=\hat{\boldsymbol{\beta}}_{LS}\)</span>, while when <span class="math inline">\(\lambda\rightarrow\infty\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}(\lambda)\rightarrow\mbox{0}\)</span>, the maximal shinkage.</p>
+<blockquote>
+<p>Reported from <span class="citation">Efron and Hastie (<a href="#ref-EfHa:16">2016</a>)</span>, Section 7.2: Ridge regression applied to the diabetes data <img src="Figures/RidgeEstimExample.png" alt="Top" /></p>
+</blockquote>
+<p>Ridge estimators have lower variance the the LS, but this does not guarantee that the corresponding predictions <span class="math inline">\(\hat{\boldsymbol{\mu}}\left(\lambda\right)=\mathbf{X}\hat{\boldsymbol{\beta}}(\lambda)\)</span> are more accurate than the ones obtained by the LS <span class="math inline">\(\hat{\boldsymbol{\mu}}(0)=\mathbf{X}\hat{\boldsymbol{\beta}}(0)\)</span>, since <span class="math inline">\(\hat{\boldsymbol{\beta}}(\lambda)\)</span> is biased towards <span class="math inline">\(\mathbf{0}\)</span>. However, in high dimensions, the prior belief is that most of the <span class="math inline">\(\beta_j\)</span> lie near zero, and biasing the LS estimator toward zero then becomes a necessity.</p>
+<p>Another notable advantage of the ridge estimator is that the inclusion of <span class="math inline">\(\lambda\)</span> makes the optimization problem solvable even if <span class="math inline">\(\mathbf{X}^T\mathbf{X}\)</span> is not invertible (e.g. <span class="math inline">\(\mathbf{X}\)</span> is not of full rank when <span class="math inline">\(p&gt;n\)</span>). This was the original motivation for ridge regression as proposed by <span class="citation">Hoerl and Kennard (<a href="#ref-HoKe:70">1970</a>)</span> who also recommended to select <span class="math inline">\(\lambda\)</span> <em>graphically</em>. Standard practice now is to use (10-fold) cross-validation.</p>
+</div>
+<div id="the-lasso-estimator" class="section level2">
+<h2><span class="header-section-number">4.3</span> The lasso estimator</h2>
+<p>Instead of regularizing the estimator using <span class="math inline">\(\sum_{i=1}^p\beta_j^2=\Vert\boldsymbol{\beta}\Vert^2&lt;t_{\lambda}\)</span>, one could use other <span class="math inline">\(l_q\)</span>-norms, i.e. <span class="math inline">\(\Vert\boldsymbol{\beta}\Vert_{q}=\sum_{i=1}^p\vert\beta_j\vert^{q}&lt;t_{\lambda}\)</span>. In particular, when <span class="math inline">\(q=0\)</span>, we have <span class="math inline">\(\Vert\boldsymbol{\beta}\Vert_{0}=\sum_{i=1}^p\vert\beta_j\vert^{0}&lt;t_{\lambda}\)</span> with, by definition, <span class="math inline">\(\sum_{i=1}^p\vert\beta_j\vert^{0}=\sum_{i=1}^pI\left(\beta_j\neq 0\right)\)</span>, the number of slope coefficients different from <span class="math inline">\(0\)</span>, and hence corresponds to subset selection.</p>
+<span class="citation">Tibshirani (<a href="#ref-Tibs:96">1996</a>)</span> proposed to use <span class="math inline">\(q=1\)</span> leading to the very famous lasso estimator. The great advantage of the lasso, on top of the fact that the resulting optimization problem
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\lambda\Vert\boldsymbol{\beta}\Vert_1
+\end{equation}\]</span>
+<p>is convex (since both the loss <span class="math inline">\(\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2\)</span> and the constraint <span class="math inline">\(\Vert\boldsymbol{\beta}\Vert_1=\sum_{j=1}^p\vert\beta_j\vert\)</span> are convex in <span class="math inline">\(\boldsymbol{\beta}\)</span>), is that the shrinking forces a set of <span class="math inline">\(\beta_j\)</span> to exactly <span class="math inline">\(0\)</span>. Hence, the lasso estimator provides simultaneously a regularized estimator and model (subset) selection.</p>
+<blockquote>
+<p>Reported from <span class="citation">Efron and Hastie (<a href="#ref-EfHa:16">2016</a>)</span>, Section 16.2 <img src="Figures/LassoRidgeIllustration.png" alt="Top" /></p>
+</blockquote>
+<p>As for the ridge estimator, <span class="math inline">\(\lambda\)</span> needs to be chosen and, for model selection purposes (or out-of-sample prediction error optimization), a criteria that assesses the model validity can be used. The most comon choices are the <span class="math inline">\(C_p\)</span> and 10-fold CV. Practically, for <em>well</em> chosen values of <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}}(\lambda)\)</span> and the corresponding model validity criterion are computed. <span class="math inline">\(\lambda\)</span> is chosen as to optimize (minimize) the later.</p>
+<p>To compute the entire lasso path (i.e. for all values of <span class="math inline">\(\lambda\)</span> that <em>add</em> one <span class="math inline">\(\beta_j\neq 0\)</span> at each step), <span class="citation">Efron et al. (<a href="#ref-EfHaJoTi:04">2004</a>)</span> propose the Least Angle Regression algorithm (LARS), which is based on correlations between the covariates to enter and the residuals from the previous fit. LARS is introduced as a more <em>democratic</em> version of forward stepwise regression. Indeed, while forward stepwise regression builds a model sequentially, adding one variable at a time and updating the LS estimator to include all the active variables, the LARS only enters <em>as much</em> of a covariate as it <em>deserves</em>. At the first step it identifies the variable most correlated with the response, and moves the coefficient of this variable continuously toward (not fully) its LS estimate. The residuals are updated and this causes the correlations with other variables to evolve. As soon as another variable reaches the same correlation with the residual as the ones in the active set, this variable then joins the active set.</p>
+<blockquote>
+<p>Reported from <span class="citation">Hastie, Tibshirani, and Friedman (<a href="#ref-HaTiFr:09">2009</a>)</span>, Section 3.4. Note that <span class="math inline">\(\langle \mbox{x}_j,\mathbf{r}\rangle= \mbox{x}_j^T\mathbf{r}\)</span>. <img src="Figures/LARS.png" alt="Top" /></p>
+</blockquote>
+<p>In step 3 and 4, the values of the slopes in the active set, say <span class="math inline">\(\mathcal{A}\)</span>, are augmented as <span class="math inline">\(\boldsymbol{\beta}_{\mathcal{A}}(\epsilon)=\boldsymbol{\beta}_{\mathcal{A}}+\epsilon\cdot\delta_{\mathcal{A}}\)</span> for small values of <span class="math inline">\(\epsilon\)</span>, with <span class="math inline">\(\delta_{\mathcal{A}}=\left(\mathbf{X}^T_{\mathcal{A}}\mathbf{X}_{\mathcal{A}}\right)^{-1}\mathbf{X}^T_{\mathcal{A}}\mathbf{r}_{\mathcal{A}}\)</span>, <span class="math inline">\(\mathbf{r}_{\mathcal{A}}=\mathbf{y}-\mathbf{X}_{\mathcal{A}}\boldsymbol{\beta}_{\mathcal{A}}\)</span>.</p>
+<p>The LARS bears very close similarities with forward stagewise regression (see <span class="citation">Hastie et al. (<a href="#ref-HaTaTiWa:07">2007</a>)</span>, <span class="citation">Tibshirani (<a href="#ref-TibR:15">2015</a>)</span> and <span class="citation">Efron and Hastie (<a href="#ref-EfHa:16">2016</a>)</span>, Section 16.4). Hence, if the covariates are correlated, the lasso path might not produce the suitable model selection path (risk of overfitting).</p>
 
+</div>
+</div>
+<h3>References</h3>
 <div id="refs" class="references">
-<div>
-<p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
-</div>
-<div>
-<p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
-</div>
-<div>
-<p>Breiman, L. 1984. <em>Classification and Regression Trees</em>. Chapman &amp; Hall.</p>
-</div>
-<div>
-<p>———. 1996. “Bagging Predictors.” <em>Machine Learning</em> 24: 123–40.</p>
-</div>
-<div>
-<p>Bühlmann, P., M. Kalisch, and M. H. Maathuis. 2010. “Variable Selection in High-Dimensional Linear Models: Partially Faithful Distributions and the PC-Simple Algorithm.” <em>Biometrika</em> 97: 261–78.</p>
-</div>
-<div>
-<p>Claeskens, Gerda, and Nils Lid Hjort. 2003. “The Focused Information Criterion.” <em>Journal of the American Statistical Association</em> 98: 900–945.</p>
-</div>
-<div>
-<p>Cowell, F. A. 2011. <em>Measuring Inequality</em>. Third Edition. Oxford: Oxford University Press.</p>
-</div>
-<div>
-<p>Donoho, David L., and Iain M. Johnstone. 1995. “Adapting to Unknown Smoothness via Wavelet Shrinkage.” <em>Journal of the American Statistical Association</em> 90: 1200–1224.</p>
-</div>
-<div>
-<p>Efron, B. 1978. “The Geometry of Exponential Families.” <em>The Annals of Statistics</em> 6: 362–76.</p>
-</div>
-<div>
-<p>———. 1979. “Bootstrap Methods: Another Look at the Jacknife.” <em>Annst</em> 7: 1–26.</p>
-</div>
-<div>
-<p>———. 1986a. “How Biased is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394). Taylor &amp; Francis: 461–70.</p>
-</div>
-<div>
-<p>———. 1986b. “How Biased Is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394): 461–70. <a href="http://www.jstor.org/stable/2289236" class="uri">http://www.jstor.org/stable/2289236</a>.</p>
-</div>
-<div>
-<p>———. 2004. “The Estimation of Prediction Error.” <em>Journal of the American Statistical Association</em> 99 (467). Taylor &amp; Francis: 619–32.</p>
-</div>
-<div>
-<p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
-</div>
-<div>
-<p>Efron, B., T. Hastie, I. Johnstone, and R. Tibshirani. 2004. “Least Angle Regression (with Discussion).” <em>Annals of Statistics</em> 32: 407–99.</p>
-</div>
-<div>
-<p>Efron, B., and C. Stein. 1981. “The Jackknife Estimate of Variance.” <em>Annals of Statististics</em> 9: 586–96.</p>
-</div>
-<div>
-<p>Fan, J., and J. Lv. 2008. “Sure Independence Screening for Ultrahigh Dimensional Feature Space.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 70 (5). Wiley Online Library: 849–911.</p>
-</div>
-<div>
-<p>Fernholz, L. 2001. “On Multivariate Higher Order von Mises Expansions.” <em>Metrika</em> 53: 123–40.</p>
-</div>
-<div>
-<p>Fisher, R. A. 1915. “Frequency Distribution of the Values of the Correlation Coeficient in Samples from an Indefinitely Large Population.” <em>Biometrika</em> 10: 507–21.</p>
-</div>
-<div>
-<p>———. 1921. “On the ‘Probable Error’ of a Coefficient of Correlation Deduced from a Small Sample.” <em>Metron</em> 1: 3–32.</p>
-</div>
-<div>
-<p>Foster, D., and R Stine. 2004. “Variable Selection in Data Mining: Building a Predictive Model for Bankruptcy.” <em>Journal of the American Statistical Association</em> 99: 303–13.</p>
-</div>
-<div>
-<p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
-</div>
-<div>
-<p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
-</div>
-<div>
-<p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
-</div>
-<div>
-<p>Hastie, T., J. Taylor, R. Tibshirani, and G. Walther. 2007. “Forward Stagewise Regression and the Monotone Lasso.” <em>Electronic Journal of Statistics</em> 1: 1–29.</p>
-</div>
-<div>
-<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
-</div>
-<div>
-<p>Hoerl, A. E., and R. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12: 55–67.</p>
-</div>
-<div>
-<p>Huber, P. J., and E. M. Ronchetti. 2009. <em>Robust Statistics</em>. Second Edition. Wiley Series in Probability and Statistics. John Wiley &amp; Sons.</p>
-</div>
-<div>
-<p>James, G., D. Witten, T. Hastie, and R. Tibshirani. 2013. <em>An Introduction to Statistical Learning: With Applications in R</em>. New York: Springer.</p>
-</div>
-<div>
+<div id="ref-JaSt:61">
 <p>James, W., and C. Stein. 1961. “Estimation with Quadratic Loss.” In <em>Proc. 4th Berkeley Symposium on Mathematical Statistics and Probability, Vol. I</em>, 361–79. University of California Press.</p>
 </div>
-<div>
-<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
+<div id="ref-EfHa:16">
+<p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
 </div>
-<div>
-<p>Mallows, C. L. 1973. “Some Comments on <span class="math inline">\(C_p\)</span>.” <em>Technometrics</em> 15: 661–75.</p>
+<div id="ref-HoKe:70">
+<p>Hoerl, A. E., and R. Kennard. 1970. “Ridge Regression: Biased Estimation for Nonorthogonal Problems.” <em>Technometrics</em> 12: 55–67.</p>
 </div>
-<div>
-<p>Quenouille, Maurice H. 1956. “Notes on Bias in Estimation.” <em>Biometrika</em> 43: 353–60.</p>
-</div>
-<div>
-<p>Schwarz, G. 1978. “Estimating the Dimension of a Model.” <em>Annst</em> 6: 461–64.</p>
-</div>
-<div>
-<p>Shannon, C. E. 1948a. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 379–423.</p>
-</div>
-<div>
-<p>———. 1948b. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 623–66.</p>
-</div>
-<div>
-<p>Spirtes, P., C. Glymour, and R. Scheines. 2000. <em>Causation, Prediction, and Search</em>. MIT Press.</p>
-</div>
-<div>
-<p>Stein, C. M. 1981. “Estimation of the Mean of a Multivariate Normal Distribution.” <em>The Annals of Statistics</em> 9: 1135–51.</p>
-</div>
-<div>
-<p>Sutton, C. D. 2005. “11 - Classification and Regression Trees, Bagging, and Boosting.” In <em>Data Mining and Data Visualization</em>, edited by C.R. Rao, E.J. Wegman, and J.L. Solka, 24:303–29. Handbook of Statistics. Elsevier.</p>
-</div>
-<div>
+<div id="ref-Tibs:96">
 <p>Tibshirani, R. 1996. “Regression Shrinkage and Selection via the Lasso.” <em>Jrssb</em> 58: 267–88.</p>
 </div>
-<div>
+<div id="ref-EfHaJoTi:04">
+<p>Efron, B., T. Hastie, I. Johnstone, and R. Tibshirani. 2004. “Least Angle Regression (with Discussion).” <em>Annals of Statistics</em> 32: 407–99.</p>
+</div>
+<div id="ref-HaTiFr:09">
+<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
+</div>
+<div id="ref-HaTaTiWa:07">
+<p>Hastie, T., J. Taylor, R. Tibshirani, and G. Walther. 2007. “Forward Stagewise Regression and the Monotone Lasso.” <em>Electronic Journal of Statistics</em> 1: 1–29.</p>
+</div>
+<div id="ref-TibR:15">
 <p>Tibshirani, R. J. 2015. “A General Framework for Fast Stagewise Algorithms.” <em>Journal of Machine Learning Research</em> 16: 2543–88.</p>
 </div>
-<div>
-<p>Tukey, John W. 1958. “Bias and Confidence in Not Quite Large Samples (Abstract).” <em>The Annals of Mathematical Statistics</em> 29: 614.</p>
 </div>
-<div>
-<p>United Nations Children’s Fund. 1998. “The State of the World’s Children 1998: Focus on Nutrition.” UNICEF, New York, USA.</p>
-</div>
-<div>
-<p>———. 2012. “The State of the World’s Children 2012: Children in an Urban World.” UNICEF, New York, USA.</p>
-</div>
-<div>
-<p>Vapnik, V. 1996. <em>The Nature of Statistical Learning Theory</em>. New York: Springer.</p>
-</div>
-<div>
-<p>Victora, C. G., L. Adair, C. Fall, P. C. Hallal, R. Martorell, L. Richter, and H. S. Sachdev. 2008. “Maternal and Child Undernutrition: Consequences for Adult Health and Human Capital.” <em>Lancet</em> 371 (9609). Elsevier: 340.</p>
-</div>
-<div>
-<p>Zhang, T. 2009. “On the Consistency of Feature Selection Using Greedy Least Squares Regression.” <em>Journal of Machine Learning Research</em> 10: 555–68.</p>
-</div>
-<div>
-<p>Zhou, J., D. P. Foster, R. A. Stine, and L. H. Ungar. 2006. “Streamwise Feature Selection.” <em>Journal of Machine Learning Research</em> 7: 1861–85.</p>
-</div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="solutions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="ordering-the-variables.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="solutions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

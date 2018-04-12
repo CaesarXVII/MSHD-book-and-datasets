@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-10">
+<meta name="date" content="2018-04-12">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="assessing-the-validity-of-a-model.html">
-<link rel="next" href="shinkage-methods.html">
+<link rel="next" href="shrinkage-methods.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -172,10 +172,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#classification-trees"><i class="fa fa-check"></i><b>3.4.2</b> Classification Trees</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="shinkage-methods.html"><a href="shinkage-methods.html"><i class="fa fa-check"></i><b>4</b> Shinkage Methods</a><ul>
-<li class="chapter" data-level="4.1" data-path="shinkage-methods.html"><a href="shinkage-methods.html#introduction-5"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
-<li class="chapter" data-level="4.2" data-path="shinkage-methods.html"><a href="shinkage-methods.html#ridge-regression"><i class="fa fa-check"></i><b>4.2</b> Ridge regression</a></li>
-<li class="chapter" data-level="4.3" data-path="shinkage-methods.html"><a href="shinkage-methods.html#the-lasso-estimator"><i class="fa fa-check"></i><b>4.3</b> The lasso estimator</a></li>
+<li class="chapter" data-level="4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html"><i class="fa fa-check"></i><b>4</b> Shrinkage Methods</a><ul>
+<li class="chapter" data-level="4.1" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#introduction-5"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#ridge-regression"><i class="fa fa-check"></i><b>4.2</b> Ridge regression</a></li>
+<li class="chapter" data-level="4.3" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-lasso-estimator"><i class="fa fa-check"></i><b>4.3</b> The lasso estimator</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="solutions.html"><a href="solutions.html"><i class="fa fa-check"></i><b>5</b> Solutions</a><ul>
 <li class="chapter" data-level="5.1" data-path="solutions.html"><a href="solutions.html#chapter-1"><i class="fa fa-check"></i><b>5.1</b> Chapter 1</a><ul>
@@ -417,25 +417,25 @@ c) The functions SIS() performs first a screening procedure based on marginal co
 </div>
 <div id="pc-simple-algorithm" class="section level3">
 <h3><span class="header-section-number">3.3.3</span> PC-simple algorithm</h3>
-<p><span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> use partial correlations to stream through the covariates and develop an algorithm that is a simplified version of the PC algorithm <span class="citation">(Spirtes, Glymour, and Scheines <a href="#ref-SpGlSc:00">2000</a>)</span> used in Bayesian network modeling (Causal Bayesian Network). Moreover, they provide a criterion based on hypothesis testing to decide in a covariate is selected or not.</p>
+<p><span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> use partial correlations to stream through the covariates and develop an algorithm that is a simplified version of the PC algorithm <span class="citation">(Spirtes, Glymour, and Scheines <a href="#ref-SpGlSc:00">2000</a>)</span> used in Bayesian network modeling (Causal Bayesian Network). Moreover, they provide a criterion based on hypothesis testing to decide if a covariate is selected or not.</p>
 <p>The PC-simple algorithm is given by the following steps:<br />
-1. Set m = 1 and the <em>active set</em> <span class="math inline">\(\mathcal{M}_0\)</span> is empty.<br />
+1. Define the <em>active set</em> at step m as <span class="math inline">\(\mathcal{M}_m\)</span> and set m = 1.<br />
 2. Do correlation screening, and build the active set <span class="math inline">\(\mathcal{M}_1 = \{j=1,\ldots,p \; \vert \; \rho_{X_jY}\neq 0 \}\)</span>.<br />
 3. m = m + 1.<br />
 4. Construct the <span class="math inline">\(m\)</span> active set <span class="math inline">\(\mathcal{M}_m =\{j \in \mathcal{M}_{m-1}\; \vert \;\rho_{X_jY,\mathbf{X}_{C}}\neq 0, \; \mathbf{X}_{C}=[X_l],l\in\mathcal{M}_{m-1}\setminus\{j\}\}\)</span>.<br />
 5. Repeat from step 3 as long as <span class="math inline">\(\vert \mathcal{M}_m\vert \leq m\)</span>.<br />
 6. Output: <span class="math inline">\(m_S=\{m\;\vert\; \vert \mathcal{M}_m\vert \leq m\}\)</span>.</p>
-<p>The PC-simple algorithm hence starts with a streamwise regression based on marginal correlations which are a particular case of partial correlations with empty conditioning set. Since this starting set might result too large, it is used as (partial) conditioning set in the next step to remove covariates with low partial correlations. The procedure stops when an equilibrium is reached, namely when the number of covariates at step <span class="math inline">\(m\)</span> is the closest (and inferior) to <span class="math inline">\(m\)</span>.</p>
+<p>The PC-simple algorithm hence starts (i.e. m=1) with a streamwise regression based on marginal correlations which are a particular case of partial correlations with empty conditioning set. In the next step (i.e. m=2) all the possible first order partial correlation, of the variables present in <span class="math inline">\(\mathcal{M}_1\)</span>, are evaluated to exclude all the covariates for with at least one first order partial correlation that is equal to zero. Then a new active set is obtained such that <span class="math inline">\(\mathcal{M}_2\subseteq \mathcal{M}_1\)</span>. Thus, at a given step m, there is an evaluation of the (m-1)-th order partial correlations, of the variables present in <span class="math inline">\(\mathcal{M}_{m-1}\)</span>, to reduce the active set to <span class="math inline">\(\mathcal{M}_m\subseteq \mathcal{M}_{m-1}\)</span>. The procedure stops when an equilibrium is reached, namely when the number of covariates in the active set at step <span class="math inline">\(m\)</span> is the closest (and inferior) to <span class="math inline">\(m\)</span>.</p>
 Since partial correlations need to be estimated from the available data, they are subject to sampling error, hence even if <span class="math inline">\(\rho_{\cdot\;\cdot,\cdot}= 0\)</span>, <span class="math inline">\(\hat{\rho}_{\cdot\;\cdot,\cdot}\neq 0\)</span>. <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> propose to apply Fisher’s <span class="math inline">\(Z\)</span>-transformation <span class="citation">(Fisher <a href="#ref-Fish:15">1915</a>)</span>
 <span class="math display">\[\begin{equation}
 Z_{X_jY,\mathbf{X}_C}=\frac{1}{2}\log\left(\frac{1+\hat{\rho}_{X_jY,\mathbf{X}_{C}}}{1-\hat{\rho}_{X_jY,\mathbf{X}_{C}}}\right)
 \end{equation}\]</span>
-<p>When testing (two-sided) <span class="math inline">\(\mathbb{H}_0:\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span>, <span class="math inline">\(\mathbb{H}_0\)</span> is rejected when <span class="citation">(Fisher <a href="#ref-Fish:21">1921</a>)</span> <span class="math inline">\(\sqrt{n-\vert \mathcal{M}_{C}\vert-3}Z_{X_jY,\mathbf{X}_C} &gt; \Phi^{-1}\left(1-\alpha/2\right)\)</span>, where <span class="math inline">\(\alpha\)</span> is the significance level and <span class="math inline">\(\Phi\)</span> is the standard Normal cumulative distribution function.</p>
+<p>When testing (two-sided) <span class="math inline">\(\mathbb{H}_0:\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span>, <span class="math inline">\(\mathbb{H}_0\)</span> is rejected when <span class="citation">(Fisher <a href="#ref-Fish:21">1921</a>)</span> <span class="math inline">\(\sqrt{n-(m-1) -3} \vert Z_{X_jY,\mathbf{X}_C}\vert &gt; \Phi^{-1}\left(1-\alpha/2\right)\)</span>, where <span class="math inline">\(\alpha\)</span> is the significance level, <span class="math inline">\(\Phi\)</span> is the standard Normal cumulative distribution function and m the current step of the procedure.</p>
 Partial correlations can be calculated recursively <span class="citation">(Bühlmann, Kalisch, and Maathuis <a href="#ref-BuKaMa:10">2010</a>)</span> using
 <span class="math display">\[\begin{equation}
 \hat{\rho}_{X_jY,\mathbf{X}_{C}}=\frac{\hat{\rho}_{X_jY,\mathbf{X}_{C\setminus\{k\}}}-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}}{\sqrt{\left(1-\hat{\rho}_{X_kY,\mathbf{X}_{C\setminus\{k\}}}^2\right)\left(1-\hat{\rho}_{X_jX_k,\mathbf{X}_{C\setminus\{k\}}}^2\right)}}
 \end{equation}\]</span>
-<p>To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. <span class="math inline">\(\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}\)</span>, <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> make use of the <em>partial faithfulness</em> concept. It applies to models that are such that if <span class="math inline">\(\forall j, j=1,\ldots,p\)</span>, <span class="math inline">\(\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span> for some <span class="math inline">\(\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}\)</span> implies that <span class="math inline">\(\beta_j=0\)</span> (with <span class="math inline">\(\mathcal{M}_p=\{j=1,\ldots,p\}\)</span>). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.</p>
+<p>To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. <span class="math inline">\(\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}\)</span>, <span class="citation">Bühlmann, Kalisch, and Maathuis (<a href="#ref-BuKaMa:10">2010</a>)</span> make use of the <em>partial faithfulness</em> concept. It applies to models that are such that if <span class="math inline">\(\forall j\)</span> (with <span class="math inline">\(j=1,\ldots,p\)</span>) <span class="math inline">\(\rho_{X_jY,\mathbf{X}_{C}}= 0\)</span>, for some <span class="math inline">\(\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}\)</span>, implies that <span class="math inline">\(\beta_j=0\)</span> (with <span class="math inline">\(\mathcal{M}_p=\{j=1,\ldots,p\}\)</span>). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.</p>
 <blockquote>
 <p>Exercise:<br />
 First of all build a simulation setting as explained below:<br />
@@ -635,7 +635,7 @@ After having read the documentation of the <em>rpart</em> package and having ins
         </div>
       </div>
 <a href="assessing-the-validity-of-a-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="shinkage-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="shrinkage-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
