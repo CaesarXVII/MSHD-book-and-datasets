@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-12">
+<meta name="date" content="2018-04-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -176,6 +176,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#introduction-5"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
 <li class="chapter" data-level="4.2" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#ridge-regression"><i class="fa fa-check"></i><b>4.2</b> Ridge regression</a></li>
 <li class="chapter" data-level="4.3" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-lasso-estimator"><i class="fa fa-check"></i><b>4.3</b> The lasso estimator</a></li>
+<li class="chapter" data-level="4.4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#alternative-penalized-regression-methods"><i class="fa fa-check"></i><b>4.4</b> Alternative penalized regression methods</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-adaptive-and-relaxed-lasso"><i class="fa fa-check"></i><b>4.4.1</b> The adaptive and relaxed lasso</a></li>
+<li class="chapter" data-level="4.4.2" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-elastic-net"><i class="fa fa-check"></i><b>4.4.2</b> The elastic net</a></li>
+<li class="chapter" data-level="4.4.3" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-nonnegative-garotte"><i class="fa fa-check"></i><b>4.4.3</b> The nonnegative garotte</a></li>
+<li class="chapter" data-level="4.4.4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#non-convex-penalties"><i class="fa fa-check"></i><b>4.4.4</b> Non convex penalties</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="solutions.html"><a href="solutions.html"><i class="fa fa-check"></i><b>5</b> Solutions</a><ul>
 <li class="chapter" data-level="5.1" data-path="solutions.html"><a href="solutions.html#chapter-1"><i class="fa fa-check"></i><b>5.1</b> Chapter 1</a><ul>
@@ -269,7 +275,113 @@ The solution is
 </blockquote>
 <p>In step 3 and 4, the values of the slopes in the active set, say <span class="math inline">\(\mathcal{A}\)</span>, are augmented as <span class="math inline">\(\boldsymbol{\beta}_{\mathcal{A}}(\epsilon)=\boldsymbol{\beta}_{\mathcal{A}}+\epsilon\cdot\delta_{\mathcal{A}}\)</span> for small values of <span class="math inline">\(\epsilon\)</span>, with <span class="math inline">\(\delta_{\mathcal{A}}=\left(\mathbf{X}^T_{\mathcal{A}}\mathbf{X}_{\mathcal{A}}\right)^{-1}\mathbf{X}^T_{\mathcal{A}}\mathbf{r}_{\mathcal{A}}\)</span>, <span class="math inline">\(\mathbf{r}_{\mathcal{A}}=\mathbf{y}-\mathbf{X}_{\mathcal{A}}\boldsymbol{\beta}_{\mathcal{A}}\)</span>.</p>
 <p>The LARS bears very close similarities with forward stagewise regression (see <span class="citation">Hastie et al. (<a href="#ref-HaTaTiWa:07">2007</a>)</span>, <span class="citation">Tibshirani (<a href="#ref-TibR:15">2015</a>)</span> and <span class="citation">Efron and Hastie (<a href="#ref-EfHa:16">2016</a>)</span>, Section 16.4). Hence, if the covariates are correlated, the lasso path might not produce the suitable model selection path (risk of overfitting).</p>
+</div>
+<div id="alternative-penalized-regression-methods" class="section level2">
+<h2><span class="header-section-number">4.4</span> Alternative penalized regression methods</h2>
+<div id="the-adaptive-and-relaxed-lasso" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> The adaptive and relaxed lasso</h3>
+Because the lasso finds a suitable compromise between estimation bias and variance, the price to pay is that it generally provides (asymptotically) biased slope estimators. It can be shown that the bias is larger for (true) large slope coefficients (in absolute value). Ideally then, one should consider, instead of the lasso penalty <span class="math inline">\(\lambda\Vert\boldsymbol{\beta}\Vert_1\)</span>, more generally <span class="math inline">\(\sum_{j=1}^p\lambda_j\vert\beta_j\vert\)</span>. <span class="citation">Zou (<a href="#ref-ZouH:06">2006</a>)</span> propose the <em>adaptive lasso</em> with <span class="math inline">\(\lambda_j=\lambda w_j^{\gamma}\)</span> and
+<span class="math display">\[\begin{equation}
+w_j^{\gamma}=\left\vert \hat{\beta}_{j}^{(LS)}\right\vert^{-\gamma}, \; \gamma&gt;0
+\end{equation}\]</span>
+<p>Hence, <span class="math inline">\(w_j\)</span> assigns smaller weights to larger slope coefficients, and when <span class="math inline">\(\hat{\beta}_{j}^{(LS)}\rightarrow 0\)</span>, <span class="math inline">\(w_j \rightarrow \infty\)</span> so that the adaptive lasso estimate <span class="math inline">\(\hat{\beta}_j \rightarrow 0\)</span>. Actually, <span class="math inline">\(\hat{\boldsymbol{\beta}}^{(LS)}\)</span> can be replaced by any (<span class="math inline">\(\sqrt{n}\)</span>) consistent estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>. In practice, when <span class="math inline">\(p&gt;n\)</span>, the ridge estimator is a suitable candidate.</p>
+The corresponding optimization problem is
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda,\gamma)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\lambda\sum_{j=1}^pw_j^{\gamma}\vert\beta_j\vert
+\end{equation}\]</span>
+and remains a convex optimization problem. Actually, the LARS algorithm can be used to obtain the adaptive losso path, by applying it to the scaled covariates <span class="math inline">\(\tilde{\mathbf{x}}_j=\mathbf{x}_j/w_j^{\gamma}\)</span>. Namely, let <span class="math inline">\(\tilde{\mathbf{X}}=\left[\tilde{\mathbf{x}}_j\right]_{j=1,\ldots,p}\)</span> and
+<span class="math display">\[\begin{equation}
+\tilde{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\tilde{\mathbf{X}}\boldsymbol{\beta}\right\Vert^2-\lambda\Vert\boldsymbol{\beta}\Vert_1
+\end{equation}\]</span>
+<p>the adpative lasso estimator is <span class="math inline">\(\left[\hat{\beta}_j(\lambda,\gamma)\right]_{j=1,\ldots,p}\)</span> with <span class="math inline">\(\hat{\beta}_j(\lambda,\gamma)=\tilde{\beta}_j(\lambda)/w_j^{\gamma}\)</span>.</p>
+<p>As with the lasso, the question of the choice of the tunning parameters is crucial. Since there are two, ideally all combiations of <span class="math inline">\((\lambda,\gamma)\)</span> should be evaluated. Hence, for a given <span class="math inline">\(\gamma\)</span>, <span class="math inline">\(\lambda\)</span> is optimized using an out-of-sample validation measure such as 10-fold CV or the <span class="math inline">\(C_p\)</span> to get <span class="math inline">\(\lambda_{\gamma}\)</span> and in a second layer, <span class="math inline">\(\gamma\)</span> is also optimized (actually <span class="math inline">\((\gamma,\lambda_{\gamma})\)</span> is optimized in <span class="math inline">\(\gamma\)</span>) again using an out-of-sample validation measure such as 10-fold CV or the <span class="math inline">\(C_p\)</span>. The choice for the latter does not have to be the same for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span>.</p>
+The adaptive lasso is a <em>two-stage approach</em>, with at the first stage a chosen initial estimator which produces a single set of weights <span class="math inline">\(w_j^{\gamma}\)</span> which are held constant (for fixed <span class="math inline">\(\gamma\)</span>) across all values of <span class="math inline">\(\lambda\)</span>. An alternative approach, known as a <em>pathwise approach</em> is to let the weights change with <span class="math inline">\(\lambda\)</span>: <span class="math inline">\(w_j^{\gamma}:=w_j^{\gamma}\left(\hat{\beta}_j\right)\)</span>. A notable example is the <em>relaxed</em> lasso of <span class="citation">Meinshausen (<a href="#ref-Mein:07">2007</a>)</span> which, for <span class="math inline">\(\lambda\geq 0\)</span> and <span class="math inline">\(0&lt;\phi\leq 1\)</span> is given by
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda,\phi)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\sum_{j=1}^p\mathbf{x}_j{\beta}_jI\left(j\in \mathcal{A}_{\lambda}\right)\right\Vert^2-\phi\lambda\Vert\boldsymbol{\beta}\Vert_1
+\end{equation}\]</span>
+<p>with <span class="math inline">\(\mathcal{A}_{\lambda}\)</span> the set of indicators of the covariates in the active set produced by the corresponding <span class="math inline">\(\lambda\)</span>. The later hence controls the variable selection part, as in the lasso, while the <em>relaxation</em> parameter <span class="math inline">\(\phi\)</span> controls the shrinkage of coefficients. If <span class="math inline">\(\phi= 1\)</span>, the lasso and relaxed lasso estimators are identical, and for <span class="math inline">\(\phi&lt;1\)</span>, the shrinkage of coefficients in the selected model is reduced compared to the lasso. When <span class="math inline">\(\phi\rightarrow 0\)</span>, <span class="math inline">\(\hat{\beta}_j(\lambda,\phi)\rightarrow\hat{\beta}_j^{(LS/\mathcal{A}_{\lambda})}\)</span>, where the <span class="math inline">\(\hat{\beta}_j^{(LS/\mathcal{A}_{\lambda})}\)</span> is the LS obtained on the subset <span class="math inline">\(\mathcal{A}_{\lambda}\)</span>. Note that if <span class="math inline">\(\phi=0\)</span> one gets the LS on the full model (the effect of <span class="math inline">\(\lambda\)</span> as variable selection tunning parameters disappears).</p>
+<p>To obtain the relaxed lasso solutions, one first sets <span class="math inline">\(\phi=1\)</span> and obtains the lasso path, then for each submodel of the lasso path, the LARS algorithm is run by varying the penalty <span class="math inline">\(\phi\lambda\)</span> through <span class="math inline">\(\phi\)</span>. There is in general no need to do the full LARS in the second stage so the compuation can be nearly as fast as a for the lasso. Again, the tunning parameters <span class="math inline">\((\lambda,\phi)\)</span> can be determined by 10-fold CV.</p>
+</div>
+<div id="the-elastic-net" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> The elastic net</h3>
+When there is strong correlation among the covariates, the lasso estimator will somehow arbitrarily choose among a set of strong but correlated variables. The ridge penalty, on the other hand, tends to shrink the coefficients of correlated variables toward each other. The elastic net penalty proposed by <span class="citation">Zou and Hastie (<a href="#ref-zou2005regularization">2005</a>)</span> is a comprimise between the lasso and ridge regression and the estimators are the solution of the optimization problem
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\alpha\lambda\Vert\boldsymbol{\beta}\Vert_1-\frac{1}{2}(1-\alpha)\lambda\Vert\boldsymbol{\beta}\Vert^2
+\end{equation}\]</span>
+<p>The elastic net solution contains in general more active covariates with smaller coefficients. The introduction of the ridge penalty has the effect of reducing the variance of lasso estimates at the cost of further increasing their bias. Adding a ridge penalty is not always universally benefficial, as the bias can dominate the variance. However, since like ridge regression, the elastic net shrinks the coefficients of correlated variables toward each other, it tends to select correlated variables in groups, which might be an advantage in for example biological studies.</p>
+</div>
+<div id="the-nonnegative-garotte" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> The nonnegative garotte</h3>
+Based on the argument that shrinking decreases the estimation/prediction variance, <span class="citation">Breiman (<a href="#ref-Brei:95">1995</a>)</span> proposes to directly define shrunk estimators as
+<span class="math display">\[\begin{equation}
+\hat{\beta}_j(\lambda)=u_j(\lambda)\hat{\beta}_j^{(LS)}
+\end{equation}\]</span>
+with shrinking factors (or <em>garotte</em>) <span class="math inline">\(\mathbf{u}(\lambda)=[u_j(\lambda)]_{j=1,\ldots,p}\)</span> obtained as
+<span class="math display">\[\begin{eqnarray}
+&amp; \mathbf{u}(\lambda)=\mbox{argmin}_{\mathbf{u}=[u_1\ldots u_p]}\left\Vert\mathbf{y}-\mathbf{X}\mathbf{B}\mathbf{u}\right\Vert^2-2\lambda\sum_{j=1}^pu_j \\
+&amp; \mbox{s.t. } u_j\geq 0 \forall j
+\end{eqnarray}\]</span>
+<p>with <span class="math inline">\(\mathbf{B}=\mbox{diag}\left(\hat{\beta}_j^{(LS)}\right)\)</span>. The penalty corresponds to the constraint <span class="math inline">\(\sum_{j=1}^pu_j\leq t_{\lambda}\)</span>. For sufficiently large <span class="math inline">\(\lambda\)</span> some of the <span class="math inline">\(u_j\)</span> will be set to 0, so that the nonnegative garotte estimator performs simultaneously shinking and subset selection.</p>
+<p><span class="citation">Yuan and Lin (<a href="#ref-YuYi:07">2007</a>)</span> propose to use a slightly modified version of the LARS to obtain the solution path for the nonnegative garotte estimators. Indeed, since <span class="math inline">\(\mathbf{B}\)</span> is provided in an initial stage, then one can use the LARS (adapted to the positivity constraints) in which <span class="math inline">\(\mathbf{X}\rightarrow \tilde{\mathbf{X}}=\mathbf{X}\mathbf{B}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\rightarrow \mathbf{u}\)</span>, <span class="math inline">\(\lambda\rightarrow 2\lambda\)</span>.</p>
+<p>The adaptive lasso with <span class="math inline">\(\gamma=1\)</span> corresponds to the nonnegative garotte (when adding the positivity constraints). Indeed, we have <span class="math inline">\(u_j=\vert\beta_j\vert/\vert\beta_j^{(LS)}\vert\)</span> with the constraints <span class="math inline">\(\beta_j\beta_j^{(LS)}\geq 0\)</span>, <span class="math inline">\(\forall j\)</span>, so that <span class="math inline">\(\mathbf{X}\mathbf{B}\mathbf{u}=\mathbf{X}\boldsymbol{\beta}\)</span>.</p>
+Given the form of the nonnegation garotte estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}(\lambda)=\left[\hat{\beta}_j(\lambda)\right]_{j=1,\ldots,p}\)</span>, it is straightforward to derive Efron’s covariance penalty estimator of out-of-sample prediction error. Indeed, <span class="math inline">\(\hat{\mathbf{y}}=\mathbf{X}\mathbf{B}\mathbf{u}=\mathbf{X}\mathbf{U}\hat{\boldsymbol{\beta}}^{(LS)}=\mathbf{X}\mathbf{U}\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\mathbf{X}^T\mathbf{y}\)</span>, with <span class="math inline">\(\mathbf{U}=\mbox{diag}\left(u_j\right)\)</span>, and
+<span class="math display">\[\begin{equation}
+\mbox{tr}\left(\mbox{cov}(\hat{\mathbf{Y}},\mathbf{Y})\right)=
+\sigma^2\mbox{tr}\left(\mathbf{X}\mathbf{U}\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\mathbf{X}^T\right)=\sigma^2\mbox{tr}\left(\mathbf{U}\right)=\sigma^2\sum_{j=1}^pu_j;
+\end{equation}\]</span>
+<p>by using the <em>cyclic property</em> of the trace operator (see also <span class="citation">Xiong (<a href="#ref-Xion:10">2010</a>)</span>). Therefore, one can determine the <span class="math inline">\(u_j\)</span> by minimizing the estimated out-of-sample prediction error, i.e. <span class="math inline">\(\mbox{min}_{\mathbf{u}} \Vert \mathbf{y}−\mathbf{X}\mathbf{U}\hat{\boldsymbol{\beta}}^{(LS)}\Vert+2\sigma^2 \sum_{j=1}^pu_j\)</span>, s.t. <span class="math inline">\(u_j \geq 0\)</span>, <span class="math inline">\(\forall j\)</span>, which yields the nonnegative garotte estimator with tuning parameter <span class="math inline">\(\lambda = \sigma^2\)</span>. In practice, <span class="math inline">\(\sigma^2\)</span> is replaced by a consistent estimator <span class="math inline">\(\hat{\sigma}^2\)</span>; for a review, see e.g. <span class="citation">Reid, Tibshirani, and Friedman (<a href="#ref-ReTiFr:16">2016</a>)</span>.</p>
+</div>
+<div id="non-convex-penalties" class="section level3">
+<h3><span class="header-section-number">4.4.4</span> Non convex penalties</h3>
+<p>The adaptive lasso consists of a two-stage approach involving an initial estimator to reduce bias for large regression coefficients. An alternative single-stage approach is to use a penalty that <em>tapers off</em> as <span class="math inline">\(\beta_j\)</span> becomes larger in absolute value. Unlike the absolute value penalty employed by the lasso, a tapering penalty function cannot be convex. Such functions are often referred to as <em>folded</em> concave, in that it is symmetric around <span class="math inline">\(\beta_j=0\)</span>. The penalty function, say <span class="math inline">\(\sum_{j=1}^pP(\beta_j\vert \lambda,\gamma)\)</span>, then involves a tuning parameter <span class="math inline">\(\gamma\)</span> that controls the concavity of the penalty (i.e., how rapidly the penalty tapers off). Using a penalty that does not taper off (e.g. the lasso penalty) is called <em>soft thresholding</em>, while using subset (forward stepwise) selection (i.e. the <span class="math inline">\(l_0\)</span> norm) is called <em>hard thresholding</em>.</p>
+A popular penalty is the <em>smoothly clipped absolute deviations</em> (SCAD) penalty of <span class="citation">Fan and Li (<a href="#ref-fanandli2001">2001</a>)</span>, given by
+<span class="math display">\[\begin{eqnarray}
+P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda\vert\beta_j\vert &amp; \mbox{if } \;\vert\beta_j\vert\leq\lambda \\
+\frac{2\gamma\lambda\vert\beta_j\vert-\beta_j^2-\lambda^2}{2(\gamma-1)} &amp;
+\mbox{if } \;\lambda&lt;\vert\beta_j\vert\leq\gamma\lambda \\
+\frac{\lambda^2(\gamma+1)}{2} &amp; \mbox{if } \;\vert\beta_j\vert&gt;\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}\]</span>
+for <span class="math inline">\(\gamma&gt;2\)</span>. The SCAD coincides with the lasso until <span class="math inline">\(\vert\beta_j\vert=\lambda\)</span>, then smoothly transits to a quadratic function until <span class="math inline">\(\vert\beta_j\vert = \gamma\lambda\)</span>, after which it remains constant. The derivative of the SCAD penalty is
+<span class="math display">\[\begin{eqnarray}
+\frac{\partial}{\partial\beta_j}P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda &amp; \mbox{if } \;\vert\beta_j\vert\leq\lambda \\
+\frac{\gamma\lambda-\vert\beta_j\vert}{\gamma-1} &amp;
+\mbox{if } \;\lambda&lt;\vert\beta_j\vert\leq\gamma\lambda \\
+0 &amp; \mbox{if } \;\vert\beta_j\vert&gt;\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}\]</span>
+<p>The SCAD penalty retains the penalization rate (and bias) of the lasso for small coefficients, but continuously relaxes the rate of penalization (and bias) as the absolute value of the coefficient increases. Hence the overall bias is reduced.</p>
+Another population non convex penalty has been proposed by <span class="citation">Zhang (<a href="#ref-Zhan:10">2010</a>)</span> as the <em>Minimax Concave Penalty</em> (MCP), given by
+<span class="math display">\[\begin{eqnarray}
+P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda\vert\beta_j\vert - \frac{\beta_j^2}{2\gamma}&amp; \mbox{if } \;\vert\beta_j\vert\leq \gamma\lambda \\
+\frac{\lambda^2\gamma}{2} &amp; \mbox{if } \;\vert\beta_j\vert&gt;\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}\]</span>
+for <span class="math inline">\(\gamma&gt;1\)</span>. Its derivative is
+<span class="math display">\[\begin{eqnarray}
+\frac{\partial}{\partial\beta_j}P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\mbox{sign}\left(\beta_j\right)\left(\lambda - \frac{\vert\beta_j\vert}{\gamma}\right)&amp; \mbox{if } \;\vert\beta_j\vert\leq\gamma\lambda \\
+0 &amp; \mbox{if } \;\vert\beta_j\vert&gt;\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}\]</span>
+<p>As with the SCAD, the MCP starts out by applying the same rate of penalization as the lasso, then smoothly relaxes the rate down to zero as the absolute value of the coefficient increases. It does however so immediately while with SCAD the rate remains flat for a while before decreasing.</p>
+<blockquote>
+<p>Reported from <span class="citation">Zhang (<a href="#ref-Zhan:10">2010</a>)</span>, Figure 1. Penalty functions (right panel) and their derivatives (left panel) as a function of <span class="math inline">\(\vert\beta_j\vert\)</span>, for the lasso (<span class="math inline">\(t\)</span>), SCAD and MCP with <span class="math inline">\(\gamma=2.5\)</span>. <img src="Figures/NonCovexPenalties.png" alt="Top" /></p>
+</blockquote>
+<p>As <span class="math inline">\(\gamma\rightarrow\infty\)</span>, both the MCP and SCAD penalties converge to the <span class="math inline">\(l_1\)</span> penalty. As <span class="math inline">\(\gamma\)</span> approaches its minimum value, the bias is minimized. The price to pay is the <em>instability</em> of the resulting MCP and SCAD estimators, in the sense that as the penalty becomes more concave (i.e. for smaller <span class="math inline">\(\gamma\)</span>), there is a greater chance for the optimization problem to admit multiple local minima.</p>
+<p>Among others, <span class="citation">Zhang (<a href="#ref-Zhan:10">2010</a>)</span> and <span class="citation">Breheny and Huang (<a href="#ref-breheny2011">2011</a>)</span> propose algorithms to find the SCAD and MCP estimates, or more generally, penalized regression estimators with non convex penalties. Moreover, as with the elastic net, one can add a ridge penalty to nonconvex penalties such as MCP and SCAD.</p>
+<blockquote>
+<p>Exercise: Generate data from the linear regression model with <span class="math inline">\(p=1000\)</span> covariates and <span class="math inline">\(n=200\)</span>, with both independent and dependent covariates, and with <span class="math inline">\(\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)\)</span>, <span class="math inline">\(\sigma^2=1\)</span>. Compare the solution paths (graphically as a function of <span class="math inline">\(\lambda\)</span>) for the lasso, adpative lasso, SCAD and MCP by fixing several values for <span class="math inline">\(\gamma\)</span> (choose e.g. <span class="math inline">\(\gamma=(1.5,2.7,6)\)</span>).</p>
+</blockquote>
 
+</div>
 </div>
 </div>
 <h3>References</h3>
@@ -297,6 +409,36 @@ The solution is
 </div>
 <div id="ref-TibR:15">
 <p>Tibshirani, R. J. 2015. “A General Framework for Fast Stagewise Algorithms.” <em>Journal of Machine Learning Research</em> 16: 2543–88.</p>
+</div>
+<div id="ref-ZouH:06">
+<p>Zou, H. 2006. “The Adaptive Lasso and Its Oracle Properties.” <em>Journal of the American Statistical Association</em> 101: 1418–29.</p>
+</div>
+<div id="ref-Mein:07">
+<p>Meinshausen, N. 2007. “Relaxed Lasso.” <em>Computational Statistics and Data Analysis</em> 52: 374–93.</p>
+</div>
+<div id="ref-zou2005regularization">
+<p>Zou, H., and T. Hastie. 2005. “Regularization and Variable Selection via the Elastic Net.” <em>Journal of the Royal Statistical Society: Series B</em> 67 (2). Wiley Online Library: 301–20.</p>
+</div>
+<div id="ref-Brei:95">
+<p>Breiman, L. 1995. “Better Subset Regression Using the Nonnegative Garrote.” <em>Technometrics</em> 37: 373–84.</p>
+</div>
+<div id="ref-YuYi:07">
+<p>Yuan, M., and Yi Lin. 2007. “On the Non-Negative Garrotte Estimator.” <em>Journal of the Royal Statististical Sociaty, Series B</em> 69: 143–61.</p>
+</div>
+<div id="ref-Xion:10">
+<p>Xiong, S. 2010. “Some Notes on the Nonnegative Garrote.” <em>Technometrics</em> 52 (3): 349–61.</p>
+</div>
+<div id="ref-ReTiFr:16">
+<p>Reid, S., R. Tibshirani, and J. Friedman. 2016. “A Study of Error Variance Eestimation in Lasso Regression.” <em>Statistica Sinica</em> 26: 35–67.</p>
+</div>
+<div id="ref-fanandli2001">
+<p>Fan, J., and R. Li. 2001. “Variable Selection via Nonconcave Penalized Likelihood and Its Oracle Properties.” <em>Journal of the American Statistical Association</em> 96 (456). Taylor &amp; Francis: 1348–60.</p>
+</div>
+<div id="ref-Zhan:10">
+<p>Zhang, C.-H. 2010. “Nearly Unbiased Variable Selection Under Minimax Concave Penalty.” <em>The Annals of Statistics</em> 38: 894–942.</p>
+</div>
+<div id="ref-breheny2011">
+<p>Breheny, P., and J. Huang. 2011. “Coordinate Descent Algorithms for Nonconvex Penalized Regression, with Applications to Biological Feature Selection.” <em>The Annals of Applied Statistics</em> 5: 232–53.</p>
 </div>
 </div>
             </section>

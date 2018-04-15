@@ -71,3 +71,125 @@ most correlated with the response, and moves the coefficient of this variable co
 In step 3 and 4, the values of the slopes in the active set, say $\mathcal{A}$, are augmented as $\boldsymbol{\beta}_{\mathcal{A}}(\epsilon)=\boldsymbol{\beta}_{\mathcal{A}}+\epsilon\cdot\delta_{\mathcal{A}}$ for small values of $\epsilon$, with $\delta_{\mathcal{A}}=\left(\mathbf{X}^T_{\mathcal{A}}\mathbf{X}_{\mathcal{A}}\right)^{-1}\mathbf{X}^T_{\mathcal{A}}\mathbf{r}_{\mathcal{A}}$, $\mathbf{r}_{\mathcal{A}}=\mathbf{y}-\mathbf{X}_{\mathcal{A}}\boldsymbol{\beta}_{\mathcal{A}}$. 
 
 The LARS bears very close similarities with forward stagewise regression (see @HaTaTiWa:07, @TibR:15 and @EfHa:16, Section 16.4). Hence, if the covariates are correlated, the lasso path might not produce the suitable model selection path (risk of overfitting).
+
+## Alternative penalized regression methods
+
+### The adaptive and relaxed lasso
+
+Because the lasso finds a suitable compromise between estimation bias and variance, the price to pay is that it generally provides (asymptotically) biased slope estimators. It can be shown that the bias is larger for (true) large slope coefficients (in absolute value). Ideally then, one should consider, instead of the lasso penalty $\lambda\Vert\boldsymbol{\beta}\Vert_1$, more generally $\sum_{j=1}^p\lambda_j\vert\beta_j\vert$. @ZouH:06 propose the *adaptive lasso* with $\lambda_j=\lambda w_j^{\gamma}$ and 
+\begin{equation}
+w_j^{\gamma}=\left\vert \hat{\beta}_{j}^{(LS)}\right\vert^{-\gamma}, \; \gamma>0
+\end{equation}
+Hence, $w_j$ assigns smaller weights to larger slope coefficients, and when $\hat{\beta}_{j}^{(LS)}\rightarrow 0$, $w_j \rightarrow \infty$ so that the adaptive lasso estimate $\hat{\beta}_j \rightarrow 0$. Actually, $\hat{\boldsymbol{\beta}}^{(LS)}$ can be replaced by any ($\sqrt{n}$) consistent estimator of $\boldsymbol{\beta}$. In practice, when $p>n$, the ridge estimator is a suitable candidate.
+
+The corresponding optimization problem is
+\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda,\gamma)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\lambda\sum_{j=1}^pw_j^{\gamma}\vert\beta_j\vert
+\end{equation}
+and remains a convex optimization problem. Actually, the LARS algorithm can be used to obtain the adaptive losso path, by applying it to the scaled covariates $\tilde{\mathbf{x}}_j=\mathbf{x}_j/w_j^{\gamma}$. Namely, let $\tilde{\mathbf{X}}=\left[\tilde{\mathbf{x}}_j\right]_{j=1,\ldots,p}$ and
+\begin{equation}
+\tilde{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\tilde{\mathbf{X}}\boldsymbol{\beta}\right\Vert^2-\lambda\Vert\boldsymbol{\beta}\Vert_1
+\end{equation}
+the adpative lasso estimator is $\left[\hat{\beta}_j(\lambda,\gamma)\right]_{j=1,\ldots,p}$ with $\hat{\beta}_j(\lambda,\gamma)=\tilde{\beta}_j(\lambda)/w_j^{\gamma}$. 
+
+As with the lasso, the question of the choice of the tunning parameters is crucial. Since there are two, ideally all combiations of $(\lambda,\gamma)$ should be evaluated. Hence, for a given $\gamma$, $\lambda$ is optimized using an out-of-sample validation measure such as 10-fold CV or the $C_p$ to get $\lambda_{\gamma}$ and in a second layer, $\gamma$ is also optimized (actually $(\gamma,\lambda_{\gamma})$ is optimized in $\gamma$) again using an out-of-sample validation measure such as 10-fold CV or the $C_p$. The choice for the latter does not have to be the same for $\lambda$ and $\gamma$.
+
+The adaptive lasso is a *two-stage approach*, with at the first stage a chosen initial estimator which produces a single set of weights $w_j^{\gamma}$ which are held constant (for fixed $\gamma$) across all values of $\lambda$. An alternative approach, known as a *pathwise approach* is to let the weights change with $\lambda$: $w_j^{\gamma}:=w_j^{\gamma}\left(\hat{\beta}_j\right)$. A notable example is the *relaxed* lasso of @Mein:07 which, for $\lambda\geq 0$ and $0<\phi\leq 1$ is given by
+\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda,\phi)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\sum_{j=1}^p\mathbf{x}_j{\beta}_jI\left(j\in \mathcal{A}_{\lambda}\right)\right\Vert^2-\phi\lambda\Vert\boldsymbol{\beta}\Vert_1
+\end{equation}
+with $\mathcal{A}_{\lambda}$ the set of indicators of the covariates in the active set produced by the corresponding $\lambda$. The later hence controls the variable selection part, as in the lasso, while the  *relaxation* parameter $\phi$ controls the shrinkage of coefficients. If $\phi= 1$, the lasso and relaxed lasso estimators are identical, and for $\phi<1$, the shrinkage of coefficients in the selected model is reduced compared to the lasso. When $\phi\rightarrow 0$, $\hat{\beta}_j(\lambda,\phi)\rightarrow\hat{\beta}_j^{(LS/\mathcal{A}_{\lambda})}$, where the $\hat{\beta}_j^{(LS/\mathcal{A}_{\lambda})}$ is the LS obtained on the subset $\mathcal{A}_{\lambda}$. Note that if $\phi=0$ one gets the LS on the full model (the effect of $\lambda$ as variable selection tunning parameters disappears). 
+
+To obtain the relaxed lasso solutions, one first sets $\phi=1$ and obtains the lasso path, then for each submodel of the lasso path, the LARS algorithm is run by varying the penalty $\phi\lambda$ through $\phi$. There is in general no need to do the full LARS in the second stage so the compuation can be nearly as fast as a for the lasso. Again, the tunning parameters $(\lambda,\phi)$ can be determined by 10-fold CV.
+
+### The elastic net
+
+When there is strong correlation among the covariates, the lasso estimator
+will somehow arbitrarily choose among a set of strong but correlated variables. The ridge penalty, on the other hand, tends to shrink the coefficients of correlated variables toward each other. The elastic net penalty proposed by @zou2005regularization is a comprimise between the lasso and ridge regression and the estimators are the solution of the optimization problem 
+\begin{equation}
+\hat{\boldsymbol{\beta}}(\lambda)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\right\Vert^2-\alpha\lambda\Vert\boldsymbol{\beta}\Vert_1-\frac{1}{2}(1-\alpha)\lambda\Vert\boldsymbol{\beta}\Vert^2
+\end{equation}
+The elastic net solution contains in general more active covariates with smaller coefficients. The introduction of the ridge penalty has the effect of reducing the variance of lasso estimates at the cost of further increasing their bias. Adding a ridge penalty is not always universally benefficial, as the bias can dominate the variance. However, since like ridge regression, the elastic net shrinks the coefficients of correlated variables toward each other, it tends to select correlated variables in groups, which might be an advantage in for example biological studies.
+
+
+### The nonnegative garotte
+
+Based on the argument that shrinking decreases the estimation/prediction variance, @Brei:95 proposes to directly define shrunk estimators as
+\begin{equation}
+\hat{\beta}_j(\lambda)=u_j(\lambda)\hat{\beta}_j^{(LS)}
+\end{equation}
+with shrinking factors (or *garotte*) $\mathbf{u}(\lambda)=[u_j(\lambda)]_{j=1,\ldots,p}$ obtained as
+\begin{eqnarray}
+& \mathbf{u}(\lambda)=\mbox{argmin}_{\mathbf{u}=[u_1\ldots u_p]}\left\Vert\mathbf{y}-\mathbf{X}\mathbf{B}\mathbf{u}\right\Vert^2-2\lambda\sum_{j=1}^pu_j \\
+& \mbox{s.t. } u_j\geq 0 \forall j
+\end{eqnarray}
+with $\mathbf{B}=\mbox{diag}\left(\hat{\beta}_j^{(LS)}\right)$. The penalty corresponds to the constraint $\sum_{j=1}^pu_j\leq t_{\lambda}$. For sufficiently large $\lambda$ some of the $u_j$ will be set to 0, so that the nonnegative garotte estimator performs simultaneously shinking and subset selection.
+
+@YuYi:07 propose to use a slightly modified version of the LARS to obtain the solution path for the nonnegative garotte estimators. Indeed, since $\mathbf{B}$ is provided in an initial stage, then one can use the LARS (adapted to the positivity constraints) in which $\mathbf{X}\rightarrow \tilde{\mathbf{X}}=\mathbf{X}\mathbf{B}$ and $\boldsymbol{\beta}\rightarrow \mathbf{u}$, $\lambda\rightarrow 2\lambda$. 
+
+The adaptive lasso with $\gamma=1$ corresponds to the nonnegative garotte (when adding the positivity constraints). Indeed, we have $u_j=\vert\beta_j\vert/\vert\beta_j^{(LS)}\vert$ with the constraints $\beta_j\beta_j^{(LS)}\geq 0$, $\forall j$, so that $\mathbf{X}\mathbf{B}\mathbf{u}=\mathbf{X}\boldsymbol{\beta}$.
+
+Given the form of the nonnegation garotte estimator $\hat{\boldsymbol{\beta}}(\lambda)=\left[\hat{\beta}_j(\lambda)\right]_{j=1,\ldots,p}$, it is straightforward to derive Efron's covariance penalty estimator of out-of-sample prediction error. Indeed, $\hat{\mathbf{y}}=\mathbf{X}\mathbf{B}\mathbf{u}=\mathbf{X}\mathbf{U}\hat{\boldsymbol{\beta}}^{(LS)}=\mathbf{X}\mathbf{U}\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\mathbf{X}^T\mathbf{y}$, with $\mathbf{U}=\mbox{diag}\left(u_j\right)$, and
+\begin{equation}
+\mbox{tr}\left(\mbox{cov}(\hat{\mathbf{Y}},\mathbf{Y})\right)=
+\sigma^2\mbox{tr}\left(\mathbf{X}\mathbf{U}\left(\mathbf{X}^T\mathbf{X}\right)^{-1}\mathbf{X}^T\right)=\sigma^2\mbox{tr}\left(\mathbf{U}\right)=\sigma^2\sum_{j=1}^pu_j;
+\end{equation}
+by using the *cyclic property* of the trace operator (see also @Xion:10). Therefore, one can determine the $u_j$ by minimizing the estimated out-of-sample prediction error, i.e. $\mbox{min}_{\mathbf{u}} \Vert \mathbf{y}−\mathbf{X}\mathbf{U}\hat{\boldsymbol{\beta}}^{(LS)}\Vert+2\sigma^2
+\sum_{j=1}^pu_j$, s.t. $u_j \geq 0$, $\forall j$, which yields the nonnegative garotte estimator with tuning parameter $\lambda = \sigma^2$. In practice, $\sigma^2$ is replaced by a consistent estimator $\hat{\sigma}^2$; for a review, see e.g. @ReTiFr:16. 
+
+### Non convex penalties
+
+The adaptive lasso consists of a two-stage approach involving an initial estimator to reduce bias for large regression coefficients. An alternative single-stage approach is to use a penalty that *tapers off* as $\beta_j$ becomes larger in absolute value. Unlike the absolute value penalty employed by the lasso, a tapering penalty function cannot be convex. Such functions are often referred to as *folded* concave, in that it is symmetric around $\beta_j=0$. The penalty function, say $\sum_{j=1}^pP(\beta_j\vert \lambda,\gamma)$, then involves a tuning parameter $\gamma$ that controls the concavity of the penalty (i.e., how rapidly the penalty tapers off). Using a penalty that does not taper off (e.g. the lasso penalty) is called *soft thresholding*, while using subset (forward stepwise) selection (i.e. the $l_0$ norm) is called *hard thresholding*.
+
+A popular penalty is the *smoothly clipped absolute deviations* (SCAD) penalty of @fanandli2001, given by
+\begin{eqnarray}
+P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda\vert\beta_j\vert & \mbox{if } \;\vert\beta_j\vert\leq\lambda \\
+\frac{2\gamma\lambda\vert\beta_j\vert-\beta_j^2-\lambda^2}{2(\gamma-1)} &
+\mbox{if } \;\lambda<\vert\beta_j\vert\leq\gamma\lambda \\
+\frac{\lambda^2(\gamma+1)}{2} & \mbox{if } \;\vert\beta_j\vert>\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}
+for $\gamma>2$. The SCAD coincides with the lasso until $\vert\beta_j\vert=\lambda$, then smoothly transits to a quadratic function until $\vert\beta_j\vert = \gamma\lambda$, after which it remains constant. The derivative of the SCAD penalty is
+\begin{eqnarray}
+\frac{\partial}{\partial\beta_j}P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda & \mbox{if } \;\vert\beta_j\vert\leq\lambda \\
+\frac{\gamma\lambda-\vert\beta_j\vert}{\gamma-1} &
+\mbox{if } \;\lambda<\vert\beta_j\vert\leq\gamma\lambda \\
+0 & \mbox{if } \;\vert\beta_j\vert>\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}
+The SCAD penalty retains the penalization rate (and bias) of the lasso for small coefficients, but continuously relaxes the rate of penalization (and bias) as the absolute value of the coefficient increases. Hence the overall bias is reduced.
+
+Another population non convex penalty has been proposed by @Zhan:10 as the *Minimax Concave Penalty* (MCP), given by
+\begin{eqnarray}
+P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\lambda\vert\beta_j\vert - \frac{\beta_j^2}{2\gamma}& \mbox{if } \;\vert\beta_j\vert\leq \gamma\lambda \\
+\frac{\lambda^2\gamma}{2} & \mbox{if } \;\vert\beta_j\vert>\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}
+for $\gamma>1$. Its derivative is
+\begin{eqnarray}
+\frac{\partial}{\partial\beta_j}P(\beta_j\vert \lambda,\gamma)=\left\{\begin{array}{ll}
+\mbox{sign}\left(\beta_j\right)\left(\lambda - \frac{\vert\beta_j\vert}{\gamma}\right)& \mbox{if } \;\vert\beta_j\vert\leq\gamma\lambda \\
+0 & \mbox{if } \;\vert\beta_j\vert>\gamma\lambda
+\end{array}
+\right.
+\end{eqnarray}
+As with the SCAD, the MCP starts out by applying the same rate of penalization as the lasso, then smoothly relaxes the rate down to zero as the absolute value of the coefficient increases. It does however so immediately while with SCAD the rate remains flat for a while before decreasing.
+
+> Reported from @Zhan:10, Figure 1. Penalty functions (right panel) and their derivatives (left panel) as a function of $\vert\beta_j\vert$, for the lasso ($t$), SCAD and MCP with $\gamma=2.5$.
+![Top](Figures/NonCovexPenalties.png) 
+
+
+As $\gamma\rightarrow\infty$, both the MCP and SCAD penalties converge to
+the $l_1$ penalty. As $\gamma$ approaches its minimum value, the bias is minimized. The price to pay is the *instability* of the resulting MCP and SCAD estimators, in the sense that as the penalty becomes more concave (i.e. for smaller $\gamma$), there is a greater chance for the optimization problem to admit multiple local minima.
+
+Among others, @Zhan:10 and @breheny2011 propose algorithms to find the SCAD and MCP estimates, or more generally, penalized regression estimators with non convex penalties. Moreover, as with the elastic net, one can add a ridge penalty to  nonconvex penalties such as MCP and SCAD.
+
+> Exercise:
+Generate data from the linear regression model with $p=1000$ covariates and $n=200$, with both independent and dependent covariates, and with $\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)$, $\sigma^2=1$. Compare the solution paths (graphically as a function of $\lambda$) for the lasso, adpative lasso, SCAD and MCP by fixing several values for $\gamma$ (choose e.g. $\gamma=(1.5,2.7,6)$). 
+
