@@ -225,11 +225,11 @@ where $\lfloor \gamma n \rfloor$ denotes the integer part of $\gamma n$. The SIS
 
 The SIS procedure can be combined with another (subset) selection method: apply the SIS to reduce the dimension, apply a selection method to the reduced dimension to get, say, $\mathcal{M}_{k_1}$ of size of order e.g. $n/log(n)$. The residuals from a regression of $Y$ on $\mathbf{X}=[X_j],j\in \mathcal{M}_{k_1}$ are then used as a new response vector and the SIS is applied to the left-aside $p-k_1$ covariates to get $\mathcal{M}_{k_2}$. The rationale behind is that using the residuals from the previous step, amounts to considering partial correlations which set aside the unimportant covariates that are highly correlated with the response through their associations with the covariates present in the set $\mathcal{M}_{k_1}$ and also makes those important predictors that are missed in the previous step possible to survive. The procedure is iterated until the $L$ disjoint subsets $\mathcal{M}_{k_l},l=1,\ldots,L$  whose union $\mathcal{M}_d$ has maximal size satisfying e.g. $\vert \mathcal{M}_d\vert<n$. This procedure is called the iterative sure independence screening (ISIS).
 
-> Exercise: \
+> Exercise (solutions presented in \@ref(SIS)): \
 > After having read the documentation of the R package *SIS* and installed it, perform the following steps:\
-a) Load the *Leukemia* dataset as explained in Chapter 1.\
-b) Split the dataset randomly in two halves (i.e. 36 observations each) and create a *train* and *test* sample.\
-c) The functions SIS() performs first a screening procedure based on marginal correlations and then applies a penalized method (forthcoming *Chapter 4* of the e-book) to obtain the final model. Choose among all the available options (i.e. in terms both of penalized methods and tuning constants) three candidates and evaluate the predictions of the selected models on the *test* sample. Which penalized method performs best in this specific example after the SIS?   
+a) Load the *Leukemia* dataset.\
+b) Split the dataset randomly and create a *train* and *test* sample.\
+c) The functions SIS() performs first a screening procedure based on marginal correlations and then applies a penalized method (*Chapter 4* of the e-book) to obtain the final model. Choose among all the available options (i.e. in terms both of penalized methods and tuning constants) three candidates and evaluate the predictions of the selected models on the *test* sample. Which penalized method performs best in this specific example after the SIS?   
 > (optional) Explain why stepwise regression based on partial correlations (for the inclusion criterion) is a special case of ISIS.
 
 
@@ -260,7 +260,7 @@ Partial correlations can be calculated recursively [@BuKaMa:10] using
 
 To assess that the (population version) of the PC-simple algorithm identifies the true underlying active set, i.e. $\mathcal{M}_{m_S} = \{j = 1,\ldots,p \; \vert\; \beta_j\neq 0 \}$, @BuKaMa:10 make use of the *partial faithfulness* concept. It applies to models that are such that if $\forall j$ (with $j=1,\ldots,p$) $\rho_{X_jY,\mathbf{X}_{C}}= 0$, for some $\mathcal{M}_C\subseteq \mathcal{M}_p\setminus \{j\}$, implies that $\beta_j=0$ (with  $\mathcal{M}_p=\{j=1,\ldots,p\}$). Partial faithfulness can only be verified when assuming a (joint) distribution for the covariates.
 
-> Exercise: \
+> Exercise (solutions presented in \@ref(PC)): \
 > First of all build a simulation setting as explained below:\
 - Generate from a MVN (multivariate normal) a matrix $\mathbf{X_{n*p}}$ with $n = 1000$ and $p = 10$. Choose the location but set the scale matrix with an autoregressive form $\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}$  with $\sigma_{lm} = \rho^{\mid l - m\mid}$.\ 
 - Fix $\rho = 0.5$ and set the seed equal to 11 (i.e. set.seed(11)).\
@@ -346,7 +346,7 @@ One major problem with trees is their high variance. Often a small change
 in the data can result in a very different series of splits, making interpretation somewhat precarious. Averaging methods such as *bagging*, i.e. *bootstrap aggregating*, can be used to reduce the variability of the tree estimator [@Brei:96]. See @Sutt:05 for a survey.
 
 
-> Exercise: \
+> Exercise (solutions presented in \@ref(RT)): \
 After having read the documentation of the *rpart* package and having installed it, perform the following steps: \ 
 
 > a) Load the *Zambia* dataset, split it randomly in a *train* and *test* sample (common choice is $\frac{2}{3}$ train and $\frac{1}{3}$ test). For simplicity, you can consider only the continuous variables. \
@@ -369,9 +369,8 @@ class $q$ observations in region $R_m$ and let $q_m=\mbox{argmax}_q p_{mq}$, i.e
 The total risk or error is obtained as $\sum_{m=1}^R\mbox{err}_m$. 
 The deviance and the Gini index have the advantage of being differentiable functions, and hence more amenable to numerical optimization. 
 
-> Exercise: \
+> Exercise (solutions presented in \@ref(CT)): \
 - After having read the documentation of the *rpart* package and having installed it, perform the following steps:\ 
-
 > a) Load the *Iris* dataset already present in R, split it randomly in a *train* and *test* sample (common choice is $\frac{2}{3}$ train and $\frac{1}{3}$ test).\ 
 
 > b) Fit a classification tree with the function rpart() and plot the tree. Have a look at *rpart.plot* package if you want to improve the appearance of the fitted tree.\ 

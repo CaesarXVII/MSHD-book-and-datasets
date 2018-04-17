@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-15">
+<meta name="date" content="2018-04-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -195,6 +195,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="solutions.html"><a href="solutions.html#chapter-3"><i class="fa fa-check"></i><b>5.3</b> Chapter 3</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="solutions.html"><a href="solutions.html#HT"><i class="fa fa-check"></i><b>5.3.1</b> Selection by Hypothesis Testing</a></li>
+<li class="chapter" data-level="5.3.2" data-path="solutions.html"><a href="solutions.html#SIS"><i class="fa fa-check"></i><b>5.3.2</b> Sure Independence Screening</a></li>
+<li class="chapter" data-level="5.3.3" data-path="solutions.html"><a href="solutions.html#PC"><i class="fa fa-check"></i><b>5.3.3</b> PC-simple algorithm</a></li>
+<li class="chapter" data-level="5.3.4" data-path="solutions.html"><a href="solutions.html#RT"><i class="fa fa-check"></i><b>5.3.4</b> Regression Tree</a></li>
+<li class="chapter" data-level="5.3.5" data-path="solutions.html"><a href="solutions.html#CT"><i class="fa fa-check"></i><b>5.3.5</b> Classification Tree</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -1635,6 +1639,518 @@ out_<span class="dv">3</span> <span class="co"># BIC has a harsh penalty that co
 <span class="co"># selects less variables. Moreover we know that, from previous practicals, our residuals inspection</span>
 
 <span class="co"># told us that we had a right tail with respect to the Normal QQ plot (see ebook corrections). </span></code></pre></div>
+</div>
+<div id="SIS" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Sure Independence Screening</h3>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Load the <em>Leukemia</em> dataset.<br />
+</li>
+<li>Split the dataset randomly and create a <em>train</em> and <em>test</em> sample.<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(SIS) <span class="co">#install it if you do not have it</span>
+
+<span class="co"># Leukemia dataset taken from SIS package.</span>
+
+train_set =<span class="st"> </span><span class="kw">data</span>(leukemia.train)
+
+test_set =<span class="st"> </span><span class="kw">data</span>(<span class="st">&quot;leukemia.test&quot;</span>)
+
+train_set =<span class="st"> </span><span class="kw">as.data.frame</span>(train_set)
+
+test_set =<span class="st"> </span><span class="kw">as.data.frame</span>(test_set)
+
+
+X_train =<span class="st"> </span><span class="kw">as.matrix</span>(leukemia.train[,<span class="dv">1</span><span class="op">:</span><span class="dv">7129</span>])
+
+y_train =<span class="st"> </span>leukemia.train[,<span class="dv">7130</span>]
+
+
+X_test =<span class="st"> </span><span class="kw">as.matrix</span>(leukemia.test[,<span class="dv">1</span><span class="op">:</span><span class="dv">7129</span>])
+
+y_test =<span class="st"> </span>leukemia.test[,<span class="dv">7130</span>]</code></pre></div>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>The functions SIS() performs first a screening procedure based on marginal correlations and then applies a penalized method (<em>Chapter 4</em> of the e-book) to obtain the final model. Choose among all the available options (i.e. in terms both of penalized methods and tuning constants) three candidates and evaluate the predictions of the selected models on the <em>test</em> sample. Which penalized method performs best in this specific example after the SIS?</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Model Phase</span>
+
+model_leuk_scad=<span class="kw">SIS</span>(X_train, y_train, <span class="dt">family=</span><span class="st">&#39;binomial&#39;</span>) <span class="co">#SCAD is default</span></code></pre></div>
+<pre><code>## Iter 1 , screening:  3320 
+## Iter 1 , selection:  3320 
+## Iter 1 , conditional-screening:  847 
+## Iter 2 , screening:  847 3320 
+## Iter 2 , selection:  3320 
+## Model already selected</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_leuk_lasso =<span class="st"> </span><span class="kw">SIS</span>(X_train, y_train, <span class="dt">family=</span><span class="st">&#39;binomial&#39;</span>,<span class="dt">penalty =</span> <span class="st">&#39;lasso&#39;</span>)</code></pre></div>
+<pre><code>## Iter 1 , screening:  3320 
+## Iter 1 , selection:  3320 
+## Iter 1 , conditional-screening:  847 
+## Iter 2 , screening:  847 3320 
+## Iter 2 , selection:  847 3320 
+## Maximum number of variables selected</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_leuk_mcp =<span class="st"> </span><span class="kw">SIS</span>(X_train, y_train, <span class="dt">family=</span><span class="st">&#39;binomial&#39;</span>,<span class="dt">penalty =</span> <span class="st">&#39;MCP&#39;</span>)</code></pre></div>
+<pre><code>## Iter 1 , screening:  3320 
+## Iter 1 , selection:  3320 
+## Iter 1 , conditional-screening:  847 
+## Iter 2 , screening:  847 3320 
+## Iter 2 , selection:  3320 
+## Model already selected</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Prediction Phase</span>
+
+pred_scad=<span class="kw">predict</span>(model_leuk_scad,X_test,<span class="dt">type=</span><span class="st">&quot;class&quot;</span>)
+
+<span class="kw">sum</span>(pred_scad <span class="op">==</span><span class="st"> </span>y_test)<span class="op">/</span><span class="dv">34</span> <span class="co">#0.7941176 </span></code></pre></div>
+<pre><code>## [1] 0.7941176</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_lasso=<span class="kw">predict</span>(model_leuk_lasso,X_test,<span class="dt">type=</span><span class="st">&quot;class&quot;</span>)
+
+<span class="kw">sum</span>(pred_lasso <span class="op">==</span><span class="st"> </span>y_test)<span class="op">/</span><span class="dv">34</span> <span class="co">#  0.7941176</span></code></pre></div>
+<pre><code>## [1] 0.7941176</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_mcp=<span class="kw">predict</span>(model_leuk_mcp,X_test,<span class="dt">type=</span><span class="st">&quot;class&quot;</span>)
+
+<span class="kw">sum</span>(pred_mcp <span class="op">==</span><span class="st"> </span>y_test)<span class="op">/</span><span class="dv">34</span> <span class="co"># 0.7941176</span></code></pre></div>
+<pre><code>## [1] 0.7941176</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We got the same predictions for every method. </span>
+
+<span class="co"># SCAD and MCP are near in terms of coefficient estimates but Lasso has one regressor more. </span></code></pre></div>
+</div>
+<div id="PC" class="section level3">
+<h3><span class="header-section-number">5.3.3</span> PC-simple algorithm</h3>
+<blockquote>
+First of all build a simulation setting as explained below:<br />
+- Generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 1000\)</span> and <span class="math inline">\(p = 10\)</span>. Choose the location but set the scale matrix with an autoregressive form <span class="math inline">\(\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}\)</span> with <span class="math inline">\(\sigma_{lm} = \rho^{\mid l - m\mid}\)</span>.  - Fix <span class="math inline">\(\rho = 0.5\)</span> and set the seed equal to 11 (i.e. set.seed(11)).<br />
+- Choose the generating vector <span class="math inline">\(\boldsymbol{\beta }= [3 \; 1.5 \; 0 \; 2 \; rep(0,6)]\)</span>.<br />
+- Generate <span class="math inline">\(\mathbf{\hat{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal. Suppose for simplicity that the errors are uncorrelated.<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Simulation Setting
+
+<span class="kw">require</span>(MASS)
+
+<span class="kw">set.seed</span>(<span class="dv">11</span>)
+
+n =<span class="st"> </span><span class="dv">100</span>
+
+p =<span class="st"> </span><span class="dv">10</span> 
+
+<span class="co"># change rho as you please to inspect other correlations among the predictors</span>
+
+rho =<span class="st"> </span><span class="fl">0.5</span> 
+
+mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
+
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p<span class="op">^</span><span class="dv">2</span>)
+
+sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
+
+
+<span class="co"># Autoregressive structure</span>
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+  
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+    
+    
+    sigma[i,j] =<span class="st"> </span>rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))
+    
+    
+  }
+  
+  
+}
+
+X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)
+
+<span class="kw">dim</span>(X)</code></pre></div>
+<pre><code>## [1] 100  10</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="fl">1.5</span>,<span class="dv">0</span>,<span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">6</span>))
+
+
+y =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) <span class="co">#for us sigma is 1</span></code></pre></div>
+<blockquote>
+Now perform the following passages on your simulated data:<br />
+a) Find the active set <span class="math inline">\(M_{1}\)</span> using the Fisher’s Z transformation and the associated correlation coefficient test (fix <span class="math inline">\(\alpha = 0.05\)</span> for the rest of the exercise).<br />
+
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part a
+
+<span class="co"># Fix alfa at 5% for all the exercise</span>
+
+v_cor =<span class="st"> </span><span class="kw">cor</span>(<span class="dt">x =</span> X,<span class="dt">y =</span> y)
+
+q=<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">10</span>)
+
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) {
+  
+  <span class="cf">if</span>(<span class="kw">sqrt</span>(n<span class="op">-</span><span class="dv">3</span>)<span class="op">*</span><span class="kw">abs</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>v_cor[i])<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>v_cor[i]))) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.96</span> ) {
+    
+    q[i]=<span class="dv">1</span>
+    
+  }
+  
+}
+
+A_<span class="dv">0</span> =<span class="st"> </span>X <span class="co">#Active set zero</span>
+
+<span class="co"># With the first step we select the first 5 variables, we reject H0 so that we have evidence that the</span>
+
+<span class="co"># correlation is different from 0. </span>
+
+A_<span class="dv">1</span> =<span class="st"> </span>X[,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>] <span class="co">#new active set</span></code></pre></div>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Calculate all the partial correlations of order 1 (i.e. one variable at the time) of the active set <span class="math inline">\(M_{1}\)</span>, test them and retrieve <span class="math inline">\(M_{2} \subseteq M_1\)</span> which is the new active set.<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part b
+
+<span class="co"># We can now create the 20x1 vector of first order partial correlation and then apply previous formula</span>
+
+
+P =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">25</span>)
+
+P =<span class="st"> </span><span class="kw">matrix</span>(P,<span class="dt">nrow =</span> <span class="dv">5</span>,<span class="dt">ncol =</span> <span class="dv">5</span>)
+
+
+
+<span class="cf">for</span> (z <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
+  
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
+    
+    <span class="cf">if</span> (i <span class="op">!=</span><span class="st"> </span>z ) {
+      
+      
+      mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(A_<span class="dv">1</span>[,z] <span class="op">~</span><span class="st"> </span>A_<span class="dv">1</span>[,i])
+      
+      e_<span class="dv">1</span> =<span class="st"> </span>A_<span class="dv">1</span>[,z] <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">1</span>[,i])<span class="op">%*%</span>mod_<span class="dv">1</span><span class="op">$</span>coefficients
+      
+      mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>A_<span class="dv">1</span>[,i])
+      
+      e_<span class="dv">2</span> =<span class="st">  </span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">1</span>[,i])<span class="op">%*%</span>mod_<span class="dv">2</span><span class="op">$</span>coefficients
+      
+      
+      P[i,z] =<span class="st"> </span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>) 
+      
+      
+    }
+    
+  }
+  
+  
+}
+
+P =<span class="st"> </span>P <span class="op">+</span><span class="st"> </span><span class="kw">diag</span>(<span class="dv">5</span>)
+
+v_cor =<span class="st"> </span><span class="kw">c</span>(P) <span class="co">#vectorization</span>
+
+<span class="co"># fix alfa at 5% and test the sample correlation.</span>
+
+q=<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">25</span>)
+
+
+<span class="co"># Cardinality of the active set is now 1 because we are evaluating partial correaltions of order 1</span>
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">25</span>) {
+  
+  <span class="cf">if</span>(<span class="kw">sqrt</span>(n<span class="op">-</span><span class="dv">4</span>)<span class="op">*</span><span class="kw">abs</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>v_cor[i])<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>v_cor[i]))) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.96</span> ) {
+    
+    q[i]=<span class="dv">1</span>
+    
+  }
+  
+}
+
+q <span class="co"># variables 3 and 5 are eliminated from the active set</span>
+
+A_<span class="dv">2</span> =<span class="st"> </span>X[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>)]</code></pre></div>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Find the partial correlations of higher order and test them until your reach the condition <span class="math inline">\(M_{m-1} = M_{m}\)</span> which implies the convergence of the PC-simple algorithm. Do you obtain the exact model?</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part c
+
+<span class="co"># Now we need to check 2nd order partial correlation to discriminate.</span>
+
+<span class="co"># Note: we could also update estimation for partial correlation in order to speed up the computations</span>
+
+<span class="co"># but in this easy example is not necessary. </span>
+
+<span class="co"># VARIABLE 1 ACTIVE SET A_2</span>
+
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">3</span>])
+
+e_<span class="dv">1</span> =<span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">2</span>],A_<span class="dv">2</span>[,<span class="dv">3</span>])<span class="op">%*%</span>mod_<span class="dv">1</span><span class="op">$</span>coefficients
+
+mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">3</span>])
+
+e_<span class="dv">2</span> =<span class="st">  </span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">2</span>],A_<span class="dv">2</span>[,<span class="dv">3</span>])<span class="op">%*%</span>mod_<span class="dv">2</span><span class="op">$</span>coefficients
+
+<span class="co"># Cardinality of active set now is two!</span>
+
+<span class="kw">sqrt</span>(n<span class="op">-</span><span class="dv">5</span>)<span class="op">*</span><span class="kw">abs</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>))<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>)))) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.96</span>
+
+<span class="co"># VARIABLE 2 ACTIVE SET A_2</span>
+
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(A_<span class="dv">2</span>[,<span class="dv">2</span>] <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">3</span>])
+
+e_<span class="dv">1</span> =<span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">1</span>],A_<span class="dv">2</span>[,<span class="dv">3</span>])<span class="op">%*%</span>mod_<span class="dv">1</span><span class="op">$</span>coefficients
+
+mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">3</span>])
+
+e_<span class="dv">2</span> =<span class="st">  </span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">1</span>],A_<span class="dv">2</span>[,<span class="dv">3</span>])<span class="op">%*%</span>mod_<span class="dv">2</span><span class="op">$</span>coefficients
+
+<span class="co"># Cardinality of active set now is two!</span>
+
+<span class="kw">sqrt</span>(n<span class="op">-</span><span class="dv">5</span>)<span class="op">*</span><span class="kw">abs</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>))<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>)))) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.96</span>
+
+<span class="co"># VARIABLE 3 ACTIVE SET A_2</span>
+
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">lm</span>(A_<span class="dv">2</span>[,<span class="dv">3</span>] <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">2</span>])
+
+e_<span class="dv">1</span> =<span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">3</span>] <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">1</span>],A_<span class="dv">2</span>[,<span class="dv">2</span>])<span class="op">%*%</span>mod_<span class="dv">1</span><span class="op">$</span>coefficients
+
+mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>A_<span class="dv">2</span>[,<span class="dv">2</span>])
+
+e_<span class="dv">2</span> =<span class="st">  </span>y <span class="op">-</span><span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,n),A_<span class="dv">2</span>[,<span class="dv">1</span>],A_<span class="dv">2</span>[,<span class="dv">2</span>])<span class="op">%*%</span>mod_<span class="dv">2</span><span class="op">$</span>coefficients
+
+<span class="co"># Cardinality of active set now is two!</span>
+
+<span class="kw">sqrt</span>(n<span class="op">-</span><span class="dv">5</span>)<span class="op">*</span><span class="kw">abs</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>))<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">cor</span>(e_<span class="dv">1</span>,e_<span class="dv">2</span>)))) <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.96</span>
+
+<span class="co"># Conclusions: all conditions are true, then the algorithm will not move anymore and we have </span>
+
+<span class="co"># our final model with the original variables c(1,2,4) which is also the exact one. </span></code></pre></div>
+</div>
+<div id="RT" class="section level3">
+<h3><span class="header-section-number">5.3.4</span> Regression Tree</h3>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Load the <em>Zambia</em> dataset, split it randomly in a <em>train</em> and <em>test</em> sample (common choice is <span class="math inline">\(\frac{2}{3}\)</span> train and <span class="math inline">\(\frac{1}{3}\)</span> test). For simplicity, you can consider only the continuous variables.<br />
+</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(rpart)
+
+<span class="kw">load</span>(<span class="st">&quot;malnutrion_zambia_cleaned.Rda&quot;</span>)
+
+
+data_zambia =<span class="st"> </span>data_zambia[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>,<span class="dv">21</span>,<span class="dv">22</span>,<span class="dv">24</span>)] <span class="co">#exclude the factors from the analysis</span>
+
+X =<span class="st"> </span><span class="kw">as.matrix</span>(data_zambia[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])
+
+y =<span class="st"> </span>data_zambia[,<span class="dv">1</span>]
+
+
+## Part a
+
+ind =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">1927</span>
+
+index =<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> ind,<span class="dt">size =</span> <span class="dv">1284</span>,<span class="dt">replace =</span> F)
+
+data_zambia_train=<span class="st"> </span>data_zambia[index,]
+
+data_zambia_test=<span class="st"> </span>data_zambia[<span class="op">-</span>index,]</code></pre></div>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a regression tree with the function rpart() and plot the tree. Have a look at <em>rpart.plot</em> package if you want to improve the appearance of the fitted tree.  </li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part b
+
+<span class="co"># grow tree </span>
+
+<span class="kw">attach</span>(data_zambia_train)
+
+fit &lt;-<span class="st"> </span><span class="kw">rpart</span>(<span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span><span class="op">~</span><span class="st"> </span>
+<span class="st">               `</span><span class="dt">Breastfeeding duration (months)</span><span class="st">`</span> <span class="op">+</span><span class="st"> `</span><span class="dt">Age of the child (months)</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Age of the mother (years)</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">BMI mother</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Heigth mother (meter)</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Weight mother (kg)</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Wealth index factor score</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Child weight at birth (kg)</span><span class="st">`</span><span class="op">+</span><span class="st">`</span><span class="dt">Interval between births</span><span class="st">`</span>, 
+             <span class="dt">method=</span><span class="st">&quot;anova&quot;</span>, <span class="dt">data=</span>data_zambia_train)
+
+<span class="kw">printcp</span>(fit) <span class="co"># display the results </span></code></pre></div>
+<pre><code>## 
+## Regression tree:
+## rpart(formula = `Height for age sd` ~ `Breastfeeding duration (months)` + 
+##     `Age of the child (months)` + `Age of the mother (years)` + 
+##     `BMI mother` + `Heigth mother (meter)` + `Weight mother (kg)` + 
+##     `Wealth index factor score` + `Child weight at birth (kg)` + 
+##     `Interval between births`, data = data_zambia_train, method = &quot;anova&quot;)
+## 
+## Variables actually used in tree construction:
+## [1] Age of the child (months)  Child weight at birth (kg)
+## [3] Heigth mother (meter)      Interval between births   
+## [5] Wealth index factor score  Weight mother (kg)        
+## 
+## Root node error: 3949.2/1284 = 3.0757
+## 
+## n= 1284 
+## 
+##         CP nsplit rel error  xerror     xstd
+## 1 0.085434      0   1.00000 1.00140 0.049312
+## 2 0.027354      1   0.91457 0.92121 0.043830
+## 3 0.014385      2   0.88721 0.91542 0.044182
+## 4 0.013865      3   0.87283 0.94016 0.045852
+## 5 0.011370      4   0.85896 0.94585 0.046185
+## 6 0.010284      5   0.84759 0.94109 0.045973
+## 7 0.010160      7   0.82702 0.94040 0.045758
+## 8 0.010000      8   0.81686 0.94034 0.045801</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(fit) <span class="co"># visualize cross-validation results </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># summary(fit) detailed summary of splits</span>
+
+<span class="kw">library</span>(rattle)
+<span class="kw">library</span>(rpart.plot)
+<span class="kw">library</span>(RColorBrewer)
+
+<span class="kw">fancyRpartPlot</span>(fit)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-66-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(data_zambia_train)</code></pre></div>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>After having pruned the tree, evaluate its prediction on the <em>test</em> sample (i.e. use predict() on a tree object.</li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part c
+
+<span class="kw">attach</span>(data_zambia_train)
+
+<span class="co"># prune the tree</span>
+
+fit<span class="op">$</span>cptable[<span class="kw">which.min</span>(fit<span class="op">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>]</code></pre></div>
+<pre><code>## [1] 0.01438482</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit<span class="op">$</span>cptable</code></pre></div>
+<pre><code>##           CP nsplit rel error    xerror       xstd
+## 1 0.08543400      0 1.0000000 1.0013950 0.04931249
+## 2 0.02735374      1 0.9145660 0.9212097 0.04382993
+## 3 0.01438482      2 0.8872123 0.9154191 0.04418249
+## 4 0.01386532      3 0.8728274 0.9401599 0.04585160
+## 5 0.01137031      4 0.8589621 0.9458524 0.04618497
+## 6 0.01028396      5 0.8475918 0.9410920 0.04597282
+## 7 0.01016050      7 0.8270239 0.9404004 0.04575772
+## 8 0.01000000      8 0.8168634 0.9403443 0.04580068</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pfit&lt;-<span class="st"> </span><span class="kw">prune</span>(fit, <span class="dt">cp=</span><span class="fl">0.02406722</span>) <span class="co"># from cptable </span>
+
+<span class="kw">fancyRpartPlot</span>(pfit) </code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Notice the different tree after pruning: Age of the child and Weight of the mother stays relevant</span>
+
+<span class="co"># while other variables disappear. </span>
+
+Prediction &lt;-<span class="st"> </span><span class="kw">predict</span>(pfit, data_zambia_test, <span class="dt">type =</span> <span class="st">&quot;vector&quot;</span>) 
+
+<span class="co"># We can use the mean squared error to evaluate the predictions</span>
+
+mse =<span class="st"> </span><span class="kw">sum</span>((Prediction <span class="op">-</span><span class="st"> </span>data_zambia_test<span class="op">$</span><span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span>)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">length</span>(Prediction)
+
+<span class="kw">detach</span>(data_zambia_train)
+
+<span class="co"># Now we should find a benchmark to understand how well is doing the Regression Tree</span>
+
+<span class="co"># In this case we will use linear regression plus model selection thanks to FDR rule.</span>
+
+X_train =<span class="st"> </span><span class="kw">as.matrix</span>(data_zambia_train[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])
+
+
+mod_zambia =<span class="st"> </span><span class="kw">lm</span>(data_zambia_train[,<span class="dv">1</span>] <span class="op">~</span><span class="st"> </span>X_train, <span class="dt">data =</span> data_zambia_train)
+
+object =<span class="st"> </span><span class="kw">summary</span>(mod_zambia)
+
+<span class="co"># Fix a level q = 0.05 of FDR (see Hochberg&amp;Benjamini), order the p-values and we reject three H0 thus</span>
+
+<span class="co"># selecting variables: Breastfeeding duration, Weight at birth and wealth index factor scores.</span>
+
+mod_zambia_final =<span class="st"> </span><span class="kw">lm</span>(data_zambia_train[,<span class="dv">1</span>] <span class="op">~</span><span class="st"> </span>X_train[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">7</span>,<span class="dv">8</span>)], <span class="dt">data =</span> data_zambia_train)
+
+X_test =<span class="st"> </span><span class="kw">as.matrix</span>(data_zambia_test[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">8</span>,<span class="dv">9</span>)])
+
+predictions_linear =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dv">643</span>),X_test)<span class="op">%*%</span>mod_zambia_final<span class="op">$</span>coefficients
+
+mse_linear =<span class="st"> </span><span class="kw">sum</span>((predictions_linear <span class="op">-</span><span class="st"> </span>data_zambia_test<span class="op">$</span><span class="st">`</span><span class="dt">Height for age sd</span><span class="st">`</span>)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">length</span>(Prediction)
+
+<span class="co"># Similar to the one of the Regression Tree so there is not a big improvement.</span>
+
+mse</code></pre></div>
+<pre><code>## [1] 2.401796</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mse_linear</code></pre></div>
+<pre><code>## [1] 2.367926</code></pre>
+</div>
+<div id="CT" class="section level3">
+<h3><span class="header-section-number">5.3.5</span> Classification Tree</h3>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Load the <em>Iris</em> dataset already present in R, split it randomly in a <em>train</em> and <em>test</em> sample (common choice is <span class="math inline">\(\frac{2}{3}\)</span> train and <span class="math inline">\(\frac{1}{3}\)</span> test). </li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part a
+
+data_iris =<span class="st"> </span>iris
+
+ind =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">150</span>
+
+index =<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> ind,<span class="dt">size =</span> <span class="dv">100</span>,<span class="dt">replace =</span> F)
+
+train=<span class="st"> </span>data_iris[index,]
+
+test=<span class="st"> </span>data_iris[<span class="op">-</span>index,]</code></pre></div>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a classification tree with the function rpart() and plot the tree. Have a look at <em>rpart.plot</em> package if you want to improve the appearance of the fitted tree. </li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part b
+
+<span class="kw">attach</span>(train) 
+
+fit_iris =<span class="st"> </span><span class="kw">rpart</span>(Species <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width,
+            <span class="dt">data=</span>train,
+            <span class="dt">method=</span><span class="st">&quot;class&quot;</span>)
+
+
+<span class="kw">printcp</span>(fit_iris) <span class="co"># display the results </span></code></pre></div>
+<pre><code>## 
+## Classification tree:
+## rpart(formula = Species ~ Sepal.Length + Sepal.Width + Petal.Length + 
+##     Petal.Width, data = train, method = &quot;class&quot;)
+## 
+## Variables actually used in tree construction:
+## [1] Petal.Length Petal.Width 
+## 
+## Root node error: 63/100 = 0.63
+## 
+## n= 100 
+## 
+##        CP nsplit rel error  xerror     xstd
+## 1 0.50794      0  1.000000 1.07937 0.074044
+## 2 0.42857      1  0.492063 0.49206 0.073412
+## 3 0.01000      2  0.063492 0.12698 0.043062</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotcp</span>(fit_iris) <span class="co"># visualize cross-validation results </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fancyRpartPlot</span>(fit_iris)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-69-2.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach</span>(train)</code></pre></div>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>After having pruned the tree, evaluate its prediction on the <em>test</em> sample (i.e. use predict() on a tree object). </li>
+</ol>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part c
+
+<span class="co"># prune the tree </span>
+
+pfit_iris&lt;-<span class="st"> </span><span class="kw">prune</span>(fit_iris, <span class="dt">cp=</span>   fit<span class="op">$</span>cptable[<span class="kw">which.min</span>(fit<span class="op">$</span>cptable[,<span class="st">&quot;xerror&quot;</span>]),<span class="st">&quot;CP&quot;</span>])
+
+<span class="kw">fancyRpartPlot</span>(pfit_iris)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Prediction &lt;-<span class="st"> </span><span class="kw">predict</span>(fit_iris, test, <span class="dt">type =</span> <span class="st">&quot;class&quot;</span>) <span class="co">#pruned or not pruned trees are equal in this example</span>
+
+t =<span class="st"> </span>Prediction <span class="op">==</span><span class="st"> </span>test<span class="op">$</span>Species
+
+<span class="kw">sum</span>(t)<span class="op">/</span><span class="kw">length</span>(test<span class="op">$</span>Species)</code></pre></div>
+<pre><code>## [1] 0.96</code></pre>
 
 </div>
 </div>

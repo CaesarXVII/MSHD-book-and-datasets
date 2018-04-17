@@ -1394,5 +1394,473 @@ out_3 # BIC has a harsh penalty that correct AIC tendency to overfit (in this ap
 
 ```
   
+### Sure Independence Screening {#SIS}  
+
+> a) Load the *Leukemia* dataset.\
+> b) Split the dataset randomly and create a *train* and *test* sample.\
+
+```{r, warning=FALSE}
+
+require(SIS) #install it if you do not have it
+
+# Leukemia dataset taken from SIS package.
+
+train_set = data(leukemia.train)
+
+test_set = data("leukemia.test")
+
+train_set = as.data.frame(train_set)
+
+test_set = as.data.frame(test_set)
+
+
+X_train = as.matrix(leukemia.train[,1:7129])
+
+y_train = leukemia.train[,7130]
+
+
+X_test = as.matrix(leukemia.test[,1:7129])
+
+y_test = leukemia.test[,7130]
+
+```
+
+> c) The functions SIS() performs first a screening procedure based on marginal correlations and then applies a penalized method (*Chapter 4* of the e-book) to obtain the final model. Choose among all the available options (i.e. in terms both of penalized methods and tuning constants) three candidates and evaluate the predictions of the selected models on the *test* sample. Which penalized method performs best in this specific example after the SIS?
+
+```{r, warning=FALSE}
+
+# Model Phase
+
+model_leuk_scad=SIS(X_train, y_train, family='binomial') #SCAD is default
+
+model_leuk_lasso = SIS(X_train, y_train, family='binomial',penalty = 'lasso')
+
+model_leuk_mcp = SIS(X_train, y_train, family='binomial',penalty = 'MCP')
+
+# Prediction Phase
+
+pred_scad=predict(model_leuk_scad,X_test,type="class")
+
+sum(pred_scad == y_test)/34 #0.7941176 
+
+pred_lasso=predict(model_leuk_lasso,X_test,type="class")
+
+sum(pred_lasso == y_test)/34 #  0.7941176
+
+pred_mcp=predict(model_leuk_mcp,X_test,type="class")
+
+sum(pred_mcp == y_test)/34 # 0.7941176
+
+# We got the same predictions for every method. 
+
+# SCAD and MCP are near in terms of coefficient estimates but Lasso has one regressor more. 
+
+```
+
+### PC-simple algorithm{#PC}
+
+> First of all build a simulation setting as explained below:\
+- Generate from a MVN (multivariate normal) a matrix $\mathbf{X_{n*p}}$ with $n = 1000$ and $p = 10$. Choose the location but set the scale matrix with an autoregressive form $\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}$  with $\sigma_{lm} = \rho^{\mid l - m\mid}$.\ 
+- Fix $\rho = 0.5$ and set the seed equal to 11 (i.e. set.seed(11)).\
+- Choose the generating vector $\boldsymbol{\beta }= [3 \; 1.5 \; 0 \; 2 \; rep(0,6)]$.\
+- Generate $\mathbf{\hat{y}}$ thanks to the relation $\mathbf{y} =  \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}$ where $\epsilon_{i}$ is a standard normal. Suppose for simplicity that the errors are uncorrelated.\
+
+```{r}
+
+## Simulation Setting
+
+require(MASS)
+
+set.seed(11)
+
+n = 100
+
+p = 10 
+
+# change rho as you please to inspect other correlations among the predictors
+
+rho = 0.5 
+
+mu = rep(1,p)
+
+sigma = rep(0,p^2)
+
+sigma = matrix(data = sigma, ncol = p,nrow = p)
+
+
+# Autoregressive structure
+
+for (i in 1:p) {
   
+  for (j in 1:p) {
+    
+    
+    sigma[i,j] = rho^(abs(i-j))
+    
+    
+  }
+  
+  
+}
+
+X = mvrnorm(n,mu,sigma)
+
+dim(X)
+
+beta = c(3,1.5,0,2,rep(0,6))
+
+
+y = X%*%beta + rnorm(n,0,1) #for us sigma is 1
+
+```
+
+> Now perform the following passages on your simulated data: \
+a) Find the active set $M_{1}$ using the Fisher's Z transformation and the associated correlation coefficient test (fix $\alpha = 0.05$ for the rest of the exercise).\
+
+```{r, eval=FALSE}
+
+## Part a
+
+# Fix alfa at 5% for all the exercise
+
+v_cor = cor(x = X,y = y)
+
+q=rep(0,10)
+
+
+for (i in 1:10) {
+  
+  if(sqrt(n-3)*abs(1/2*log((1 + v_cor[i])/(1-v_cor[i]))) > 1.96 ) {
+    
+    q[i]=1
+    
+  }
+  
+}
+
+A_0 = X #Active set zero
+
+# With the first step we select the first 5 variables, we reject H0 so that we have evidence that the
+
+# correlation is different from 0. 
+
+A_1 = X[,1:5] #new active set
+
+```
+
+> b) Calculate all the partial correlations of order 1 (i.e. one variable at the time) of the active set $M_{1}$, test them and retrieve $M_{2} \subseteq M_1$ which is the new active set.\
+
+```{r, eval=FALSE}
+
+## Part b
+
+# We can now create the 20x1 vector of first order partial correlation and then apply previous formula
+
+
+P = rep(0,25)
+
+P = matrix(P,nrow = 5,ncol = 5)
+
+
+
+for (z in 1:5) {
+  
+  for (i in 1:5) {
+    
+    if (i != z ) {
+      
+      
+      mod_1 = lm(A_1[,z] ~ A_1[,i])
+      
+      e_1 = A_1[,z] - cbind(rep(1,n),A_1[,i])%*%mod_1$coefficients
+      
+      mod_2 = lm(y ~ A_1[,i])
+      
+      e_2 =  y - cbind(rep(1,n),A_1[,i])%*%mod_2$coefficients
+      
+      
+      P[i,z] = cor(e_1,e_2) 
+      
+      
+    }
+    
+  }
+  
+  
+}
+
+P = P + diag(5)
+
+v_cor = c(P) #vectorization
+
+# fix alfa at 5% and test the sample correlation.
+
+q=rep(0,25)
+
+
+# Cardinality of the active set is now 1 because we are evaluating partial correaltions of order 1
+
+for (i in 1:25) {
+  
+  if(sqrt(n-4)*abs(1/2*log((1 + v_cor[i])/(1-v_cor[i]))) > 1.96 ) {
+    
+    q[i]=1
+    
+  }
+  
+}
+
+q # variables 3 and 5 are eliminated from the active set
+
+A_2 = X[,c(1,2,4)]
+
+```
+
+> c) Find the partial correlations of higher order and test them until your reach the condition $M_{m-1} = M_{m}$ which implies the convergence of the PC-simple algorithm. Do you obtain the exact model?
+
+```{r, eval=FALSE}
+
+## Part c
+
+# Now we need to check 2nd order partial correlation to discriminate.
+
+# Note: we could also update estimation for partial correlation in order to speed up the computations
+
+# but in this easy example is not necessary. 
+
+# VARIABLE 1 ACTIVE SET A_2
+
+mod_1 = lm(A_2[,1] ~ A_2[,2] + A_2[,3])
+
+e_1 = A_2[,1] - cbind(rep(1,n),A_2[,2],A_2[,3])%*%mod_1$coefficients
+
+mod_2 = lm(y ~ A_2[,2] + A_2[,3])
+
+e_2 =  y - cbind(rep(1,n),A_2[,2],A_2[,3])%*%mod_2$coefficients
+
+# Cardinality of active set now is two!
+
+sqrt(n-5)*abs(1/2*log((1 + cor(e_1,e_2))/(1-cor(e_1,e_2)))) > 1.96
+
+# VARIABLE 2 ACTIVE SET A_2
+
+mod_1 = lm(A_2[,2] ~ A_2[,1] + A_2[,3])
+
+e_1 = A_2[,2] - cbind(rep(1,n),A_2[,1],A_2[,3])%*%mod_1$coefficients
+
+mod_2 = lm(y ~ A_2[,1] + A_2[,3])
+
+e_2 =  y - cbind(rep(1,n),A_2[,1],A_2[,3])%*%mod_2$coefficients
+
+# Cardinality of active set now is two!
+
+sqrt(n-5)*abs(1/2*log((1 + cor(e_1,e_2))/(1-cor(e_1,e_2)))) > 1.96
+
+# VARIABLE 3 ACTIVE SET A_2
+
+mod_1 = lm(A_2[,3] ~ A_2[,1] + A_2[,2])
+
+e_1 = A_2[,3] - cbind(rep(1,n),A_2[,1],A_2[,2])%*%mod_1$coefficients
+
+mod_2 = lm(y ~ A_2[,1] + A_2[,2])
+
+e_2 =  y - cbind(rep(1,n),A_2[,1],A_2[,2])%*%mod_2$coefficients
+
+# Cardinality of active set now is two!
+
+sqrt(n-5)*abs(1/2*log((1 + cor(e_1,e_2))/(1-cor(e_1,e_2)))) > 1.96
+
+# Conclusions: all conditions are true, then the algorithm will not move anymore and we have 
+
+# our final model with the original variables c(1,2,4) which is also the exact one. 
+
+```
+
+### Regression Tree {#RT}
+
+> a) Load the *Zambia* dataset, split it randomly in a *train* and *test* sample (common choice is $\frac{2}{3}$ train and $\frac{1}{3}$ test). For simplicity, you can consider only the continuous variables. \
+
+```{r, warning=FALSE}
+
+require(rpart)
+
+load("malnutrion_zambia_cleaned.Rda")
+
+
+data_zambia = data_zambia[,c(1:7,21,22,24)] #exclude the factors from the analysis
+
+X = as.matrix(data_zambia[,2:10])
+
+y = data_zambia[,1]
+
+
+## Part a
+
+ind = 1:1927
+
+index = sample(x = ind,size = 1284,replace = F)
+
+data_zambia_train= data_zambia[index,]
+
+data_zambia_test= data_zambia[-index,]
+
+```
+
+
+> b) Fit a regression tree with the function rpart() and plot the tree. Have a look at *rpart.plot* package if you want to improve the appearance of the fitted tree. \ 
+
+```{r, warning=FALSE}
+
+## Part b
+
+# grow tree 
+
+attach(data_zambia_train)
+
+fit <- rpart(`Height for age sd`~ 
+               `Breastfeeding duration (months)` + `Age of the child (months)`+`Age of the mother (years)`+`BMI mother`+`Heigth mother (meter)`+`Weight mother (kg)`+`Wealth index factor score`+`Child weight at birth (kg)`+`Interval between births`, 
+             method="anova", data=data_zambia_train)
+
+printcp(fit) # display the results 
+plotcp(fit) # visualize cross-validation results 
+# summary(fit) detailed summary of splits
+
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+
+fancyRpartPlot(fit)
+
+detach(data_zambia_train)
+
+```
+
+
+
+> c) After having pruned the tree, evaluate its prediction on the *test* sample (i.e. use predict() on a tree object.
+
+```{r, warning=FALSE}
+
+## Part c
+
+attach(data_zambia_train)
+
+# prune the tree
+
+fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"]
+
+fit$cptable
+
+pfit<- prune(fit, cp=0.02406722) # from cptable 
+
+fancyRpartPlot(pfit) 
+
+# Notice the different tree after pruning: Age of the child and Weight of the mother stays relevant
+
+# while other variables disappear. 
+
+Prediction <- predict(pfit, data_zambia_test, type = "vector") 
+
+# We can use the mean squared error to evaluate the predictions
+
+mse = sum((Prediction - data_zambia_test$`Height for age sd`)^2)/length(Prediction)
+
+detach(data_zambia_train)
+
+# Now we should find a benchmark to understand how well is doing the Regression Tree
+
+# In this case we will use linear regression plus model selection thanks to FDR rule.
+
+X_train = as.matrix(data_zambia_train[,2:10])
+
+
+mod_zambia = lm(data_zambia_train[,1] ~ X_train, data = data_zambia_train)
+
+object = summary(mod_zambia)
+
+# Fix a level q = 0.05 of FDR (see Hochberg&Benjamini), order the p-values and we reject three H0 thus
+
+# selecting variables: Breastfeeding duration, Weight at birth and wealth index factor scores.
+
+mod_zambia_final = lm(data_zambia_train[,1] ~ X_train[,c(1,7,8)], data = data_zambia_train)
+
+X_test = as.matrix(data_zambia_test[,c(2,8,9)])
+
+predictions_linear = cbind(rep(1,643),X_test)%*%mod_zambia_final$coefficients
+
+mse_linear = sum((predictions_linear - data_zambia_test$`Height for age sd`)^2)/length(Prediction)
+
+# Similar to the one of the Regression Tree so there is not a big improvement.
+
+mse
+
+mse_linear
+
+```
+
+
+### Classification Tree {#CT}
+
+> a) Load the *Iris* dataset already present in R, split it randomly in a *train* and *test* sample (common choice is $\frac{2}{3}$ train and $\frac{1}{3}$ test).\ 
+
+```{r, warning=FALSE}
+
+## Part a
+
+data_iris = iris
+
+ind = 1:150
+
+index = sample(x = ind,size = 100,replace = F)
+
+train= data_iris[index,]
+
+test= data_iris[-index,]
+
+```
+
+
+> b) Fit a classification tree with the function rpart() and plot the tree. Have a look at *rpart.plot* package if you want to improve the appearance of the fitted tree.\ 
+
+```{r, warning=FALSE}
+
+## Part b
+
+attach(train) 
+
+fit_iris = rpart(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+            data=train,
+            method="class")
+
+
+printcp(fit_iris) # display the results 
+plotcp(fit_iris) # visualize cross-validation results 
+
+fancyRpartPlot(fit_iris)
+
+detach(train)
+
+```
+
+
+> c) After having pruned the tree, evaluate its prediction on the *test* sample (i.e. use predict() on a tree object).\ 
+
+```{r, warning=FALSE}
+
+## Part c
+
+# prune the tree 
+
+pfit_iris<- prune(fit_iris, cp=   fit$cptable[which.min(fit$cptable[,"xerror"]),"CP"])
+
+fancyRpartPlot(pfit_iris)
+
+Prediction <- predict(fit_iris, test, type = "class") #pruned or not pruned trees are equal in this example
+
+t = Prediction == test$Species
+
+sum(t)/length(test$Species)
+
+```
+
 

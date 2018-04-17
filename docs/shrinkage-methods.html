@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-15">
+<meta name="date" content="2018-04-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -195,6 +195,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="solutions.html"><a href="solutions.html#chapter-3"><i class="fa fa-check"></i><b>5.3</b> Chapter 3</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="solutions.html"><a href="solutions.html#HT"><i class="fa fa-check"></i><b>5.3.1</b> Selection by Hypothesis Testing</a></li>
+<li class="chapter" data-level="5.3.2" data-path="solutions.html"><a href="solutions.html#SIS"><i class="fa fa-check"></i><b>5.3.2</b> Sure Independence Screening</a></li>
+<li class="chapter" data-level="5.3.3" data-path="solutions.html"><a href="solutions.html#PC"><i class="fa fa-check"></i><b>5.3.3</b> PC-simple algorithm</a></li>
+<li class="chapter" data-level="5.3.4" data-path="solutions.html"><a href="solutions.html#RT"><i class="fa fa-check"></i><b>5.3.4</b> Regression Tree</a></li>
+<li class="chapter" data-level="5.3.5" data-path="solutions.html"><a href="solutions.html#CT"><i class="fa fa-check"></i><b>5.3.5</b> Classification Tree</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -295,7 +299,7 @@ and remains a convex optimization problem. Actually, the LARS algorithm can be u
 \end{equation}\]</span>
 <p>the adpative lasso estimator is <span class="math inline">\(\left[\hat{\beta}_j(\lambda,\gamma)\right]_{j=1,\ldots,p}\)</span> with <span class="math inline">\(\hat{\beta}_j(\lambda,\gamma)=\tilde{\beta}_j(\lambda)/w_j^{\gamma}\)</span>.</p>
 <p>As with the lasso, the question of the choice of the tunning parameters is crucial. Since there are two, ideally all combiations of <span class="math inline">\((\lambda,\gamma)\)</span> should be evaluated. Hence, for a given <span class="math inline">\(\gamma\)</span>, <span class="math inline">\(\lambda\)</span> is optimized using an out-of-sample validation measure such as 10-fold CV or the <span class="math inline">\(C_p\)</span> to get <span class="math inline">\(\lambda_{\gamma}\)</span> and in a second layer, <span class="math inline">\(\gamma\)</span> is also optimized (actually <span class="math inline">\((\gamma,\lambda_{\gamma})\)</span> is optimized in <span class="math inline">\(\gamma\)</span>) again using an out-of-sample validation measure such as 10-fold CV or the <span class="math inline">\(C_p\)</span>. The choice for the latter does not have to be the same for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\gamma\)</span>.</p>
-The adaptive lasso is a <em>two-stage approach</em>, with at the first stage a chosen initial estimator which produces a single set of weights <span class="math inline">\(w_j^{\gamma}\)</span> which are held constant (for fixed <span class="math inline">\(\gamma\)</span>) across all values of <span class="math inline">\(\lambda\)</span>. An alternative approach, known as a <em>pathwise approach</em> is to let the weights change with <span class="math inline">\(\lambda\)</span>: <span class="math inline">\(w_j^{\gamma}:=w_j^{\gamma}\left(\hat{\beta}_j\right)\)</span>. A notable example is the <em>relaxed</em> lasso of <span class="citation">Meinshausen (<a href="#ref-Mein:07">2007</a>)</span> which, for <span class="math inline">\(\lambda\geq 0\)</span> and <span class="math inline">\(0&lt;\phi\leq 1\)</span> is given by
+The adaptive lasso is a <em>two-stage approach</em>, with at the first stage a chosen initial estimator which produces a single set of weights <span class="math inline">\(w_j^{\gamma}\)</span> which are held constant (for fixed <span class="math inline">\(\gamma\)</span>) across all values of <span class="math inline">\(\lambda\)</span>. An alternative approach, known as a <em>pathwise approach</em> is to let the weights change with <span class="math inline">\(\lambda\)</span>: <span class="math inline">\(w_j^{\gamma\lambda}:=w_j^{\gamma\lambda}\left(\hat{\beta}_j\right)\)</span>. A notable example is the <em>relaxed</em> lasso of <span class="citation">Meinshausen (<a href="#ref-Mein:07">2007</a>)</span> which, for <span class="math inline">\(\lambda\geq 0\)</span> and <span class="math inline">\(0&lt;\phi\leq 1\)</span> is given by
 <span class="math display">\[\begin{equation}
 \hat{\boldsymbol{\beta}}(\lambda,\phi)=\mbox{argmin}_{\boldsymbol{\beta}}\left\Vert\mathbf{y}-\sum_{j=1}^p\mathbf{x}_j{\beta}_jI\left(j\in \mathcal{A}_{\lambda}\right)\right\Vert^2-\phi\lambda\Vert\boldsymbol{\beta}\Vert_1
 \end{equation}\]</span>

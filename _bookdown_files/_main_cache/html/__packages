@@ -11,3 +11,8 @@ glmnet
 intervals
 survival
 selectiveInference
+SIS
+rpart
+rattle
+rpart.plot
+RColorBrewer
