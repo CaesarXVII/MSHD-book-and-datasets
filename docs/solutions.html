@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-17">
+<meta name="date" content="2018-04-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -199,6 +199,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3.3" data-path="solutions.html"><a href="solutions.html#PC"><i class="fa fa-check"></i><b>5.3.3</b> PC-simple algorithm</a></li>
 <li class="chapter" data-level="5.3.4" data-path="solutions.html"><a href="solutions.html#RT"><i class="fa fa-check"></i><b>5.3.4</b> Regression Tree</a></li>
 <li class="chapter" data-level="5.3.5" data-path="solutions.html"><a href="solutions.html#CT"><i class="fa fa-check"></i><b>5.3.5</b> Classification Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="solutions.html"><a href="solutions.html#chapter-4"><i class="fa fa-check"></i><b>5.4</b> Chapter 4</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="solutions.html"><a href="solutions.html#Ridge"><i class="fa fa-check"></i><b>5.4.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="5.4.2" data-path="solutions.html"><a href="solutions.html#lasso"><i class="fa fa-check"></i><b>5.4.2</b> Lasso</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -2151,6 +2155,207 @@ t =<span class="st"> </span>Prediction <span class="op">==</span><span class="st
 
 <span class="kw">sum</span>(t)<span class="op">/</span><span class="kw">length</span>(test<span class="op">$</span>Species)</code></pre></div>
 <pre><code>## [1] 0.96</code></pre>
+</div>
+</div>
+<div id="chapter-4" class="section level2">
+<h2><span class="header-section-number">5.4</span> Chapter 4</h2>
+<div id="Ridge" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> Ridge Regression</h3>
+<ul>
+<li>Use the function <em>glmnet()</em> to perform a Ridge regression on <em>Zambia</em> dataset, plot the values as a function of <span class="math inline">\(\lambda\)</span> and comment on the results.<br />
+</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(glmnet)
+
+<span class="kw">load</span>(<span class="st">&quot;malnutrion_zambia_cleaned.Rda&quot;</span>)
+
+
+data_zambia =<span class="st"> </span>data_zambia[,<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">7</span>,<span class="dv">21</span>,<span class="dv">22</span>,<span class="dv">24</span>)] <span class="co">#exclude the factors from the analysis</span>
+
+X =<span class="st"> </span><span class="kw">as.matrix</span>(data_zambia[,<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>])
+
+y =<span class="st"> </span>data_zambia[,<span class="dv">1</span>]
+
+## Part a
+
+<span class="co"># Ridge penalty is obtained with parameter alpha = 0</span>
+
+mod_pen_L2 =<span class="st"> </span><span class="kw">glmnet</span>(X,y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">alpha =</span> <span class="dv">0</span>)
+
+<span class="kw">plot</span>(mod_pen_L2, <span class="dt">xvar=</span><span class="st">&quot;lambda&quot;</span>) <span class="co">#more smoothed, no model selection property just shrinkage</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># mod_pen_L2$beta shrinked but all present</span></code></pre></div>
+<ul>
+<li>Use the function <em>cv.glmnet()</em> to perform model selection based on 10-fold Cross Validation (i.e. method to select the <span class="math inline">\(\lambda\)</span> parameter), plot the results and comment the graph that you obtain. Which values of <span class="math inline">\(\lambda\)</span> are shown by default?<br />
+</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part b
+
+<span class="co"># Selection based on 10 fold CV</span>
+
+cv.zero_L2 &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(X,y, <span class="dt">alpha=</span><span class="dv">0</span>) <span class="co">#a way in which you can select lambda (10k CV)</span>
+
+cv.zero_L2<span class="op">$</span>lambda.min</code></pre></div>
+<pre><code>## [1] 0.08504366</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(cv.zero_L2) </code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The two vertical lines are respectively: the value of lambda that minimizes the CV error curve and </span>
+
+<span class="co"># the value lambda.1SE which is one standard error from lambda.min on the right.</span></code></pre></div>
+<ul>
+<li>Use the function <em>predict()</em> to retrieve the final model estimates and perform a simple linear model on the same covariates, what can you conclude?</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part c
+
+<span class="co"># Easier with predict rather than check all the order based on the single value of lambda</span>
+
+### MESSAGE FROM HASTIE AND TIBSHIRANI <span class="al">###</span>
+
+<span class="co"># Use directly lambda.min it is prone to errors</span>
+
+<span class="co"># </span><span class="al">WARNING</span><span class="co">: use with care. Do not supply a single value for lambda (for predictions after CV use predict() instead). </span>
+
+<span class="co"># Supply instead a decreasing sequence of lambda values. glmnet relies on its warms starts for speed, and its often </span>
+
+<span class="co"># faster to fit a whole path than compute a single fit.</span>
+
+
+coef_L2_min =<span class="st"> </span><span class="kw">predict</span>(cv.zero_L2,<span class="dt">type=</span><span class="st">&quot;coefficient&quot;</span>,<span class="dt">s =</span> <span class="st">&quot;lambda.min&quot;</span>)
+
+coef_L2_1SE =<span class="st"> </span><span class="kw">predict</span>(cv.zero_L2,<span class="dt">type=</span><span class="st">&quot;coefficient&quot;</span>)  <span class="co">#default is lambda.1SE</span>
+
+model_linear =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>.,<span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>)])
+
+<span class="kw">summary</span>(model_linear)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ ., data = data_zambia[, c(2:10)])
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.4167 -0.9869 -0.0761  0.8483  7.9208 
+## 
+## Coefficients:
+##                                     Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                       -4.646e+00  5.439e+00  -0.854   0.3931
+## `Breastfeeding duration (months)` -5.273e-02  6.866e-03  -7.681 2.50e-14
+## `Age of the child (months)`       -5.574e-03  2.928e-03  -1.904   0.0571
+## `Age of the mother (years)`        1.170e-02  6.485e-03   1.804   0.0715
+## `BMI mother`                      -8.108e-02  1.186e-01  -0.683   0.4944
+## `Heigth mother (meter)`            1.348e+00  3.423e+00   0.394   0.6938
+## `Weight mother (kg)`               4.251e-02  4.674e-02   0.909   0.3632
+## `Wealth index factor score`        1.261e-06  3.968e-07   3.178   0.0015
+## `Child weight at birth (kg)`       2.851e-01  5.813e-02   4.904 1.02e-06
+## `Interval between births`          3.250e-03  1.987e-03   1.636   0.1021
+##                                      
+## (Intercept)                          
+## `Breastfeeding duration (months)` ***
+## `Age of the child (months)`       .  
+## `Age of the mother (years)`       .  
+## `BMI mother`                         
+## `Heigth mother (meter)`              
+## `Weight mother (kg)`                 
+## `Wealth index factor score`       ** 
+## `Child weight at birth (kg)`      ***
+## `Interval between births`            
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.592 on 1917 degrees of freedom
+## Multiple R-squared:  0.1339, Adjusted R-squared:  0.1298 
+## F-statistic: 32.93 on 9 and 1917 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We observe the shrinkage property of L2 norms penalties, the coefficients are shrinked to achieve a better compromise between bias and variance. For supplementary theory see Stein&#39;s estimators.</span></code></pre></div>
+</div>
+<div id="lasso" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> Lasso</h3>
+<ul>
+<li>Use the function <em>glmnet()</em> to perform a lasso on <em>Zambia</em> dataset, plot the values as a function of <span class="math inline">\(\lambda\)</span> and comment on the results.<br />
+</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part 1
+
+<span class="co"># Lasso penalty is obtained by setting alpha equal to one</span>
+
+mod_pen =<span class="st"> </span><span class="kw">glmnet</span>(X,y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">alpha =</span> <span class="dv">1</span>)
+
+
+<span class="co"># mod_pen$beta # here you can see order of the lasso</span>
+
+
+<span class="kw">plot</span>(mod_pen, <span class="dt">xvar=</span><span class="st">&quot;lambda&quot;</span>) <span class="co">#plot coefficients as lambda varys, use lambda found below to select. </span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<ul>
+<li>Use the function <em>cv.glmnet()</em> to perform model selection based on 10-fold Cross Validation (i.e. method to select the <span class="math inline">\(\lambda\)</span> parameter), plot the results and comment the graph that you obtain. Which values of <span class="math inline">\(\lambda\)</span> are shown by default? What can you conclude on the choice of <span class="math inline">\(\lambda\)</span> in terms of model selection?<br />
+</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part 2
+
+<span class="co"># Selection based on 10 fold CV</span>
+
+cv.zero_mod &lt;-<span class="st"> </span><span class="kw">cv.glmnet</span>(X,y, <span class="dt">alpha=</span><span class="dv">1</span>) <span class="co">#a way in which you can select lambda (10k CV)</span>
+
+cv.zero_mod<span class="op">$</span>lambda.min</code></pre></div>
+<pre><code>## [1] 0.002010848</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(cv.zero_mod) </code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The two vertical lines are respectively: the value of lambda that minimizes the CV error curve and </span>
+
+<span class="co"># the value lambda.1SE which is one standard error from lambda.min in the direction of a more </span>
+
+<span class="co"># parsimonious model.</span></code></pre></div>
+<ul>
+<li>Use the function <em>predict()</em> to retrieve the final model chosen by 10-fold CV (given lasso ordering) and perform a linear model on the covariates present in the final model. What can you conclude observing the estimates?</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Part 3
+
+mod_pen =<span class="st"> </span><span class="kw">glmnet</span>(X,y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">alpha =</span> <span class="dv">1</span>,<span class="dt">lambda =</span> <span class="fl">0.00201</span>) <span class="co">#wrong, do not use this way!</span>
+
+<span class="co"># The right way is to use the predict function</span>
+
+coef_L1_min =<span class="st"> </span><span class="kw">predict</span>(cv.zero_mod,<span class="dt">type=</span><span class="st">&quot;coefficient&quot;</span>,<span class="dt">s =</span> <span class="st">&quot;lambda.min&quot;</span>)
+
+coef_L1_1SE =<span class="st"> </span><span class="kw">predict</span>(cv.zero_mod,<span class="dt">type=</span><span class="st">&quot;coefficient&quot;</span>)  <span class="co">#default is lambda.1SE</span>
+
+<span class="co"># As you can notice, lambda min tends to select more regressors so it is less parsimonious then 1.SE</span>
+
+
+model_linear =<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>.,<span class="dt">data =</span> data_zambia[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">6</span><span class="op">:</span><span class="dv">9</span>)])
+
+<span class="kw">summary</span>(model_linear)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ ., data = data_zambia[, c(2, 3, 6:9)])
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.4782 -0.9864 -0.0534  0.8430  7.8345 
+## 
+## Coefficients:
+##                                     Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)                       -7.971e+00  9.654e-01  -8.257 2.75e-16
+## `Breastfeeding duration (months)` -5.196e-02  6.863e-03  -7.571 5.74e-14
+## `Age of the child (months)`       -5.901e-03  2.924e-03  -2.018 0.043726
+## `Heigth mother (meter)`            3.675e+00  6.483e-01   5.668 1.66e-08
+## `Weight mother (kg)`               1.203e-02  3.970e-03   3.031 0.002469
+## `Wealth index factor score`        1.311e-06  3.916e-07   3.349 0.000827
+## `Child weight at birth (kg)`       2.822e-01  5.811e-02   4.856 1.30e-06
+##                                      
+## (Intercept)                       ***
+## `Breastfeeding duration (months)` ***
+## `Age of the child (months)`       *  
+## `Heigth mother (meter)`           ***
+## `Weight mother (kg)`              ** 
+## `Wealth index factor score`       ***
+## `Child weight at birth (kg)`      ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.594 on 1920 degrees of freedom
+## Multiple R-squared:  0.1302, Adjusted R-squared:  0.1275 
+## F-statistic: 47.91 on 6 and 1920 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Lasso estimates are known to be biased and we are not even sure about the signs if dimensions of predictor space </span>
+
+<span class="co"># is greater than 2. There are methods which are called &quot;debiasing the lasso&quot; that you can search if you are interested by this topic. Of course here we are using real data so we have always to be aware of the assumptions of each model that we are fitting. </span></code></pre></div>
 
 </div>
 </div>

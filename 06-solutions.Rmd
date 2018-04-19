@@ -1863,4 +1863,160 @@ sum(t)/length(test$Species)
 
 ```
 
+## Chapter 4
+
+### Ridge Regression{#Ridge}
+
+- Use the function *glmnet()* to perform a Ridge regression on *Zambia* dataset, plot the values as a function of $\lambda$ and comment on the results.\
+
+```{r, warning=FALSE}
+
+require(glmnet)
+
+load("malnutrion_zambia_cleaned.Rda")
+
+
+data_zambia = data_zambia[,c(1:7,21,22,24)] #exclude the factors from the analysis
+
+X = as.matrix(data_zambia[,2:10])
+
+y = data_zambia[,1]
+
+## Part a
+
+# Ridge penalty is obtained with parameter alpha = 0
+
+mod_pen_L2 = glmnet(X,y,family = "gaussian",alpha = 0)
+
+plot(mod_pen_L2, xvar="lambda") #more smoothed, no model selection property just shrinkage
+
+# mod_pen_L2$beta shrinked but all present
+
+```
+
+- Use the function *cv.glmnet()* to perform model selection based on 10-fold Cross Validation (i.e. method to select the $\lambda$ parameter), plot the results and comment the graph that you obtain. Which values of $\lambda$ are shown by default?\
+
+```{r}
+
+## Part b
+
+# Selection based on 10 fold CV
+
+cv.zero_L2 <- cv.glmnet(X,y, alpha=0) #a way in which you can select lambda (10k CV)
+
+cv.zero_L2$lambda.min
+
+plot(cv.zero_L2) 
+
+# The two vertical lines are respectively: the value of lambda that minimizes the CV error curve and 
+
+# the value lambda.1SE which is one standard error from lambda.min on the right.
+
+```
+
+
+- Use the function *predict()* to retrieve the final model estimates and perform a simple linear model on the same covariates, what can you conclude?  
+
+```{r, warning=FALSE}
+
+## Part c
+
+# Easier with predict rather than check all the order based on the single value of lambda
+
+### MESSAGE FROM HASTIE AND TIBSHIRANI ###
+
+# Use directly lambda.min it is prone to errors
+
+# WARNING: use with care. Do not supply a single value for lambda (for predictions after CV use predict() instead). 
+
+# Supply instead a decreasing sequence of lambda values. glmnet relies on its warms starts for speed, and its often 
+
+# faster to fit a whole path than compute a single fit.
+
+
+coef_L2_min = predict(cv.zero_L2,type="coefficient",s = "lambda.min")
+
+coef_L2_1SE = predict(cv.zero_L2,type="coefficient")  #default is lambda.1SE
+
+model_linear = lm(y ~ .,data = data_zambia[,c(2:10)])
+
+summary(model_linear)
+
+# We observe the shrinkage property of L2 norms penalties, the coefficients are shrinked to achieve a better compromise between bias and variance. For supplementary theory see Stein's estimators.
+
+
+```
+
+
+### Lasso {#lasso}
+
+- Use the function *glmnet()* to perform a lasso on *Zambia* dataset, plot the values as a function of $\lambda$ and comment on the results.\
+
+```{r}
+
+## Part 1
+
+# Lasso penalty is obtained by setting alpha equal to one
+
+mod_pen = glmnet(X,y,family = "gaussian",alpha = 1)
+
+
+# mod_pen$beta # here you can see order of the lasso
+
+
+plot(mod_pen, xvar="lambda") #plot coefficients as lambda varys, use lambda found below to select. 
+
+```
+
+
+- Use the function *cv.glmnet()* to perform model selection based on 10-fold Cross Validation (i.e. method to select the $\lambda$ parameter), plot the results and comment the graph that you obtain. Which values of $\lambda$ are shown by default? What can you conclude on the choice of $\lambda$ in terms of model selection?\
+
+```{r, warning=FALSE}
+
+## Part 2
+
+# Selection based on 10 fold CV
+
+cv.zero_mod <- cv.glmnet(X,y, alpha=1) #a way in which you can select lambda (10k CV)
+
+cv.zero_mod$lambda.min
+
+plot(cv.zero_mod) 
+
+# The two vertical lines are respectively: the value of lambda that minimizes the CV error curve and 
+
+# the value lambda.1SE which is one standard error from lambda.min in the direction of a more 
+
+# parsimonious model.
+
+```
+
+
+- Use the function *predict()* to retrieve the final model chosen by 10-fold CV (given lasso ordering) and perform a linear model on the covariates present in the final model. What can you conclude observing the estimates?
+
+```{r, warning=FALSE}
+
+## Part 3
+
+mod_pen = glmnet(X,y,family = "gaussian",alpha = 1,lambda = 0.00201) #wrong, do not use this way!
+
+# The right way is to use the predict function
+
+coef_L1_min = predict(cv.zero_mod,type="coefficient",s = "lambda.min")
+
+coef_L1_1SE = predict(cv.zero_mod,type="coefficient")  #default is lambda.1SE
+
+# As you can notice, lambda min tends to select more regressors so it is less parsimonious then 1.SE
+
+
+model_linear = lm(y ~ .,data = data_zambia[,c(2,3,6:9)])
+
+summary(model_linear)
+
+
+# Lasso estimates are known to be biased and we are not even sure about the signs if dimensions of predictor space 
+
+# is greater than 2. There are methods which are called "debiasing the lasso" that you can search if you are interested by this topic. Of course here we are using real data so we have always to be aware of the assumptions of each model that we are fitting. 
+
+```
 

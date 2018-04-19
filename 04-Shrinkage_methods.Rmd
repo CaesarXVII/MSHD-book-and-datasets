@@ -46,6 +46,11 @@ Ridge estimators have lower variance the the LS, but this does not guarantee tha
 
 Another notable advantage of the ridge estimator is that the inclusion of $\lambda$ makes the optimization problem solvable even if $\mathbf{X}^T\mathbf{X}$ is not invertible (e.g. $\mathbf{X}$ is not of full rank when $p>n$). This was the original motivation for ridge regression as proposed by @HoKe:70 who also recommended to select $\lambda$ *graphically*. Standard practice now is to use (10-fold) cross-validation.
 
+> Exercise (solutions presented in \@ref(Ridge)):\
+- Use the function *glmnet()* to perform a Ridge regression on *Zambia* dataset, plot the values as a function of $\lambda$ and comment on the results.\
+- Use the function *cv.glmnet()* to perform model selection based on 10-fold Cross Validation (i.e. method to select the $\lambda$ parameter), plot the results and comment the graph that you obtain. Which values of $\lambda$ are shown by default?\
+- Use the function *predict()* to retrieve the final model estimates and perform a simple linear model on the same covariates, what can you conclude?   
+
 ## The lasso estimator
 
 Instead of regularizing the estimator using $\sum_{i=1}^p\beta_j^2=\Vert\boldsymbol{\beta}\Vert^2<t_{\lambda}$, one could use other $l_q$-norms, i.e. $\Vert\boldsymbol{\beta}\Vert_{q}=\sum_{i=1}^p\vert\beta_j\vert^{q}<t_{\lambda}$. In particular, when $q=0$, we have $\Vert\boldsymbol{\beta}\Vert_{0}=\sum_{i=1}^p\vert\beta_j\vert^{0}<t_{\lambda}$ with, by definition, $\sum_{i=1}^p\vert\beta_j\vert^{0}=\sum_{i=1}^pI\left(\beta_j\neq 0\right)$, the number of slope coefficients different from $0$, and hence corresponds to subset selection.
@@ -71,6 +76,11 @@ most correlated with the response, and moves the coefficient of this variable co
 In step 3 and 4, the values of the slopes in the active set, say $\mathcal{A}$, are augmented as $\boldsymbol{\beta}_{\mathcal{A}}(\epsilon)=\boldsymbol{\beta}_{\mathcal{A}}+\epsilon\cdot\delta_{\mathcal{A}}$ for small values of $\epsilon$, with $\delta_{\mathcal{A}}=\left(\mathbf{X}^T_{\mathcal{A}}\mathbf{X}_{\mathcal{A}}\right)^{-1}\mathbf{X}^T_{\mathcal{A}}\mathbf{r}_{\mathcal{A}}$, $\mathbf{r}_{\mathcal{A}}=\mathbf{y}-\mathbf{X}_{\mathcal{A}}\boldsymbol{\beta}_{\mathcal{A}}$. 
 
 The LARS bears very close similarities with forward stagewise regression (see @HaTaTiWa:07, @TibR:15 and @EfHa:16, Section 16.4). Hence, if the covariates are correlated, the lasso path might not produce the suitable model selection path (risk of overfitting).
+
+> Exercise (solutions presented in \@ref(lasso)):\
+- Use the function *glmnet()* to perform a lasso on *Zambia* dataset, plot the values as a function of $\lambda$ and comment on the results.\
+- Use the function *cv.glmnet()* to perform model selection based on 10-fold Cross Validation (i.e. method to select the $\lambda$ parameter), plot the results and comment the graph that you obtain. Which values of $\lambda$ are shown by default? What can you conclude on the choice of $\lambda$ in terms of model selection?\
+- Use the function *predict()* to retrieve the final model chosen by 10-fold CV (given lasso ordering) and perform a linear model on the covariates present in the final model. What can you conclude observing the estimates?
 
 ## Alternative penalized regression methods
 
@@ -190,6 +200,13 @@ the $l_1$ penalty. As $\gamma$ approaches its minimum value, the bias is minimiz
 
 Among others, @Zhan:10 and @breheny2011 propose algorithms to find the SCAD and MCP estimates, or more generally, penalized regression estimators with non convex penalties. Moreover, as with the elastic net, one can add a ridge penalty to  nonconvex penalties such as MCP and SCAD.
 
-> Exercise:
-Generate data from the linear regression model with $p=1000$ covariates and $n=200$, with both independent and dependent covariates, and with $\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)$, $\sigma^2=1$. Compare the solution paths (graphically as a function of $\lambda$) for the lasso, adpative lasso, SCAD and MCP by fixing several values for $\gamma$ (choose e.g. $\gamma=(1.5,2.7,6)$). 
+> Exercise:\
+After having read the documentation of the R package *ncvreg* and installed it, perform the following steps:\
 
+> a) Fix the generating vector $\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)$ and set the seed equal to 11 (i.e. set.seed(11)).\
+
+> b) Generate from a MVN (multivariate normal) a matrix $\mathbf{X_{n*p}}$ with $n = 200$ and $p = 1000$. You can choose the location vector as you wish but set the scale matrix with an autoregressive form $\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}$  with $\sigma_{lm} = \rho^{\mid l - m\mid}$.\ 
+
+> c) For each $\boldsymbol{\rho} = [0 \; 0.2 \; 0.5]$ generate $\mathbf{\hat{y}}$ thanks to the relation $\mathbf{y} =  \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}$ where $\epsilon_{i}$ is a standard normal. Suppose for simplicity that the errors are uncorrelated.\
+
+> d) Compare the solution paths (graphically as a function of $\lambda$) for the lasso, SCAD and MCP by fixing several values for $\gamma$ (choose e.g. $\gamma=(1.5, 2, 3, 3.7, 5)$) for each value of $ \rho $ indicated at point c.
