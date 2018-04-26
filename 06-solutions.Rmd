@@ -2144,11 +2144,35 @@ plot(model_mcp_5, main="MCP - Gamma 5")
 
 ```
 
-$\rho = 0$ 
+$\rho = 0$
+
+![](Figures/gamma_2_rho_0.png)
+
+
+![](Figures/gamma_default_rho_0.png)
+
+
+![](Figures/gamma_5_rho_0.png)
 
 $\rho = 0.2$
 
-$\rho = 0.5$
+![](Figures/gamma_2_rho_0.2.png)
+
+
+![](Figures/gamma_default_rho_0.2.png)
+
+
+![](Figures/gamma_5_rho_0.2.png)
+
+$\rho = 0.5$ 
+
+![](Figures/gamma_2_rho_0.5.png)
+
+![](Figures/gamma_default_rho_0.5.png)
+
+![](Figures/gamma_5_rho_0.5.png)
+
+
 
 ```{r}
 
