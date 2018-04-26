@@ -200,7 +200,7 @@ the $l_1$ penalty. As $\gamma$ approaches its minimum value, the bias is minimiz
 
 Among others, @Zhan:10 and @breheny2011 propose algorithms to find the SCAD and MCP estimates, or more generally, penalized regression estimators with non convex penalties. Moreover, as with the elastic net, one can add a ridge penalty to  nonconvex penalties such as MCP and SCAD.
 
-> Exercise:\
+> Exercise (solutions presented in \@ref(nonconvex)):\
 After having read the documentation of the R package *ncvreg* and installed it, perform the following steps:\
 
 > a) Fix the generating vector $\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)$ and set the seed equal to 11 (i.e. set.seed(11)).\
@@ -209,4 +209,4 @@ After having read the documentation of the R package *ncvreg* and installed it, 
 
 > c) For each $\boldsymbol{\rho} = [0 \; 0.2 \; 0.5]$ generate $\mathbf{\hat{y}}$ thanks to the relation $\mathbf{y} =  \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}$ where $\epsilon_{i}$ is a standard normal. Suppose for simplicity that the errors are uncorrelated.\
 
-> d) Compare the solution paths (graphically as a function of $\lambda$) for the lasso, SCAD and MCP by fixing several values for $\gamma$ (choose e.g. $\gamma=(1.5, 2, 3, 3.7, 5)$) for each value of $ \rho $ indicated at point c.
+> d) Compare the solution paths (graphically as a function of $\lambda$) for the lasso, SCAD and MCP by fixing several values for $\gamma$ (choose e.g. $\gamma=(1.5, 2, 3, 3.7, 5)$) for each value of $\rho$ indicated at point c.

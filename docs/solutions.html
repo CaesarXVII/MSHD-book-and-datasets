@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-04-19">
+<meta name="date" content="2018-04-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -203,6 +203,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.4" data-path="solutions.html"><a href="solutions.html#chapter-4"><i class="fa fa-check"></i><b>5.4</b> Chapter 4</a><ul>
 <li class="chapter" data-level="5.4.1" data-path="solutions.html"><a href="solutions.html#Ridge"><i class="fa fa-check"></i><b>5.4.1</b> Ridge Regression</a></li>
 <li class="chapter" data-level="5.4.2" data-path="solutions.html"><a href="solutions.html#lasso"><i class="fa fa-check"></i><b>5.4.2</b> Lasso</a></li>
+<li class="chapter" data-level="5.4.3" data-path="solutions.html"><a href="solutions.html#nonconvex"><i class="fa fa-check"></i><b>5.4.3</b> Non Convex Penalties</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -2356,6 +2357,126 @@ model_linear =<span class="st"> </span><span class="kw">lm</span>(y <span class=
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Lasso estimates are known to be biased and we are not even sure about the signs if dimensions of predictor space </span>
 
 <span class="co"># is greater than 2. There are methods which are called &quot;debiasing the lasso&quot; that you can search if you are interested by this topic. Of course here we are using real data so we have always to be aware of the assumptions of each model that we are fitting. </span></code></pre></div>
+</div>
+<div id="nonconvex" class="section level3">
+<h3><span class="header-section-number">5.4.3</span> Non Convex Penalties</h3>
+<ul>
+<li>Fix the generating vector <span class="math inline">\(\boldsymbol{\beta}=(4,2,-4,-2,0,0,\ldots,0)\)</span> and set the seed equal to 11 (i.e. set.seed(11)).</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MASS)
+
+<span class="kw">set.seed</span>(<span class="dv">11</span>)
+
+beta =<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">2</span>,<span class="op">-</span><span class="dv">4</span>,<span class="op">-</span><span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">0</span>,<span class="dv">996</span>))</code></pre></div>
+<ul>
+<li>Generate from a MVN (multivariate normal) a matrix <span class="math inline">\(\mathbf{X_{n*p}}\)</span> with <span class="math inline">\(n = 200\)</span> and <span class="math inline">\(p = 1000\)</span>. You can choose the location vector as you wish but set the scale matrix with an autoregressive form <span class="math inline">\(\boldsymbol{\Sigma}=[\sigma_{lm}]_{l,m=1,\ldots,p}\)</span> with <span class="math inline">\(\sigma_{lm} = \rho^{\mid l - m\mid}\)</span>.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n =<span class="st"> </span><span class="dv">200</span> 
+
+p =<span class="st"> </span><span class="dv">1000</span> 
+
+<span class="co"># Three values needed for rho = (0 0.2 0.5)</span>
+
+rho =<span class="st"> </span><span class="dv">0</span> 
+
+mu =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,p)
+
+sigma =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>,p<span class="op">^</span><span class="dv">2</span>)
+
+sigma =<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> sigma, <span class="dt">ncol =</span> p,<span class="dt">nrow =</span> p)
+
+
+<span class="co"># Autoregressive structure</span>
+
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+  
+  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>p) {
+    
+    
+    sigma[i,j] =<span class="st"> </span>rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))
+    
+    
+  }
+  
+  
+}
+
+X =<span class="st"> </span><span class="kw">mvrnorm</span>(n,mu,sigma)</code></pre></div>
+<ul>
+<li>For each <span class="math inline">\(\boldsymbol{\rho} = [0 \; 0.2 \; 0.5]\)</span> generate <span class="math inline">\(\mathbf{\hat{y}}\)</span> thanks to the relation <span class="math inline">\(\mathbf{y} = \mathbf{X_{n*p}} \; \boldsymbol{\beta} + \boldsymbol{\epsilon}\)</span> where <span class="math inline">\(\epsilon_{i}\)</span> is a standard normal. Suppose for simplicity that the errors are uncorrelated.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y =<span class="st"> </span>X<span class="op">%*%</span>beta <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>) <span class="co">#for us sigma is 1</span></code></pre></div>
+<ul>
+<li>Compare the solution paths (graphically as a function of <span class="math inline">\(\lambda\)</span>) for the lasso, SCAD and MCP by fixing several values for <span class="math inline">\(\gamma\)</span> (choose e.g. <span class="math inline">\(\gamma=(1.5, 2, 3, 3.7, 5)\)</span>) for each value of <span class="math inline">\(\rho\)</span> indicated at previous point.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Paths will be presented for gamma = (2, default values, 5)</span>
+
+<span class="co"># The value 1.5 for gamma is not possible for SCAD while 3 and 3.7 are the default value for MCP and Scad respectively</span>
+
+<span class="kw">require</span>(ncvreg)
+
+<span class="co"># Default gamma</span>
+
+model_scad =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;SCAD&quot;</span>) <span class="co">#gamma default is 3.7</span>
+
+model_mcp =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;MCP&quot;</span>) <span class="co">#gamma default is 3</span>
+
+model_lasso =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;lasso&quot;</span>)
+
+
+<span class="co"># Gamma = 2</span>
+
+model_scad_<span class="dv">2</span> =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;SCAD&quot;</span>,<span class="dt">gamma =</span> <span class="fl">2.1</span>) <span class="co">#no scad for gamma lower than 2</span>
+
+model_mcp_<span class="dv">2</span> =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;MCP&quot;</span>, <span class="dt">gamma =</span> <span class="dv">2</span>)
+
+
+<span class="co"># Gamma = 5</span>
+
+model_scad_<span class="dv">5</span> =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;SCAD&quot;</span>, <span class="dt">gamma =</span> <span class="dv">5</span>)
+
+model_mcp_<span class="dv">5</span> =<span class="st"> </span><span class="kw">ncvreg</span>(<span class="dt">X =</span> X,<span class="dt">y =</span> y,<span class="dt">family =</span> <span class="st">&quot;gaussian&quot;</span>,<span class="dt">penalty =</span> <span class="st">&quot;MCP&quot;</span>, <span class="dt">gamma =</span> <span class="dv">5</span>)
+
+
+
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+
+<span class="co"># gamma = 2</span>
+
+<span class="kw">plot</span>(model_lasso,<span class="dt">main=</span><span class="st">&quot;Lasso&quot;</span>)
+<span class="kw">plot</span>(model_scad_<span class="dv">2</span>, <span class="dt">main=</span><span class="st">&quot;Scad - Gamma 2.1&quot;</span>)
+<span class="kw">plot</span>(model_mcp_<span class="dv">2</span>, <span class="dt">main=</span><span class="st">&quot;MCP - Gamma 2&quot;</span>)
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+
+<span class="co">#default gamma</span>
+
+<span class="kw">plot</span>(model_lasso,<span class="dt">main=</span><span class="st">&quot;Lasso&quot;</span>)
+<span class="kw">plot</span>(model_scad,<span class="dt">main=</span><span class="st">&quot;Scad - Gamma 3.7&quot;</span>)
+<span class="kw">plot</span>(model_mcp, <span class="dt">main=</span><span class="st">&quot;MCP - Gamma 3&quot;</span>)
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+
+<span class="co"># gamma = 5</span>
+
+<span class="kw">plot</span>(model_lasso,<span class="dt">main=</span><span class="st">&quot;Lasso&quot;</span>)
+<span class="kw">plot</span>(model_scad_<span class="dv">5</span>,<span class="dt">main=</span><span class="st">&quot;Scad - Gamma 5&quot;</span>)
+<span class="kw">plot</span>(model_mcp_<span class="dv">5</span>, <span class="dt">main=</span><span class="st">&quot;MCP - Gamma 5&quot;</span>)</code></pre></div>
+<p><span class="math inline">\(\rho = 0\)</span></p>
+<p><span class="math inline">\(\rho = 0.2\)</span></p>
+<p><span class="math inline">\(\rho = 0.5\)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Comments: </span>
+
+<span class="co"># 1) We can already see that there is a non convex behavior of Scad and MCP while Lasso path is more </span>
+
+<span class="co"># smoothed.</span>
+
+<span class="co"># 2) As gamma goes to plus infinity we notice that we go back to lasso path (smoothing procedure). </span>
+
+<span class="co"># 3) The bias is minimized as gamma approaches his minimum value.</span>
+
+<span class="co"># 4) Correlation creates a distorsion in the paths of all the three penalties.</span></code></pre></div>
 
 </div>
 </div>
