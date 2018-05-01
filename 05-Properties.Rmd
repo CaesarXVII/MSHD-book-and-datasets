@@ -1,0 +1,187 @@
+# Properties of model selection criteria
+
+## Introduction
+
+With model selection methods, defining *suitable* properties comes in several forms. We consider here the case of the linear regression model with $Y_i|\mathbf{x}_i \sim \mathcal{N}(\boldsymbol{\mu}\left(\mathbf{x}_i\right),\sigma^2), 0<\sigma^2<\infty$, $i=1,\ldots,n$, with 
+\begin{equation}  
+\boldsymbol{\mu}\left(\mathbf{x}_i\right)=\mathbf{x}_i^T \boldsymbol{\beta}, 
+\end{equation}
+where $\boldsymbol{\beta} \in  \mathbb{R}^p$ and $\mathbf{x}_i^T$ is the *i*th row of $\mathbf{X}$ (that includes a column of ones for the intercept). The normality assumption is not necessary (but sufficient), weaker assumptions on the form of the error distribution can be instead assumed.
+
+Asymptotically, a consistent estimator for $\boldsymbol{\beta}$ such as the MLE (LS estimator) will converge to the *true* regression coefficients $\beta_j\neq 0$ for $j\in \mathcal{J}_S=\{j\in\mathcal{J}=\{j=1,\ldots,p\}\;\vert\; \beta_j\neq 0,\}$ and $\beta_j=0$ for $j\in\mathcal{J}\setminus\mathcal{J}_{S}$, where $\mathcal{J}\setminus\mathcal{J}_{S}$ is the complement set of $\mathcal{J}_{S}$ in $\mathcal{J}$. If $\mathcal{J}\setminus\mathcal{J}_{S}\neq\emptyset$, one is under a *sparse* setting, and under this setting, a model selection method should be able to identify the subset $\mathcal{J}_S$, by means of say $\widehat{\mathcal{J}_S}$, in the most parsimonious way, i.e. $s=\vert\mathcal{J}_S\vert\leq\vert\widehat{\mathcal{J}_S}\vert<\vert\mathcal{J}\vert=p$, where $\vert\mathcal{J}\vert$ denotes the number of elements in the set $\mathcal{J}$.  
+
+Let $\mathcal{M}=\{\mathcal{M}_l\;\vert\;l=1,\ldots,L\}$ denote the set all possible models that can be constructed with $K\leq\min(n,p)$ covariates, with associated indicator's set $\mathcal{J}_{l}\subseteq\mathcal{J}$, which are all submodels of the full one(s) (i.e. with $K$ covariates). Let $\mathcal{M}_S$ denote the *true model*, one distinguishes two situations that are assumed *a priori*: $\mathcal{M}_S\in\mathcal{M}$ or $\mathcal{M}_S\notin\mathcal{M}$. If $\mathcal{M}_S\in\mathcal{M}$, then a reasonable property for a model selection criterion is its ability to find $\mathcal{J}_S$, measured by the *consistency* of $\widehat{\mathcal{J}_S}$, i.e. its ability to converge, in some sense and when the available information is sufficiently large, to $\mathcal{J}_S$. If $\mathcal{M}_S\notin\mathcal{M}$, one instead assumes that one of the possible models $\mathcal{M}_{\jmath_S}\in\mathcal{M}$ is the *closest* to the true one with respect to a suitable *distance*, e.g. the Kullback-Leibler (KL) distance. A selection criterion that selects (for sufficiently large $n$) this submodel is said to be (asymptotically) *efficient*.
+
+However, model selection consistency is not the same as estimation consistency, and the *nearest* property to estimation consistency is *selection efficiency*. As will be seen later, selection consistency excludes selection efficiency (and conversely), so that different criteria serve different purposes. For pure prediction, selection consistency is possibly the most desired property since it avoids the problem of overfitting. For model building for a better understanding of the phenomenon under study, selection efficiency is a more desirable property, if the *probability of overfitting* associated to the selection criterion remains reasonable. Indeed, since the model selection criteria are statistics that are subject to random sampling, their (asymptotic) distribution can be derived. From the later, one can evaluate the probability of overfitting and the *signal-to-noise ratio (SNR)*.
+
+
+A property that is also invoked in the case of penalized methods (that perform simultaneously selection and estimation) is the *oracle* property [@fanandli2001] that concerns a form of *conditional* consistency for the regression coefficient estimator of the selected submodel, derived under the sparsity assumption (and selection consistency). 
+
+For the linear regression model, there are (at least) two conditions that are assumed which are 
+\
+1. For all $\mathcal{M}_\jmath\in\mathcal{M}$ with associated covariates matrix $\mathbf{X}_\jmath$ (i.e. $\mathbf{X}_\jmath$ is formed by the columns $\jmath\in\mathcal{J}_{\jmath}$ of $\mathbf{X}$), we have $\lim_{n\rightarrow \infty} \frac{1}{n}\mathbf{X}_\jmath^T\mathbf{X}_\jmath=\mathbf{\Sigma}_{\jmath\jmath}$,  with $\mathbf{\Sigma}_{\jmath\jmath}$ a positive definite matrix. \
+2. When ${\sigma}^2$ is unknown it can be replaced by a consistent estimator $\hat{\sigma}^2$. \
+
+Moreover, in our context, information takes two forms, the sample size $n$ and also the number of available covariates (features, factors, regressors) $p$.
+
+We denote by $\xi\left(\mathbf{A}\right)$ the the smallest eigenvalue of the matrix $\mathbf{A}$.
+
+## Selection consistency
+
+Let $R(\boldsymbol{\beta})=\Vert \mathbf{y}-\mathbf{X}\boldsymbol{\beta}\Vert^2$ and consider the LS estimator obtained from a subset $\mathcal{J}_{\jmath}$ of covariates given by
+\begin{equation}
+\hat{\boldsymbol{\beta}}_{\mathcal{J}_{\jmath}}=\mbox{argmin}_{\boldsymbol{\beta}\vert \beta_j=0, j\in \mathcal{J}\setminus\mathcal{J}_{\jmath}}R(\boldsymbol{\beta})
+\end{equation}
+We consider here model selection criteria from a Generalized Information Criterion (GIC) class [@shao1997asymptotic,@KiKwCh:12] that estimate a subset of covariates as
+\begin{equation}
+\widehat{\mathcal{J}_{\jmath}}\left(\lambda_n\right)=\mbox{argmin}_{\mathcal{J}_{\jmath}}R\left(\hat{\boldsymbol{\beta}}_{\mathcal{J}_{\jmath}}\right)+\lambda_n\vert\mathcal{J}_{\jmath}\vert\sigma^2
+\end{equation}
+where $\lambda_n$ possibly depends on $n$. The AIC ($C_p$) is obtained with $\lambda_n=2$, while the BIC is obtained with $\lambda_n=\log(n)$. Note that $\vert\mathcal{J}\vert=p>n$ in high dimensions, it is therefore more suitable to restrict the GIC class to submodels  $\mathcal{J}_{\jmath,s_n}$ such that $\vert\mathcal{J}_{\jmath,s_n}\vert\leq s_n$ where $s_n$ can possibly grow with the sample size $n$.
+
+A member of the GIC class is said to be selection consistent if
+\begin{equation}
+\lim_{n\rightarrow\infty}P\left(\widehat{\mathcal{J}_{S,s_n}}\left(\lambda_n\right)=\mathcal{J}_{S}\right)=1
+\end{equation}
+
+@KiKwCh:12 sets the necessary regularity conditions (essentially on the design matrix $\mathbf{X}$) for a member of the GIC class to be selection consistent when $p:=p_n$ is allowed to grow with $n$.  The result is then
+
+**Theorem: Selection consistency of the (restricted) GIC class** [@KiKwCh:12] \
+If $\mathbb{E}\left[\varepsilon^{2k}\right]<\infty$ for some $k\in\mathbb{N}^{+}$, then for $\lambda_n$ such that $\lambda_n=o\left(n^{c_2-c_1}\right)$ and  $\lim_{n\rightarrow\infty}p_n/\left(\lambda_n\rho_n\right)^k=0$, with $0\leq c_1<1/2$, $2c_1<c_2\leq 1$, $\rho_n=\mbox{inf}_{\mathcal{J}_{S}\;\vert\;\vert \mathcal{J}_{S}\vert \leq s_n}\xi\left(\mathbf{X}_{S}^T\mathbf{X}_{S}/n\right)$, a member of the GIC class is selection consistent. \
+
+  \
+The notation $\lambda_n=o\left(n^{c_2-c_1}\right)$ is equivalent to $\lim_{n\rightarrow\infty} \lambda_n/n^{c_2-c_1}=0$. In particular, we can take $c_1=0$ and $c_2=1$ so that $\lambda_n$ must be $o(n)$. Condition $\lim_{n\rightarrow\infty}p_n/\left(\lambda_n\rho_n\right)^k=0$ indicated that the penalty needs to grow faster with $n$ (through $\lambda_n$) than the number of available covariates $p_n$. If $p_n$ does not depend on $n$ (hence it is fixed), then selection consistency is achieved when $\lambda_n=o(n)$ and $\lim_{n\rightarrow\infty}\lambda_n=\infty$. Hence, the BIC is selection consistent while the AIC ($C_p$) is not. 
+
+Selection consistency is an asymptotic concept which does not indicate what happens in finite samples. For example, the $C_p$ could be transformed by changing the factor $2$ with say $2\cdot n^{\alpha}$, with e.g. $\alpha=0.0000001$ and we then have a selection consistent estimator,  but $2\cdot n^{\alpha}\approx 2$ even for very large values of $n$.
+
+## Selection efficiency
+
+While selection consistency is concerned by the selection of the most parsimonious model, efficiency studies the behavior of a model selection criterion relative to a distance between the true model and the selected one (asymptotically). In particular, one can use for the distance, a *loss function* for prediction purposes. Such a loss function can be the squared prediction error ($L_2$ loss function), given by
+\begin{equation}
+L_n\left(\widehat{\mathcal{J}_{\jmath}}\right)=\frac{1}{n}\Vert \boldsymbol{\mu}\left(\mathbf{X}\right) - \hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}\Vert^2=\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}\Vert^2
+\end{equation}
+where $\hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}$ is the vector of predicted responses $\mathbf{X}\hat{\boldsymbol{\beta}}_{{\widehat{\mathcal{J}_{\jmath}}}}$ with $\hat{\boldsymbol{\beta}}_{{\widehat{\mathcal{J}_{\jmath}}}}$ of length $p$ with elements $\beta_j:=0, j\in \mathcal{J}\setminus{\widehat{\mathcal{J}_{\jmath}}}$. Let $\mathcal{J}_{S}$ be defined as
+\begin{equation}
+L_n\left(\mathcal{J}_{S}\right)= \min_{\mathcal{M}_l}L_n\left(\mathcal{J}_{l}\right) = \min_{\mathcal{M}_l}\frac{1}{n}\Vert \hat{\mathbf{Y}}_{\mathcal{J}_{l}}-\mathbf{X}\boldsymbol{\beta}\Vert^2
+\end{equation}
+An efficient model selection criterion that selects the submodel with indices $\widehat{\mathcal{J}_S}$ is such that
+\begin{equation}
+\frac{\mathbb{E}\left[L_n\left(\widehat{\mathcal{J}_{S}}\right)\right]}{\mathbb{E}\left[L_n\left(\mathcal{J}_S\right)\right]}\overset{p}{\rightarrow}1
+\end{equation}
+In other words, a model selection criterion is efficient if it selects a model such that the ratio of the expected loss function at the selected model and the expected loss function at its theoretical minimiser converges to one in probability [@shao1997asymptotic].
+
+Under some suitable technical conditions, the $C_p$ (AIC) is an efficient model selection criterion. This is also true for other  model selection criteria with finite $\lambda_n$. More importantly, a consistent model selection (i.e. $\lambda_n\rightarrow\infty$) cannot be efficient [@Yang:05]. Actually, consistency guaranties the identification of the true or best model first while efficiency is related to model estimation accuracy. For the later, a suitable measure is the *minimax rate optimality* [@Yang:05].  The $C_p$ (AIC) is minimax-rate optimal for estimating the regression function, while the BIC and adaptive model selection (penalized regression methods) are not [see also @LePo:08]. 
+
+****
+>Let $\mathbf{H}_{\mathcal{J}_{\jmath}}=\mathbf{X}_{\mathcal{J}_{\jmath}}\left(\mathbf{X}_{\mathcal{J}_{\jmath}}^T\mathbf{X}_{\mathcal{J}_{\jmath}}\right)^{-1}\mathbf{X}_{\mathcal{J}_{\jmath}}^T$, with $\mathbf{X}_{\mathcal{J}_{\jmath}}$ formed by the columns of $\mathbf{X}$ in $\mathcal{J}_{\jmath}$. We have $\hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}=\mathbf{H}_{\mathcal{J}_{\jmath}}\mathbf{Y}$. Hence
+\begin{eqnarray}
+L_n\left(\mathcal{J}_{\jmath}\right)&=&\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \mathbf{H}_{\mathcal{J}_{\jmath}}\left(\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}\right)\Vert^2= 
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}
+-\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&=&
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2
+-2\frac{1}{n}\Vert\boldsymbol{\varepsilon}^{T}\mathbf{H}_{\mathcal{J}_{\jmath}}^T\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2 +\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon} \\
+&=&
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2
++\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon} = \Delta\left(\mathcal{J}_{\jmath}\right)+\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
+\end{eqnarray}
+with $\boldsymbol{\varepsilon}=\mathbf{Y}-\mathbf{X}\boldsymbol{\beta}$. Within the GIC class, $\widehat{\mathcal{J}_{\jmath}}$ is is obtained as the minimizer in $\mathcal{J}_{\jmath}$ of
+\begin{equation}
+\frac{1}{n}\Vert \mathbf{Y} - \hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}\Vert^2
++\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2
+\end{equation}
+We have that
+\begin{eqnarray}
+\frac{1}{n}\Vert \mathbf{Y} - \hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}\Vert^2&=&
+\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \mathbf{H}_{\mathcal{J}_{\jmath}}\mathbf{X}\boldsymbol{\beta}+
+\boldsymbol{\varepsilon} - \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2 \\
+&=&
+\frac{1}{n}\Vert \left(\mathbf{I}- \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2 
++
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T\left(\mathbf{I}- \mathbf{H}_{\mathcal{J}_{\jmath}}\right)
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon} - \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&=&
+\Delta\left(\mathcal{J}_{\jmath}\right)+
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon}\Vert^2 -2\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}+\frac{1}{n}\Vert\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&=&
+\Delta\left(\mathcal{J}_{\jmath}\right)+
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon}\Vert^2 -\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
+\end{eqnarray}
+When $\mathcal{J}_S\subset\widehat{\mathcal{J}_{\jmath}}$, that is $\beta_j\neq 0 \forall j\in \mathcal{J}_S$ and $\beta_j=0$ otherwise, $\boldsymbol{\beta}^T\mathbf{X}^T
+\left(\mathbf{I} - \mathbf{H}_{\widehat{\mathcal{J}_{\jmath}}}\right)=0$ and $\Delta\left(\mathcal{J}_{\jmath}\right)=0$, so that $\widehat{\mathcal{J}_{\jmath}}$ is is obtained as the minimizer in $\mathcal{J}_{\jmath}$ of
+\begin{equation}
+-\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
++\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2
+=
+L_n\left(\mathcal{J}_{\jmath}\right)
++\left(\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2-2\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\right)
+\end{equation}
+****
+
+## The oracle property
+
+The oracle property was set by @fanandli2001 as a desirable property for model selection methods that do model selection and estimation simultaneously (regularized regression). It concerns the properties of the resulting model estimator, $\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_{\jmath}}\right)$ obtained with the penalty term $\lambda_n$ (e.g. in the linear regression model), that, for the oracle property to hold, must satisfy:\
+1. The corresponding model selection criterion, based on $\lambda_n$, is consistent (by providing $\widehat{\mathcal{J}_S}$)\
+2.
+\begin{equation}
+\sqrt{n}\left(
+\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)-
+\hat{\boldsymbol{\beta}}\left(\mathcal{J}_S\right)
+\right)
+\overset{D}{\rightarrow}
+\mathcal{N}\left(\mathbf{0},\boldsymbol{\Sigma}\left(\mathcal{J}_S\right)\right), \end{equation}
+where $\boldsymbol{\Sigma}\left(\mathcal{J}_S\right)$ is the covariance
+matrix knowing the true subset model.\
+\
+The oracle property is based on the *sparsity* assumption, i.e. the ability for the model selection methods to estimate $\beta_j\in\mathcal{J}\setminus\mathcal{J}_S$ exactly as zero (with probability approaching one as sample size increases). As a consequence, a model selection procedure enjoying the oracle property does as good (asymptotically) as the maximum likelihood estimator on the full model.
+
+The oracle property is a concept that holds only asymptotically. In finite samples, @LePo:08 show that the estimator $\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)$ satisfying the sparsity condition
+\begin{equation}
+\mathcal{P}\left(
+I\left(
+\hat{\beta}_j\left(\widehat{\mathcal{J}_S}\right)
+\neq 0
+\right)
+\leq I\left(
+\beta_j\neq 0\right)
+\right)\rightarrow 1, \mbox{as }\; n\rightarrow\infty, \; \forall j\in \{1,\ldots,p\}
+\end{equation}
+have unbounded estimation risk as measured by the maximal mean squared error of estimation
+\begin{equation}
+\mbox{sup}_{\boldsymbol{\beta}}\mathbb{E}\left[n\Vert \hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)- \boldsymbol{\beta}\Vert^2\right]\rightarrow\infty, \mbox{as }\; n\rightarrow\infty
+\end{equation}
+Note that for the LS (MLE), we have $\mathbb{E}\left[n\Vert
+\hat{\boldsymbol{\beta}}_{LS}- \boldsymbol{\beta}\Vert^2\right]
+=\mbox{tr}\left[\left(n^{-1}\mathbf{X}^T\mathbf{X}\right)^{-1}\right]$ which does not depend on $\boldsymbol{\beta}$ and remains bounded as the sample size increases.
+
+This means that we cannot have it all: model selection consistency and estimation efficiency.
+
+## Probability of overfitting
+
+Model selection criteria that are efficient (hence not consistent), will select models that are not the most parsimonious ones. One can then study their associated probability of overfitting.
+
+Overfitting can be defined as choosing a model that has more variables than the model identified as closest to the true model, thereby reducing efficiency. Similarly, underfitting is defined as choosing a model with too few variables compared to the closest model, also reducing efficiency. An underfitted model may have poor predictive ability due to a lack of detail in the model, while an overfitted model may be *unstable* in the sense that predictions are highly variable (noisy). 
+
+The probability of overfitting for a model selection criterion, say $\mbox{MSC}_l(\lambda)$, with $\lambda$ indicating the strength of the penalty (e.g. $\lambda=2$ for the $C_p$ and AIC) and $l$ the size of the selected model, is computed, for nested models, as the probability of choosing $L$ additional variables to the $s$ of the best (nearest) model (or true one) $\mathcal{M}_S$. Namely
+\begin{equation}
+\mathcal{P}\left(\mbox{MSC}_{s+L}(\lambda)<\mbox{MSC}_s(\lambda)\right)
+\end{equation}
+Note that the probability is defined for finite samples $n$, but cannot always be given in a closed form (but computed by means of simulations). To compute the probability of overfitting one first derives the (sampling) distribution of the random variable $\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)$ to get the probability distribution that depends on $L$.
+
+@McQuTs:98, Section 2.5, provide the expressions of the probabilities of overfitting by $L$ variables for several model selection criteria, for finite samples and for $n\rightarrow\infty$.
+
+A measure that is associated to the probability of overfitting is the *signal-to-noise ratio (SNR)* given by 
+\begin{equation}
+\frac{\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}
+{\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}}
+\end{equation}
+where $\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]$ is the signal and $\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}$ is the noise. While the signal depends primarily on the penalty
+function ($\lambda$), the noise depends on the distribution of the (in-sample) prediction error measure. If the penalty $\lambda$ is weaker than the noise, the model selection criterion will have a weak signal, a weak signal-to-noise ratio, and will tend to overfit. @McQuTs:98, Section 2.5, provide the SNR (finite sample and as $n\rightarrow\infty$) for several model selection criteria. In general, efficient criteria have equivalent (finite) SNR, and consistent criteria all have
+have much larger SNR. Larger SNR is an indicator of the propensity of a model selection criterion to underfit in finite samples.

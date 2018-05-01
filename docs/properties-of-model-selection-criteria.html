@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Model Selection in High Dimensions</title>
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Model Selection in High Dimensions" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Model Selection in High Dimensions" />
+  
+  <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  
+
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+
+
+<meta name="date" content="2018-05-01">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="shrinkage-methods.html">
+<link rel="next" href="solutions.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#read-this-part-first"><i class="fa fa-check"></i><b>1.1</b> Read this part first</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#content-choice-and-structure"><i class="fa fa-check"></i><b>1.2</b> Content choice and structure</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#bibliography"><i class="fa fa-check"></i><b>1.2.1</b> Bibliography</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#useful-links"><i class="fa fa-check"></i><b>1.2.2</b> Useful links</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#using-r"><i class="fa fa-check"></i><b>1.3</b> Using R</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#useful-r-packages"><i class="fa fa-check"></i><b>1.3.1</b> Useful R packages</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#managing-data"><i class="fa fa-check"></i><b>1.3.2</b> Managing Data</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#loading-data-from-an-r-package"><i class="fa fa-check"></i><b>1.3.3</b> Loading data from an R package</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#loading-data-from-a-local-file"><i class="fa fa-check"></i><b>1.3.4</b> Loading data from a local file</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#loading-data-from-an-online-file"><i class="fa fa-check"></i><b>1.3.5</b> Loading data from an online file</a></li>
+<li class="chapter" data-level="1.3.6" data-path="index.html"><a href="index.html#loading-data-from-an-online-database-using-a-mysql-query-optional"><i class="fa fa-check"></i><b>1.3.6</b> Loading data from an online database using a mySQL query (Optional)</a></li>
+<li class="chapter" data-level="1.3.7" data-path="index.html"><a href="index.html#data-wrangling"><i class="fa fa-check"></i><b>1.3.7</b> Data Wrangling</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#writing-reports"><i class="fa fa-check"></i><b>1.4</b> Writing reports</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#r-markdown"><i class="fa fa-check"></i><b>1.4.1</b> R Markdown</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#github"><i class="fa fa-check"></i><b>1.4.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#examples"><i class="fa fa-check"></i><b>1.5</b> Examples</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data-on-malnutrition-in-zambia"><i class="fa fa-check"></i><b>1.5.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#prognostic-factors-in-childhood-leukemia"><i class="fa fa-check"></i><b>1.5.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.3</b> R package quantmod</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#fundamental-statistical-concepts"><i class="fa fa-check"></i><b>1.6</b> Fundamental statistical concepts</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#sample-and-population"><i class="fa fa-check"></i><b>1.6.1</b> Sample and population</a></li>
+<li class="chapter" data-level="1.6.2" data-path="index.html"><a href="index.html#models-and-risk"><i class="fa fa-check"></i><b>1.6.2</b> Models and risk</a></li>
+<li class="chapter" data-level="1.6.3" data-path="index.html"><a href="index.html#estimators-and-associated-variability"><i class="fa fa-check"></i><b>1.6.3</b> Estimators and associated variability</a></li>
+<li class="chapter" data-level="1.6.4" data-path="index.html"><a href="index.html#simulating-the-population-using-resampling-techniques"><i class="fa fa-check"></i><b>1.6.4</b> Simulating the population using resampling techniques</a></li>
+<li class="chapter" data-level="1.6.5" data-path="index.html"><a href="index.html#model-selection"><i class="fa fa-check"></i><b>1.6.5</b> Model Selection</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html"><i class="fa fa-check"></i><b>2</b> Assessing the validity of a model</a><ul>
+<li class="chapter" data-level="2.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-1"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#cross-validation"><i class="fa fa-check"></i><b>2.2</b> Cross-Validation</a></li>
+<li class="chapter" data-level="2.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#covariance-penalties-criteria"><i class="fa fa-check"></i><b>2.3</b> Covariance Penalties Criteria</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#introduction-2"><i class="fa fa-check"></i><b>2.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.3.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mallows-c_p"><i class="fa fa-check"></i><b>2.3.2</b> Mallows <span class="math inline">\(C_p\)</span></a></li>
+<li class="chapter" data-level="2.3.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#efrons-q-class"><i class="fa fa-check"></i><b>2.3.3</b> Efron’s <span class="math inline">\(q\)</span>-class</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#information-theory-and-bayesian-criteria"><i class="fa fa-check"></i><b>2.4</b> Information Theory and Bayesian Criteria</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#aic-akaike-information-criterion"><i class="fa fa-check"></i><b>2.4.1</b> AIC: Akaike Information Criterion</a></li>
+<li class="chapter" data-level="2.4.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#bic-bayesian-information-criterion"><i class="fa fa-check"></i><b>2.4.2</b> BIC: Bayesian Information Criterion</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#mean-squared-error-based-criteria"><i class="fa fa-check"></i><b>2.5</b> Mean Squared Error Based Criteria</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#steins-unbiased-risk-estimator-sure"><i class="fa fa-check"></i><b>2.5.1</b> Stein’s unbiased risk estimator (SURE)</a></li>
+<li class="chapter" data-level="2.5.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-focused-information-criterion-fic"><i class="fa fa-check"></i><b>2.5.2</b> The Focused Information Criterion (FIC)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#classification-measures"><i class="fa fa-check"></i><b>2.6</b> Classification measures</a><ul>
+<li class="chapter" data-level="2.6.1" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-logistic-model"><i class="fa fa-check"></i><b>2.6.1</b> The logistic model</a></li>
+<li class="chapter" data-level="2.6.2" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#prediction-error-measures-for-binary-classification"><i class="fa fa-check"></i><b>2.6.2</b> Prediction error measures for Binary classification</a></li>
+<li class="chapter" data-level="2.6.3" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#classification-error-estimation"><i class="fa fa-check"></i><b>2.6.3</b> Classification error estimation</a></li>
+<li class="chapter" data-level="2.6.4" data-path="assessing-the-validity-of-a-model.html"><a href="assessing-the-validity-of-a-model.html#the-roc-curve"><i class="fa fa-check"></i><b>2.6.4</b> The ROC curve</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html"><i class="fa fa-check"></i><b>3</b> Ordering the variables</a><ul>
+<li class="chapter" data-level="3.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#introduction-3"><i class="fa fa-check"></i><b>3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#stepwise-forward-regression"><i class="fa fa-check"></i><b>3.2</b> Stepwise forward regression</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#partial-correlations"><i class="fa fa-check"></i><b>3.2.1</b> Partial correlations</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#selection-by-hypothesis-testing"><i class="fa fa-check"></i><b>3.2.2</b> Selection by hypothesis testing</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#orthogonal-matching-pursuit"><i class="fa fa-check"></i><b>3.2.3</b> Orthogonal matching pursuit</a></li>
+<li class="chapter" data-level="3.2.4" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#forward-stagewise-regression"><i class="fa fa-check"></i><b>3.2.4</b> Forward stagewise regression</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#streamwise-regression"><i class="fa fa-check"></i><b>3.3</b> Streamwise regression</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#introduction-4"><i class="fa fa-check"></i><b>3.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#sure-independence-screening"><i class="fa fa-check"></i><b>3.3.2</b> Sure Independence Screening</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#pc-simple-algorithm"><i class="fa fa-check"></i><b>3.3.3</b> PC-simple algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#classification-and-regression-tree-cart"><i class="fa fa-check"></i><b>3.4</b> Classification And Regression Tree (CART)</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#regression-tree"><i class="fa fa-check"></i><b>3.4.1</b> Regression tree</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ordering-the-variables.html"><a href="ordering-the-variables.html#classification-trees"><i class="fa fa-check"></i><b>3.4.2</b> Classification Trees</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html"><i class="fa fa-check"></i><b>4</b> Shrinkage Methods</a><ul>
+<li class="chapter" data-level="4.1" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#introduction-5"><i class="fa fa-check"></i><b>4.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.2" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#ridge-regression"><i class="fa fa-check"></i><b>4.2</b> Ridge regression</a></li>
+<li class="chapter" data-level="4.3" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-lasso-estimator"><i class="fa fa-check"></i><b>4.3</b> The lasso estimator</a></li>
+<li class="chapter" data-level="4.4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#alternative-penalized-regression-methods"><i class="fa fa-check"></i><b>4.4</b> Alternative penalized regression methods</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-adaptive-and-relaxed-lasso"><i class="fa fa-check"></i><b>4.4.1</b> The adaptive and relaxed lasso</a></li>
+<li class="chapter" data-level="4.4.2" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-elastic-net"><i class="fa fa-check"></i><b>4.4.2</b> The elastic net</a></li>
+<li class="chapter" data-level="4.4.3" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#the-nonnegative-garotte"><i class="fa fa-check"></i><b>4.4.3</b> The nonnegative garotte</a></li>
+<li class="chapter" data-level="4.4.4" data-path="shrinkage-methods.html"><a href="shrinkage-methods.html#non-convex-penalties"><i class="fa fa-check"></i><b>4.4.4</b> Non convex penalties</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html"><i class="fa fa-check"></i><b>5</b> Properties of model selection criteria</a><ul>
+<li class="chapter" data-level="5.1" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html#introduction-6"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html#selection-consistency"><i class="fa fa-check"></i><b>5.2</b> Selection consistency</a></li>
+<li class="chapter" data-level="5.3" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html#selection-efficiency"><i class="fa fa-check"></i><b>5.3</b> Selection efficiency</a></li>
+<li class="chapter" data-level="5.4" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html#the-oracle-property"><i class="fa fa-check"></i><b>5.4</b> The oracle property</a></li>
+<li class="chapter" data-level="5.5" data-path="properties-of-model-selection-criteria.html"><a href="properties-of-model-selection-criteria.html#probability-of-overfitting"><i class="fa fa-check"></i><b>5.5</b> Probability of overfitting</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="solutions.html"><a href="solutions.html"><i class="fa fa-check"></i><b>6</b> Solutions</a><ul>
+<li class="chapter" data-level="6.1" data-path="solutions.html"><a href="solutions.html#chapter-1"><i class="fa fa-check"></i><b>6.1</b> Chapter 1</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="solutions.html"><a href="solutions.html#zam"><i class="fa fa-check"></i><b>6.1.1</b> Data on Malnutrition in Zambia</a></li>
+<li class="chapter" data-level="6.1.2" data-path="solutions.html"><a href="solutions.html#leuk"><i class="fa fa-check"></i><b>6.1.2</b> Prognostic Factors in Childhood Leukemia</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="solutions.html"><a href="solutions.html#chapter-2"><i class="fa fa-check"></i><b>6.2</b> Chapter 2</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="solutions.html"><a href="solutions.html#cv"><i class="fa fa-check"></i><b>6.2.1</b> Cross-validation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="solutions.html"><a href="solutions.html#aic"><i class="fa fa-check"></i><b>6.2.2</b> Akaike Information Criterion</a></li>
+<li class="chapter" data-level="6.2.3" data-path="solutions.html"><a href="solutions.html#roc"><i class="fa fa-check"></i><b>6.2.3</b> ROC curves</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="solutions.html"><a href="solutions.html#chapter-3"><i class="fa fa-check"></i><b>6.3</b> Chapter 3</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="solutions.html"><a href="solutions.html#HT"><i class="fa fa-check"></i><b>6.3.1</b> Selection by Hypothesis Testing</a></li>
+<li class="chapter" data-level="6.3.2" data-path="solutions.html"><a href="solutions.html#SIS"><i class="fa fa-check"></i><b>6.3.2</b> Sure Independence Screening</a></li>
+<li class="chapter" data-level="6.3.3" data-path="solutions.html"><a href="solutions.html#PC"><i class="fa fa-check"></i><b>6.3.3</b> PC-simple algorithm</a></li>
+<li class="chapter" data-level="6.3.4" data-path="solutions.html"><a href="solutions.html#RT"><i class="fa fa-check"></i><b>6.3.4</b> Regression Tree</a></li>
+<li class="chapter" data-level="6.3.5" data-path="solutions.html"><a href="solutions.html#CT"><i class="fa fa-check"></i><b>6.3.5</b> Classification Tree</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="solutions.html"><a href="solutions.html#chapter-4"><i class="fa fa-check"></i><b>6.4</b> Chapter 4</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="solutions.html"><a href="solutions.html#Ridge"><i class="fa fa-check"></i><b>6.4.1</b> Ridge Regression</a></li>
+<li class="chapter" data-level="6.4.2" data-path="solutions.html"><a href="solutions.html#lasso"><i class="fa fa-check"></i><b>6.4.2</b> Lasso</a></li>
+<li class="chapter" data-level="6.4.3" data-path="solutions.html"><a href="solutions.html#nonconvex"><i class="fa fa-check"></i><b>6.4.3</b> Non Convex Penalties</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Model Selection in High Dimensions</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="properties-of-model-selection-criteria" class="section level1">
+<h1><span class="header-section-number">5</span> Properties of model selection criteria</h1>
+<div id="introduction-6" class="section level2">
+<h2><span class="header-section-number">5.1</span> Introduction</h2>
+With model selection methods, defining <em>suitable</em> properties comes in several forms. We consider here the case of the linear regression model with <span class="math inline">\(Y_i|\mathbf{x}_i \sim \mathcal{N}(\boldsymbol{\mu}\left(\mathbf{x}_i\right),\sigma^2), 0&lt;\sigma^2&lt;\infty\)</span>, <span class="math inline">\(i=1,\ldots,n\)</span>, with
+<span class="math display">\[\begin{equation}  
+\boldsymbol{\mu}\left(\mathbf{x}_i\right)=\mathbf{x}_i^T \boldsymbol{\beta}, 
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p\)</span> and <span class="math inline">\(\mathbf{x}_i^T\)</span> is the <em>i</em>th row of <span class="math inline">\(\mathbf{X}\)</span> (that includes a column of ones for the intercept). The normality assumption is not necessary (but sufficient), weaker assumptions on the form of the error distribution can be instead assumed.</p>
+<p>Asymptotically, a consistent estimator for <span class="math inline">\(\boldsymbol{\beta}\)</span> such as the MLE (LS estimator) will converge to the <em>true</em> regression coefficients <span class="math inline">\(\beta_j\neq 0\)</span> for <span class="math inline">\(j\in \mathcal{J}_S=\{j\in\mathcal{J}=\{j=1,\ldots,p\}\;\vert\; \beta_j\neq 0,\}\)</span> and <span class="math inline">\(\beta_j=0\)</span> for <span class="math inline">\(j\in\mathcal{J}\setminus\mathcal{J}_{S}\)</span>, where <span class="math inline">\(\mathcal{J}\setminus\mathcal{J}_{S}\)</span> is the complement set of <span class="math inline">\(\mathcal{J}_{S}\)</span> in <span class="math inline">\(\mathcal{J}\)</span>. If <span class="math inline">\(\mathcal{J}\setminus\mathcal{J}_{S}\neq\emptyset\)</span>, one is under a <em>sparse</em> setting, and under this setting, a model selection method should be able to identify the subset <span class="math inline">\(\mathcal{J}_S\)</span>, by means of say <span class="math inline">\(\widehat{\mathcal{J}_S}\)</span>, in the most parsimonious way, i.e. <span class="math inline">\(s=\vert\mathcal{J}_S\vert\leq\vert\widehat{\mathcal{J}_S}\vert&lt;\vert\mathcal{J}\vert=p\)</span>, where <span class="math inline">\(\vert\mathcal{J}\vert\)</span> denotes the number of elements in the set <span class="math inline">\(\mathcal{J}\)</span>.</p>
+<p>Let <span class="math inline">\(\mathcal{M}=\{\mathcal{M}_l\;\vert\;l=1,\ldots,L\}\)</span> denote the set all possible models that can be constructed with <span class="math inline">\(K\leq\min(n,p)\)</span> covariates, with associated indicator’s set <span class="math inline">\(\mathcal{J}_{l}\subseteq\mathcal{J}\)</span>, which are all submodels of the full one(s) (i.e. with <span class="math inline">\(K\)</span> covariates). Let <span class="math inline">\(\mathcal{M}_S\)</span> denote the <em>true model</em>, one distinguishes two situations that are assumed <em>a priori</em>: <span class="math inline">\(\mathcal{M}_S\in\mathcal{M}\)</span> or <span class="math inline">\(\mathcal{M}_S\notin\mathcal{M}\)</span>. If <span class="math inline">\(\mathcal{M}_S\in\mathcal{M}\)</span>, then a reasonable property for a model selection criterion is its ability to find <span class="math inline">\(\mathcal{J}_S\)</span>, measured by the <em>consistency</em> of <span class="math inline">\(\widehat{\mathcal{J}_S}\)</span>, i.e. its ability to converge, in some sense and when the available information is sufficiently large, to <span class="math inline">\(\mathcal{J}_S\)</span>. If <span class="math inline">\(\mathcal{M}_S\notin\mathcal{M}\)</span>, one instead assumes that one of the possible models <span class="math inline">\(\mathcal{M}_{\jmath_S}\in\mathcal{M}\)</span> is the <em>closest</em> to the true one with respect to a suitable <em>distance</em>, e.g. the Kullback-Leibler (KL) distance. A selection criterion that selects (for sufficiently large <span class="math inline">\(n\)</span>) this submodel is said to be (asymptotically) <em>efficient</em>.</p>
+<p>However, model selection consistency is not the same as estimation consistency, and the <em>nearest</em> property to estimation consistency is <em>selection efficiency</em>. As will be seen later, selection consistency excludes selection efficiency (and conversely), so that different criteria serve different purposes. For pure prediction, selection consistency is possibly the most desired property since it avoids the problem of overfitting. For model building for a better understanding of the phenomenon under study, selection efficiency is a more desirable property, if the <em>probability of overfitting</em> associated to the selection criterion remains reasonable. Indeed, since the model selection criteria are statistics that are subject to random sampling, their (asymptotic) distribution can be derived. From the later, one can evaluate the probability of overfitting and the <em>signal-to-noise ratio (SNR)</em>.</p>
+<p>A property that is also invoked in the case of penalized methods (that perform simultaneously selection and estimation) is the <em>oracle</em> property <span class="citation">(Fan and Li <a href="#ref-fanandli2001">2001</a>)</span> that concerns a form of <em>conditional</em> consistency for the regression coefficient estimator of the selected submodel, derived under the sparsity assumption (and selection consistency).</p>
+<p>For the linear regression model, there are (at least) two conditions that are assumed which are<br />
+1. For all <span class="math inline">\(\mathcal{M}_\jmath\in\mathcal{M}\)</span> with associated covariates matrix <span class="math inline">\(\mathbf{X}_\jmath\)</span> (i.e. <span class="math inline">\(\mathbf{X}_\jmath\)</span> is formed by the columns <span class="math inline">\(\jmath\in\mathcal{J}_{\jmath}\)</span> of <span class="math inline">\(\mathbf{X}\)</span>), we have <span class="math inline">\(\lim_{n\rightarrow \infty} \frac{1}{n}\mathbf{X}_\jmath^T\mathbf{X}_\jmath=\mathbf{\Sigma}_{\jmath\jmath}\)</span>, with <span class="math inline">\(\mathbf{\Sigma}_{\jmath\jmath}\)</span> a positive definite matrix.<br />
+2. When <span class="math inline">\({\sigma}^2\)</span> is unknown it can be replaced by a consistent estimator <span class="math inline">\(\hat{\sigma}^2\)</span>.<br />
+Moreover, in our context, information takes two forms, the sample size <span class="math inline">\(n\)</span> and also the number of available covariates (features, factors, regressors) <span class="math inline">\(p\)</span>.</p>
+<p>We denote by <span class="math inline">\(\xi\left(\mathbf{A}\right)\)</span> the the smallest eigenvalue of the matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+</div>
+<div id="selection-consistency" class="section level2">
+<h2><span class="header-section-number">5.2</span> Selection consistency</h2>
+Let <span class="math inline">\(R(\boldsymbol{\beta})=\Vert \mathbf{y}-\mathbf{X}\boldsymbol{\beta}\Vert^2\)</span> and consider the LS estimator obtained from a subset <span class="math inline">\(\mathcal{J}_{\jmath}\)</span> of covariates given by
+<span class="math display">\[\begin{equation}
+\hat{\boldsymbol{\beta}}_{\mathcal{J}_{\jmath}}=\mbox{argmin}_{\boldsymbol{\beta}\vert \beta_j=0, j\in \mathcal{J}\setminus\mathcal{J}_{\jmath}}R(\boldsymbol{\beta})
+\end{equation}\]</span>
+We consider here model selection criteria from a Generalized Information Criterion (GIC) class <span class="citation">(Shao <a href="#ref-shao1997asymptotic">1997</a>,<span class="citation">Kim, Kwon, and Choi (<a href="#ref-KiKwCh:12">2012</a>)</span>)</span> that estimate a subset of covariates as
+<span class="math display">\[\begin{equation}
+\widehat{\mathcal{J}_{\jmath}}\left(\lambda_n\right)=\mbox{argmin}_{\mathcal{J}_{\jmath}}R\left(\hat{\boldsymbol{\beta}}_{\mathcal{J}_{\jmath}}\right)+\lambda_n\vert\mathcal{J}_{\jmath}\vert\sigma^2
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\lambda_n\)</span> possibly depends on <span class="math inline">\(n\)</span>. The AIC (<span class="math inline">\(C_p\)</span>) is obtained with <span class="math inline">\(\lambda_n=2\)</span>, while the BIC is obtained with <span class="math inline">\(\lambda_n=\log(n)\)</span>. Note that <span class="math inline">\(\vert\mathcal{J}\vert=p&gt;n\)</span> in high dimensions, it is therefore more suitable to restrict the GIC class to submodels <span class="math inline">\(\mathcal{J}_{\jmath,s_n}\)</span> such that <span class="math inline">\(\vert\mathcal{J}_{\jmath,s_n}\vert\leq s_n\)</span> where <span class="math inline">\(s_n\)</span> can possibly grow with the sample size <span class="math inline">\(n\)</span>.</p>
+A member of the GIC class is said to be selection consistent if
+<span class="math display">\[\begin{equation}
+\lim_{n\rightarrow\infty}P\left(\widehat{\mathcal{J}_{S,s_n}}\left(\lambda_n\right)=\mathcal{J}_{S}\right)=1
+\end{equation}\]</span>
+<p><span class="citation">Kim, Kwon, and Choi (<a href="#ref-KiKwCh:12">2012</a>)</span> sets the necessary regularity conditions (essentially on the design matrix <span class="math inline">\(\mathbf{X}\)</span>) for a member of the GIC class to be selection consistent when <span class="math inline">\(p:=p_n\)</span> is allowed to grow with <span class="math inline">\(n\)</span>. The result is then</p>
+<p><strong>Theorem: Selection consistency of the (restricted) GIC class</strong> <span class="citation">(Kim, Kwon, and Choi <a href="#ref-KiKwCh:12">2012</a>)</span><br />
+If <span class="math inline">\(\mathbb{E}\left[\varepsilon^{2k}\right]&lt;\infty\)</span> for some <span class="math inline">\(k\in\mathbb{N}^{+}\)</span>, then for <span class="math inline">\(\lambda_n\)</span> such that <span class="math inline">\(\lambda_n=o\left(n^{c_2-c_1}\right)\)</span> and <span class="math inline">\(\lim_{n\rightarrow\infty}p_n/\left(\lambda_n\rho_n\right)^k=0\)</span>, with <span class="math inline">\(0\leq c_1&lt;1/2\)</span>, <span class="math inline">\(2c_1&lt;c_2\leq 1\)</span>, <span class="math inline">\(\rho_n=\mbox{inf}_{\mathcal{J}_{S}\;\vert\;\vert \mathcal{J}_{S}\vert \leq s_n}\xi\left(\mathbf{X}_{S}^T\mathbf{X}_{S}/n\right)\)</span>, a member of the GIC class is selection consistent.<br />
+<br />
+The notation <span class="math inline">\(\lambda_n=o\left(n^{c_2-c_1}\right)\)</span> is equivalent to <span class="math inline">\(\lim_{n\rightarrow\infty} \lambda_n/n^{c_2-c_1}=0\)</span>. In particular, we can take <span class="math inline">\(c_1=0\)</span> and <span class="math inline">\(c_2=1\)</span> so that <span class="math inline">\(\lambda_n\)</span> must be <span class="math inline">\(o(n)\)</span>. Condition <span class="math inline">\(\lim_{n\rightarrow\infty}p_n/\left(\lambda_n\rho_n\right)^k=0\)</span> indicated that the penalty needs to grow faster with <span class="math inline">\(n\)</span> (through <span class="math inline">\(\lambda_n\)</span>) than the number of available covariates <span class="math inline">\(p_n\)</span>. If <span class="math inline">\(p_n\)</span> does not depend on <span class="math inline">\(n\)</span> (hence it is fixed), then selection consistency is achieved when <span class="math inline">\(\lambda_n=o(n)\)</span> and <span class="math inline">\(\lim_{n\rightarrow\infty}\lambda_n=\infty\)</span>. Hence, the BIC is selection consistent while the AIC (<span class="math inline">\(C_p\)</span>) is not.</p>
+<p>Selection consistency is an asymptotic concept which does not indicate what happens in finite samples. For example, the <span class="math inline">\(C_p\)</span> could be transformed by changing the factor <span class="math inline">\(2\)</span> with say <span class="math inline">\(2\cdot n^{\alpha}\)</span>, with e.g. <span class="math inline">\(\alpha=0.0000001\)</span> and we then have a selection consistent estimator, but <span class="math inline">\(2\cdot n^{\alpha}\approx 2\)</span> even for very large values of <span class="math inline">\(n\)</span>.</p>
+</div>
+<div id="selection-efficiency" class="section level2">
+<h2><span class="header-section-number">5.3</span> Selection efficiency</h2>
+While selection consistency is concerned by the selection of the most parsimonious model, efficiency studies the behavior of a model selection criterion relative to a distance between the true model and the selected one (asymptotically). In particular, one can use for the distance, a <em>loss function</em> for prediction purposes. Such a loss function can be the squared prediction error (<span class="math inline">\(L_2\)</span> loss function), given by
+<span class="math display">\[\begin{equation}
+L_n\left(\widehat{\mathcal{J}_{\jmath}}\right)=\frac{1}{n}\Vert \boldsymbol{\mu}\left(\mathbf{X}\right) - \hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}\Vert^2=\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}\Vert^2
+\end{equation}\]</span>
+where <span class="math inline">\(\hat{\mathbf{Y}}_{\widehat{\mathcal{J}_{\jmath}}}\)</span> is the vector of predicted responses <span class="math inline">\(\mathbf{X}\hat{\boldsymbol{\beta}}_{{\widehat{\mathcal{J}_{\jmath}}}}\)</span> with <span class="math inline">\(\hat{\boldsymbol{\beta}}_{{\widehat{\mathcal{J}_{\jmath}}}}\)</span> of length <span class="math inline">\(p\)</span> with elements <span class="math inline">\(\beta_j:=0, j\in \mathcal{J}\setminus{\widehat{\mathcal{J}_{\jmath}}}\)</span>. Let <span class="math inline">\(\mathcal{J}_{S}\)</span> be defined as
+<span class="math display">\[\begin{equation}
+L_n\left(\mathcal{J}_{S}\right)= \min_{\mathcal{M}_l}L_n\left(\mathcal{J}_{l}\right) = \min_{\mathcal{M}_l}\frac{1}{n}\Vert \hat{\mathbf{Y}}_{\mathcal{J}_{l}}-\mathbf{X}\boldsymbol{\beta}\Vert^2
+\end{equation}\]</span>
+An efficient model selection criterion that selects the submodel with indices <span class="math inline">\(\widehat{\mathcal{J}_S}\)</span> is such that
+<span class="math display">\[\begin{equation}
+\frac{\mathbb{E}\left[L_n\left(\widehat{\mathcal{J}_{S}}\right)\right]}{\mathbb{E}\left[L_n\left(\mathcal{J}_S\right)\right]}\overset{p}{\rightarrow}1
+\end{equation}\]</span>
+<p>In other words, a model selection criterion is efficient if it selects a model such that the ratio of the expected loss function at the selected model and the expected loss function at its theoretical minimiser converges to one in probability <span class="citation">(Shao <a href="#ref-shao1997asymptotic">1997</a>)</span>.</p>
+<p>Under some suitable technical conditions, the <span class="math inline">\(C_p\)</span> (AIC) is an efficient model selection criterion. This is also true for other model selection criteria with finite <span class="math inline">\(\lambda_n\)</span>. More importantly, a consistent model selection (i.e. <span class="math inline">\(\lambda_n\rightarrow\infty\)</span>) cannot be efficient <span class="citation">(Yang <a href="#ref-Yang:05">2005</a>)</span>. Actually, consistency guaranties the identification of the true or best model first while efficiency is related to model estimation accuracy. For the later, a suitable measure is the <em>minimax rate optimality</em> <span class="citation">(Yang <a href="#ref-Yang:05">2005</a>)</span>. The <span class="math inline">\(C_p\)</span> (AIC) is minimax-rate optimal for estimating the regression function, while the BIC and adaptive model selection (penalized regression methods) are not <span class="citation">(see also Leeb and Pötscher <a href="#ref-LePo:08">2008</a>)</span>.</p>
+<hr />
+<blockquote>
+Let <span class="math inline">\(\mathbf{H}_{\mathcal{J}_{\jmath}}=\mathbf{X}_{\mathcal{J}_{\jmath}}\left(\mathbf{X}_{\mathcal{J}_{\jmath}}^T\mathbf{X}_{\mathcal{J}_{\jmath}}\right)^{-1}\mathbf{X}_{\mathcal{J}_{\jmath}}^T\)</span>, with <span class="math inline">\(\mathbf{X}_{\mathcal{J}_{\jmath}}\)</span> formed by the columns of <span class="math inline">\(\mathbf{X}\)</span> in <span class="math inline">\(\mathcal{J}_{\jmath}\)</span>. We have <span class="math inline">\(\hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}=\mathbf{H}_{\mathcal{J}_{\jmath}}\mathbf{Y}\)</span>. Hence
+<span class="math display">\[\begin{eqnarray}
+L_n\left(\mathcal{J}_{\jmath}\right)&amp;=&amp;\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \mathbf{H}_{\mathcal{J}_{\jmath}}\left(\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}\right)\Vert^2= 
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}
+-\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&amp;=&amp;
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2
+-2\frac{1}{n}\Vert\boldsymbol{\varepsilon}^{T}\mathbf{H}_{\mathcal{J}_{\jmath}}^T\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2 +\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon} \\
+&amp;=&amp;
+\frac{1}{n}\Vert \left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2
++\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon} = \Delta\left(\mathcal{J}_{\jmath}\right)+\frac{1}{n}\boldsymbol{\varepsilon}^T\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
+\end{eqnarray}\]</span>
+with <span class="math inline">\(\boldsymbol{\varepsilon}=\mathbf{Y}-\mathbf{X}\boldsymbol{\beta}\)</span>. Within the GIC class, <span class="math inline">\(\widehat{\mathcal{J}_{\jmath}}\)</span> is is obtained as the minimizer in <span class="math inline">\(\mathcal{J}_{\jmath}\)</span> of
+<span class="math display">\[\begin{equation}
+\frac{1}{n}\Vert \mathbf{Y} - \hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}\Vert^2
++\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2
+\end{equation}\]</span>
+We have that
+<span class="math display">\[\begin{eqnarray}
+\frac{1}{n}\Vert \mathbf{Y} - \hat{\mathbf{Y}}_{\mathcal{J}_{\jmath}}\Vert^2&amp;=&amp;
+\frac{1}{n}\Vert \mathbf{X}\boldsymbol{\beta} - \mathbf{H}_{\mathcal{J}_{\jmath}}\mathbf{X}\boldsymbol{\beta}+
+\boldsymbol{\varepsilon} - \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2 \\
+&amp;=&amp;
+\frac{1}{n}\Vert \left(\mathbf{I}- \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\mathbf{X}\boldsymbol{\beta}\Vert^2 
++
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T\left(\mathbf{I}- \mathbf{H}_{\mathcal{J}_{\jmath}}\right)
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon} - \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&amp;=&amp;
+\Delta\left(\mathcal{J}_{\jmath}\right)+
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon}\Vert^2 -2\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}+\frac{1}{n}\Vert\mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\Vert^2\\
+&amp;=&amp;
+\Delta\left(\mathcal{J}_{\jmath}\right)+
+2\frac{1}{n}\boldsymbol{\beta}^T\mathbf{X}^T
+\left(\mathbf{I} - \mathbf{H}_{\mathcal{J}_{\jmath}}\right)\boldsymbol{\varepsilon}
++\frac{1}{n}\Vert
+\boldsymbol{\varepsilon}\Vert^2 -\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
+\end{eqnarray}\]</span>
+When <span class="math inline">\(\mathcal{J}_S\subset\widehat{\mathcal{J}_{\jmath}}\)</span>, that is <span class="math inline">\(\beta_j\neq 0 \forall j\in \mathcal{J}_S\)</span> and <span class="math inline">\(\beta_j=0\)</span> otherwise, <span class="math inline">\(\boldsymbol{\beta}^T\mathbf{X}^T \left(\mathbf{I} - \mathbf{H}_{\widehat{\mathcal{J}_{\jmath}}}\right)=0\)</span> and <span class="math inline">\(\Delta\left(\mathcal{J}_{\jmath}\right)=0\)</span>, so that <span class="math inline">\(\widehat{\mathcal{J}_{\jmath}}\)</span> is is obtained as the minimizer in <span class="math inline">\(\mathcal{J}_{\jmath}\)</span> of
+<span class="math display">\[\begin{equation}
+-\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}
++\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2
+=
+L_n\left(\mathcal{J}_{\jmath}\right)
++\left(\frac{1}{n}\lambda_n\vert\mathcal{J}_{\jmath}\vert\hat{\sigma}^2-2\frac{1}{n}\boldsymbol{\varepsilon}^T \mathbf{H}_{\mathcal{J}_{\jmath}}\boldsymbol{\varepsilon}\right)
+\end{equation}\]</span>
+<hr />
+</blockquote>
+</div>
+<div id="the-oracle-property" class="section level2">
+<h2><span class="header-section-number">5.4</span> The oracle property</h2>
+The oracle property was set by <span class="citation">Fan and Li (<a href="#ref-fanandli2001">2001</a>)</span> as a desirable property for model selection methods that do model selection and estimation simultaneously (regularized regression). It concerns the properties of the resulting model estimator, <span class="math inline">\(\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_{\jmath}}\right)\)</span> obtained with the penalty term <span class="math inline">\(\lambda_n\)</span> (e.g. in the linear regression model), that, for the oracle property to hold, must satisfy:<br />
+1. The corresponding model selection criterion, based on <span class="math inline">\(\lambda_n\)</span>, is consistent (by providing <span class="math inline">\(\widehat{\mathcal{J}_S}\)</span>)<br />
+2.
+<span class="math display">\[\begin{equation}
+\sqrt{n}\left(
+\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)-
+\hat{\boldsymbol{\beta}}\left(\mathcal{J}_S\right)
+\right)
+\overset{D}{\rightarrow}
+\mathcal{N}\left(\mathbf{0},\boldsymbol{\Sigma}\left(\mathcal{J}_S\right)\right), \end{equation}\]</span>
+<p>where <span class="math inline">\(\boldsymbol{\Sigma}\left(\mathcal{J}_S\right)\)</span> is the covariance matrix knowing the true subset model.<br />
+<br />
+The oracle property is based on the <em>sparsity</em> assumption, i.e. the ability for the model selection methods to estimate <span class="math inline">\(\beta_j\in\mathcal{J}\setminus\mathcal{J}_S\)</span> exactly as zero (with probability approaching one as sample size increases). As a consequence, a model selection procedure enjoying the oracle property does as good (asymptotically) as the maximum likelihood estimator on the full model.</p>
+The oracle property is a concept that holds only asymptotically. In finite samples, <span class="citation">Leeb and Pötscher (<a href="#ref-LePo:08">2008</a>)</span> show that the estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)\)</span> satisfying the sparsity condition
+<span class="math display">\[\begin{equation}
+\mathcal{P}\left(
+I\left(
+\hat{\beta}_j\left(\widehat{\mathcal{J}_S}\right)
+\neq 0
+\right)
+\leq I\left(
+\beta_j\neq 0\right)
+\right)\rightarrow 1, \mbox{as }\; n\rightarrow\infty, \; \forall j\in \{1,\ldots,p\}
+\end{equation}\]</span>
+have unbounded estimation risk as measured by the maximal mean squared error of estimation
+<span class="math display">\[\begin{equation}
+\mbox{sup}_{\boldsymbol{\beta}}\mathbb{E}\left[n\Vert \hat{\boldsymbol{\beta}}\left(\widehat{\mathcal{J}_S}\right)- \boldsymbol{\beta}\Vert^2\right]\rightarrow\infty, \mbox{as }\; n\rightarrow\infty
+\end{equation}\]</span>
+<p>Note that for the LS (MLE), we have <span class="math inline">\(\mathbb{E}\left[n\Vert \hat{\boldsymbol{\beta}}_{LS}- \boldsymbol{\beta}\Vert^2\right] =\mbox{tr}\left[\left(n^{-1}\mathbf{X}^T\mathbf{X}\right)^{-1}\right]\)</span> which does not depend on <span class="math inline">\(\boldsymbol{\beta}\)</span> and remains bounded as the sample size increases.</p>
+<p>This means that we cannot have it all: model selection consistency and estimation efficiency.</p>
+</div>
+<div id="probability-of-overfitting" class="section level2">
+<h2><span class="header-section-number">5.5</span> Probability of overfitting</h2>
+<p>Model selection criteria that are efficient (hence not consistent), will select models that are not the most parsimonious ones. One can then study their associated probability of overfitting.</p>
+<p>Overfitting can be defined as choosing a model that has more variables than the model identified as closest to the true model, thereby reducing efficiency. Similarly, underfitting is defined as choosing a model with too few variables compared to the closest model, also reducing efficiency. An underfitted model may have poor predictive ability due to a lack of detail in the model, while an overfitted model may be <em>unstable</em> in the sense that predictions are highly variable (noisy).</p>
+The probability of overfitting for a model selection criterion, say <span class="math inline">\(\mbox{MSC}_l(\lambda)\)</span>, with <span class="math inline">\(\lambda\)</span> indicating the strength of the penalty (e.g. <span class="math inline">\(\lambda=2\)</span> for the <span class="math inline">\(C_p\)</span> and AIC) and <span class="math inline">\(l\)</span> the size of the selected model, is computed, for nested models, as the probability of choosing <span class="math inline">\(L\)</span> additional variables to the <span class="math inline">\(s\)</span> of the best (nearest) model (or true one) <span class="math inline">\(\mathcal{M}_S\)</span>. Namely
+<span class="math display">\[\begin{equation}
+\mathcal{P}\left(\mbox{MSC}_{s+L}(\lambda)&lt;\mbox{MSC}_s(\lambda)\right)
+\end{equation}\]</span>
+<p>Note that the probability is defined for finite samples <span class="math inline">\(n\)</span>, but cannot always be given in a closed form (but computed by means of simulations). To compute the probability of overfitting one first derives the (sampling) distribution of the random variable <span class="math inline">\(\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\)</span> to get the probability distribution that depends on <span class="math inline">\(L\)</span>.</p>
+<p><span class="citation">McQuarrie and Tsai (<a href="#ref-McQuTs:98">1998</a>)</span>, Section 2.5, provide the expressions of the probabilities of overfitting by <span class="math inline">\(L\)</span> variables for several model selection criteria, for finite samples and for <span class="math inline">\(n\rightarrow\infty\)</span>.</p>
+A measure that is associated to the probability of overfitting is the <em>signal-to-noise ratio (SNR)</em> given by
+<span class="math display">\[\begin{equation}
+\frac{\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}
+{\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}}
+\end{equation}\]</span>
+<p>where <span class="math inline">\(\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]\)</span> is the signal and <span class="math inline">\(\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}\)</span> is the noise. While the signal depends primarily on the penalty function (<span class="math inline">\(\lambda\)</span>), the noise depends on the distribution of the (in-sample) prediction error measure. If the penalty <span class="math inline">\(\lambda\)</span> is weaker than the noise, the model selection criterion will have a weak signal, a weak signal-to-noise ratio, and will tend to overfit. <span class="citation">McQuarrie and Tsai (<a href="#ref-McQuTs:98">1998</a>)</span>, Section 2.5, provide the SNR (finite sample and as <span class="math inline">\(n\rightarrow\infty\)</span>) for several model selection criteria. In general, efficient criteria have equivalent (finite) SNR, and consistent criteria all have have much larger SNR. Larger SNR is an indicator of the propensity of a model selection criterion to underfit in finite samples.</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-fanandli2001">
+<p>Fan, J., and R. Li. 2001. “Variable Selection via Nonconcave Penalized Likelihood and Its Oracle Properties.” <em>Journal of the American Statistical Association</em> 96 (456). Taylor &amp; Francis: 1348–60.</p>
+</div>
+<div id="ref-shao1997asymptotic">
+<p>Shao, J. 1997. “An Asymptotic Theory for Linear Model Selection.” <em>Statistica Sinica</em> 7: 221–42.</p>
+</div>
+<div id="ref-KiKwCh:12">
+<p>Kim, Y., S. Kwon, and H. Choi. 2012. <em>Journal of Machine Learning Research</em> 13: 1037–57.</p>
+</div>
+<div id="ref-Yang:05">
+<p>Yang, Y. 2005. “Can the Strengths of AIC and BIC Be Shared? A Conflict Between Model Indentification and Regression Estimation.” <em>Biometrika</em> 92: 937–50.</p>
+</div>
+<div id="ref-LePo:08">
+<p>Leeb, H., and B. M. Pötscher. 2008. “Sparse Estimators and the Oracle Property, or the Return of Hodges’ Estimator.” <em>Journal of Econometrics</em> 142: 201–11.</p>
+</div>
+<div id="ref-McQuTs:98">
+<p>McQuarrie, A.D.R., and C.L. Tsai. 1998. <em>Regression and Time Series Model Selection</em>. World Scientific.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="shrinkage-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="solutions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
