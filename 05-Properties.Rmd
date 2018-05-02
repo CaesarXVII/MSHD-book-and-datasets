@@ -185,3 +185,14 @@ A measure that is associated to the probability of overfitting is the *signal-to
 where $\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]$ is the signal and $\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}$ is the noise. While the signal depends primarily on the penalty
 function ($\lambda$), the noise depends on the distribution of the (in-sample) prediction error measure. If the penalty $\lambda$ is weaker than the noise, the model selection criterion will have a weak signal, a weak signal-to-noise ratio, and will tend to overfit. @McQuTs:98, Section 2.5, provide the SNR (finite sample and as $n\rightarrow\infty$) for several model selection criteria. In general, efficient criteria have equivalent (finite) SNR, and consistent criteria all have
 have much larger SNR. Larger SNR is an indicator of the propensity of a model selection criterion to underfit in finite samples.
+
+> Exercise:\
+In this exercise we would like to prove that the Mallow $C_p$ criterion is over-fitting asymptotically, thus not consistent in the strong sense. In order to understand the more general implications of this result, we work with a $\lambda_n$ parameter which, in the special $C_p$ case, is equal to 2. We limit our reasoning to the linear model case where, by default, $AIC$ and $C_p$ expressions coincide. Perform the following steps:\
+
+> a) Derive the small small sample distribution of the quantity $(C_{p, L + K} - C_{p, K})$ where $C_{p, K}$ is the $C_p$ value for the supposed true model and $C_{p, L + K}$ is the $C_p$ value of a generic over-fitted model which selects L regressors more than the true number (i.e. K). For doing so, use the fact that: $C_{p,K} = \frac{SSE_{K}}{s^2_{k^{\star}}} - n + \lambda_n K$ and $s^2_{k^{\star}} = \frac{SSE_{k^{\star}}}{n - k^{\star}}$ meaning that we are estimating the variance of some larger model with $k^{\star}$ regressors (e.g. full model).\
+
+> b) Thanks to the previous step, retrieve the small sample probability of over-fitting which has to depend on $\lambda_n$.\    
+
+> c) Let $n \rightarrow + \infty$ and derive the asymptotic probability of over-fitting thanks to the Slutsky theorem.\
+
+> d) For $\lambda_n = [0 \; 2 \; log(n)]$ derive the asymptotic probabilities of over-fitting. Show that Mallow $C_p$ is not strong consistent and that BIC is not over-fitting asymptotically. What can you conclude on the role of the penalty in this specific situation?

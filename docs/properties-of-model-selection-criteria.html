@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-05-01">
+<meta name="date" content="2018-05-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -392,6 +392,33 @@ A measure that is associated to the probability of overfitting is the <em>signal
 {\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}}
 \end{equation}\]</span>
 <p>where <span class="math inline">\(\mathbb{E}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]\)</span> is the signal and <span class="math inline">\(\sqrt{\mbox{var}\left[\mbox{MSC}_{s+L}(\lambda)-\mbox{MSC}_s(\lambda)\right]}\)</span> is the noise. While the signal depends primarily on the penalty function (<span class="math inline">\(\lambda\)</span>), the noise depends on the distribution of the (in-sample) prediction error measure. If the penalty <span class="math inline">\(\lambda\)</span> is weaker than the noise, the model selection criterion will have a weak signal, a weak signal-to-noise ratio, and will tend to overfit. <span class="citation">McQuarrie and Tsai (<a href="#ref-McQuTs:98">1998</a>)</span>, Section 2.5, provide the SNR (finite sample and as <span class="math inline">\(n\rightarrow\infty\)</span>) for several model selection criteria. In general, efficient criteria have equivalent (finite) SNR, and consistent criteria all have have much larger SNR. Larger SNR is an indicator of the propensity of a model selection criterion to underfit in finite samples.</p>
+<blockquote>
+Exercise:<br />
+In this exercise we would like to prove that the Mallow <span class="math inline">\(C_p\)</span> criterion is over-fitting asymptotically, thus not consistent in the strong sense. In order to understand the more general implications of this result, we work with a <span class="math inline">\(\lambda_n\)</span> parameter which, in the special <span class="math inline">\(C_p\)</span> case, is equal to 2. We limit our reasoning to the linear model case where, by default, <span class="math inline">\(AIC\)</span> and <span class="math inline">\(C_p\)</span> expressions coincide. Perform the following steps:<br />
+
+</blockquote>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Derive the small small sample distribution of the quantity <span class="math inline">\((C_{p, L + K} - C_{p, K})\)</span> where <span class="math inline">\(C_{p, K}\)</span> is the <span class="math inline">\(C_p\)</span> value for the supposed true model and <span class="math inline">\(C_{p, L + K}\)</span> is the <span class="math inline">\(C_p\)</span> value of a generic over-fitted model which selects L regressors more than the true number (i.e. K). For doing so, use the fact that: <span class="math inline">\(C_{p,K} = \frac{SSE_{K}}{s^2_{k^{\star}}} - n + \lambda_n K\)</span> and <span class="math inline">\(s^2_{k^{\star}} = \frac{SSE_{k^{\star}}}{n - k^{\star}}\)</span> meaning that we are estimating the variance of some larger model with <span class="math inline">\(k^{\star}\)</span> regressors (e.g. full model).<br />
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Thanks to the previous step, retrieve the small sample probability of over-fitting which has to depend on <span class="math inline">\(\lambda_n\)</span>. </li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Let <span class="math inline">\(n \rightarrow + \infty\)</span> and derive the asymptotic probability of over-fitting thanks to the Slutsky theorem.<br />
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>For <span class="math inline">\(\lambda_n = [0 \; 2 \; log(n)]\)</span> derive the asymptotic probabilities of over-fitting. Show that Mallow <span class="math inline">\(C_p\)</span> is not strong consistent and that BIC is not over-fitting asymptotically. What can you conclude on the role of the penalty in this specific situation?</li>
+</ol>
+</blockquote>
 
 </div>
 </div>
