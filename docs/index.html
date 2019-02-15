@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2018-05-06">
+<meta name="date" content="2019-02-15">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -121,7 +121,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#examples"><i class="fa fa-check"></i><b>1.5</b> Examples</a><ul>
 <li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#data-on-malnutrition-in-zambia"><i class="fa fa-check"></i><b>1.5.1</b> Data on Malnutrition in Zambia</a></li>
 <li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#prognostic-factors-in-childhood-leukemia"><i class="fa fa-check"></i><b>1.5.2</b> Prognostic Factors in Childhood Leukemia</a></li>
-<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.3</b> R package quantmod</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#gene-expression-in-prostate-cancer"><i class="fa fa-check"></i><b>1.5.3</b> Gene Expression in Prostate Cancer</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#gene-expression-ratios-in-lung-cancer-and-mesothelioma"><i class="fa fa-check"></i><b>1.5.4</b> Gene Expression Ratios in Lung Cancer and Mesothelioma</a></li>
+<li class="chapter" data-level="1.5.5" data-path="index.html"><a href="index.html#r-package-quantmod"><i class="fa fa-check"></i><b>1.5.5</b> R package quantmod</a></li>
 </ul></li>
 <li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#fundamental-statistical-concepts"><i class="fa fa-check"></i><b>1.6</b> Fundamental statistical concepts</a><ul>
 <li class="chapter" data-level="1.6.1" data-path="index.html"><a href="index.html#sample-and-population"><i class="fa fa-check"></i><b>1.6.1</b> Sample and population</a></li>
@@ -240,7 +242,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Model Selection in High Dimensions</h1>
 <h4 class="author"><em>Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)</em></h4>
-<h4 class="date"><em>2018-05-06</em></h4>
+<h4 class="date"><em>2019-02-15</em></h4>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -337,11 +339,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>rpart</li>
 <li>rpart.plot</li>
 <li>glmnet</li>
+<li>devtools</li>
 </ul>
 <p>To install a package, use the R command <code>install.packages(&quot;chosen.package.name&quot;)</code> (see also <a href="https://cran.r-project.org/web/packages/" class="uri">https://cran.r-project.org/web/packages/</a>). Visit the <a href="https://cran.r-project.org/">CRAN R project</a> to get useful information about all the available R packages (<a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="uri">https://cran.r-project.org/web/packages/available_packages_by_name.html</a>)</p>
 <p>To install all packages at once, run the following code with administrator rights.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">packages.required &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;quantmod&quot;</span>, <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;tidyr&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;RODBC&quot;</span>, <span class="st">&quot;pool&quot;</span>, <span class="st">&quot;RMySQL&quot;</span>, 
-                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>,<span class="st">&quot;mvtnorm&quot;</span>, <span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;tictoc&quot;</span>, <span class="st">&quot;pROC&quot;</span>, <span class="st">&quot;selectiveInference&quot;</span>, <span class="st">&quot;SIS&quot;</span>, <span class="st">&quot;rpart&quot;</span>, <span class="st">&quot;rpart.plot&quot;</span>, <span class="st">&quot;glmnet&quot;</span>)
+                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>,<span class="st">&quot;mvtnorm&quot;</span>, <span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;tictoc&quot;</span>, <span class="st">&quot;pROC&quot;</span>, <span class="st">&quot;selectiveInference&quot;</span>, <span class="st">&quot;SIS&quot;</span>, <span class="st">&quot;rpart&quot;</span>, <span class="st">&quot;rpart.plot&quot;</span>, <span class="st">&quot;glmnet&quot;</span>, <span class="st">&quot;devtools&quot;</span>)
 packages.missing  &lt;-<span class="st"> </span>packages.required[<span class="op">!</span>(packages.required <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))]
 <span class="cf">if</span>(<span class="kw">length</span>(packages.missing)<span class="op">!=</span><span class="dv">0</span>) <span class="kw">install.packages</span>(packages.missing)</code></pre></div>
 </div>
@@ -613,7 +616,7 @@ result</code></pre></div>
 </blockquote>
 <blockquote>
 <ul>
-<li>In order to properly execute your <em>commits</em>, you need to be added as a collaborator of the project. It is sufficient to send an email to <em><a href="mailto:cesare.miglioli@etu.unige.ch">cesare.miglioli@etu.unige.ch</a></em> with your GitHub name in it from your unige mail account and you will be set as a collaborator.</li>
+<li>In order to properly execute your <em>commits</em>, you need to be added as a collaborator of the project. It is sufficient to send an email to <em><a href="mailto:cesare.miglioli@unige.ch">cesare.miglioli@unige.ch</a></em> with your GitHub name in it from your unige mail account and you will be set as a collaborator.</li>
 </ul>
 </blockquote>
 </div>
@@ -651,9 +654,21 @@ Exercise (<a href="solutions.html#zam">7.1.1</a>)<br />
 </blockquote>
 <blockquote>
 Load the dataset and build the variables so that they can be used for a regression analysis.<br />
+
+</blockquote>
+<blockquote>
 Associate proper names to each variable (hint: look at the previous comments in the r chunk).<br />
+
+</blockquote>
+<blockquote>
 Perform a linear regression on all the available variables.<br />
+
+</blockquote>
+<blockquote>
 Reduce the number of covariates (e.g. using the t-test) and add some interactions. Perform a linear regression on the new dataset.<br />
+
+</blockquote>
+<blockquote>
 Analyse your chosen estimated model with a residual analysis (e.g. residuals vs fitted plot, normal QQ plot etc.).<br />
 
 </blockquote>
@@ -678,8 +693,55 @@ Choose the correct exponential family for this situation and perform a GLM on th
 </blockquote>
 <!-- Since p>>n there are problems -->
 </div>
+<div id="gene-expression-in-prostate-cancer" class="section level3">
+<h3><span class="header-section-number">1.5.3</span> Gene Expression in Prostate Cancer</h3>
+<p>(by C. Miglioli)</p>
+<p>Prostate tumors are among the most heterogeneous of cancers, both histologically and clinically. Microarray expression analysis can be used to determine whether global biological differences underlie common pathological features of prostate cancer and to identify genes that might anticipate the clinical behavior of this disease.</p>
+<p>The <em>prostate.train</em> dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from <span class="citation">Singh et al. (<a href="#ref-singh2002gene">2002</a>)</span> Cancer cell paper and support the notion that “the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the time of diagnosis”.</p>
+<blockquote>
+Exercises<br />
+
+</blockquote>
+<blockquote>
+<p>Load the package SIS in your R environment. Type <strong>data(“prostate.train”)</strong> in the console window.<br />
+Define the response variable y knowing that it is the last column of the dataset. In the same fashion create the matrix X of independent variables. </p>
+</blockquote>
+<blockquote>
+Choose one of the model selection procedures explained during the course to select the most important genes related to prostate cancer.<br />
+
+</blockquote>
+<blockquote>
+Validate the prediction accuracy of your selected model on the test dataset <strong>data(“prostate.test”)</strong>, available in the package SIS.<br />
+
+</blockquote>
+</div>
+<div id="gene-expression-ratios-in-lung-cancer-and-mesothelioma" class="section level3">
+<h3><span class="header-section-number">1.5.4</span> Gene Expression Ratios in Lung Cancer and Mesothelioma</h3>
+<p>(by C. Miglioli)</p>
+<p>The pathological distinction between malignant pleural mesothelioma (MPM) and adenocarcinoma (ADCA) of the lung can be cumbersome using established methods. That is why doctors are moving towards gene expression ratios as an accurate and inexpensive technique with direct clinical applicability for distinguishing between MPM and lung cancer.</p>
+<p>The <em>gordon</em> dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from <span class="citation">Gordon et al. (<a href="#ref-gordon2002translation">2002</a>)</span> Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios.</p>
+<blockquote>
+Exercises<br />
+
+</blockquote>
+<blockquote>
+Install the R package devtools and load it. Type <strong>install_github(‘ramhiser/datamicroarray’)</strong> in the console window to install the updated version of the datamicroarray package.<br />
+
+</blockquote>
+<blockquote>
+<p>After loading the datamicroarray package, type <strong>data(‘gordon’, package = ‘datamicroarray’)</strong> and define the second element of the list as the response y. In the same fashion create the matrix X of independent variables with the remaining first element of the list. </p>
+</blockquote>
+<blockquote>
+Try different model selection procedures, explained during the course, to find the most important genes to distinguish between Lung Cancer and Mesothelioma.<br />
+
+</blockquote>
+<blockquote>
+Plot the ROC curve relative to each different selected model and compare the results in terms of AUC.<br />
+
+</blockquote>
+</div>
 <div id="r-package-quantmod" class="section level3">
-<h3><span class="header-section-number">1.5.3</span> R package quantmod</h3>
+<h3><span class="header-section-number">1.5.5</span> R package quantmod</h3>
 <p>The quantmod package for R (<a href="https://www.quantmod.com/" class="uri">https://www.quantmod.com/</a>) <em>is designed to assist the quantitative trader in the development, testing, and deployment of statistically based trading models</em>. We are here interested in the easy and rapid access to data.</p>
 <p><em>It is possible with one quantmod function to load data from a variety of sources, including Yahoo! Finance (OHLC data), Federal Reserve Bank of St. Louis FRED® (11,000 economic series), Google Finance (OHLC data), Oanda, The Currency Site (FX and Metals)</em>, etc. Below are some examples on how to load financial data and perform some simple data analysis. A <em>getting started guide to quantmod</em> can be found at <a href="https://www.quantmod.com/examples/intro/" class="uri">https://www.quantmod.com/examples/intro/</a>.</p>
 <p>The first step is to install the <em>quantmod</em> package (only once), using the <em>install.packages</em> in R. Also install the <em>plotly</em> package for nice plots. Then try the following:</p>
@@ -797,6 +859,12 @@ Hint: Read chapter 11 of <span class="citation">Efron and Hastie (<a href="#ref-
 </div>
 <div id="ref-golub1999molecular">
 <p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
+</div>
+<div id="ref-singh2002gene">
+<p>Singh, Dinesh, Phillip G Febbo, Kenneth Ross, Donald G Jackson, Judith Manola, Christine Ladd, Pablo Tamayo, et al. 2002. “Gene Expression Correlates of Clinical Prostate Cancer Behavior.” <em>Cancer Cell</em> 1 (2). Elsevier: 203–9.</p>
+</div>
+<div id="ref-gordon2002translation">
+<p>Gordon, Gavin J, Roderick V Jensen, Li-Li Hsiao, Steven R Gullans, Joshua E Blumenstock, Sridhar Ramaswamy, William G Richards, David J Sugarbaker, and Raphael Bueno. 2002. “Translation of Microarray Data into Clinically Relevant Cancer Diagnostic Tests Using Gene Expression Ratios in Lung Cancer and Mesothelioma.” <em>Cancer Research</em> 62 (17). AACR: 4963–7.</p>
 </div>
 <div id="ref-Cowe:11">
 <p>Cowell, F. A. 2011. <em>Measuring Inequality</em>. Third Edition. Oxford: Oxford University Press.</p>

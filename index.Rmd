@@ -122,6 +122,7 @@ The R packages that will be used throughout this class are the following (to be 
 - rpart
 - rpart.plot
 - glmnet
+- devtools
 
 To install a package, use the R command `install.packages("chosen.package.name")` (see also <https://cran.r-project.org/web/packages/>). Visit the [CRAN R project](<https://cran.r-project.org/>) to get useful information about all the available R packages (<https://cran.r-project.org/web/packages/available_packages_by_name.html>)
 
@@ -129,7 +130,7 @@ To install all packages at once, run the following code with administrator right
 
 ```{r echo=T, eval=FALSE}
 packages.required <- c("rmarkdown", "quantmod", "plotly", "tidyr", "dplyr", "RODBC", "pool", "RMySQL", 
-                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc", "pROC", "selectiveInference", "SIS", "rpart", "rpart.plot", "glmnet")
+                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc", "pROC", "selectiveInference", "SIS", "rpart", "rpart.plot", "glmnet", "devtools")
 packages.missing  <- packages.required[!(packages.required %in% rownames(installed.packages()))]
 if(length(packages.missing)!=0) install.packages(packages.missing)
 ```
@@ -426,7 +427,7 @@ Students following this course will be stimulated to complete the exercises and 
 
 >- Modify the file (add the name of practical1.rmd file) as you like (e.g. try to solve an exercise). Then *commit* the changes and *push* it to the remote repository of the course. Do not forget to click on *pull* every time you access to your R Studio project to retrieve the updated version of all the files of the course repository
 
->- In order to properly execute your *commits*, you need to be added as a collaborator of the project. It is sufficient to send an email to *cesare.miglioli@etu.unige.ch* with your GitHub name in it from your unige mail account and you will be set as a collaborator. 
+>- In order to properly execute your *commits*, you need to be added as a collaborator of the project. It is sufficient to send an email to *cesare.miglioli@unige.ch* with your GitHub name in it from your unige mail account and you will be set as a collaborator. 
 
 
 ## Examples
@@ -466,9 +467,13 @@ Consider the dataset *Zambia.SAV* available at [Course Datasets - Malnutrition i
 > Exercise (\@ref(zam)) \
 
 > Load the dataset and build the variables so that they can be used for a regression analysis.\
+
 > Associate proper names to each variable (hint: look at the previous comments in the r chunk).\
+
 > Perform a linear regression on all the available variables.\
+
 > Reduce the number of covariates (e.g. using the t-test) and add some interactions. Perform a linear regression on the new dataset.\
+
 > Analyse your chosen estimated model with a residual analysis (e.g. residuals vs fitted plot, normal QQ plot etc.).\
 
 
@@ -489,6 +494,46 @@ See  <https://web.stanford.edu/~hastie/CASI_files/DATA/leukemia.html> for furthe
 > Choose the correct exponential family for this situation and perform a GLM on the data. Comment on the results that you obtain. \
 
 <!-- Since p>>n there are problems -->
+
+### Gene Expression in Prostate Cancer
+(by C. Miglioli)
+
+Prostate tumors are among the most heterogeneous of cancers, both histologically and clinically. Microarray expression
+analysis can be used to determine whether global biological differences underlie common pathological features of prostate
+cancer and to identify genes that might anticipate the clinical behavior of this disease.
+
+The *prostate.train* dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from @singh2002gene Cancer cell paper and support the notion
+that "the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the
+time of diagnosis".    
+
+> Exercises \
+
+> Load the package SIS in your R environment. Type **data("prostate.train")** in the console window.\
+> Define the response variable y knowing that it is the last column of the dataset. In the same fashion create the matrix X of independent variables.\ 
+
+> Choose one of the model selection procedures explained during the course to select the most important genes related to prostate cancer. \
+
+> Validate the prediction accuracy of your selected model on the test dataset **data("prostate.test")**, available in the package SIS. \
+
+### Gene Expression Ratios in Lung Cancer and Mesothelioma
+(by C. Miglioli)
+
+The pathological distinction between malignant pleural mesothelioma (MPM) and adenocarcinoma (ADCA) of the lung can be cumbersome
+using established methods. That is why doctors are moving towards gene expression ratios as an accurate and
+inexpensive technique with direct clinical applicability for distinguishing between MPM and lung cancer. 
+
+The *gordon* dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from @gordon2002translation Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios.
+
+> Exercises \
+
+> Install the R package devtools and load it. Type **install_github('ramhiser/datamicroarray')** in the console window to install the updated version of the datamicroarray package.\
+
+> After loading the datamicroarray package, type **data('gordon', package = 'datamicroarray')** and define the second element of the list as the response y. In the same fashion create the matrix X of independent variables with the remaining first element of the list.\ 
+
+> Try different model selection procedures, explained during the course, to find the most important genes to distinguish between Lung Cancer and Mesothelioma. \
+
+> Plot the ROC curve relative to each different selected model and compare the results in terms of AUC. \
+
 
 ### R package quantmod
 
