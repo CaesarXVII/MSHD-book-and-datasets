@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2019-02-15">
+<meta name="date" content="2019-02-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -306,6 +306,10 @@ Cross-validation attempts to mimic <span class="math inline">\(\widehat{\text{Er
 <span class="math display">\[\begin{equation}  
 \widehat{\text{Err}}_{\text{cv1}}= \frac{1}{n}\sum_{i=1}^{n}d\left(\hat{y}_{(i)},y_{i}\right)
 \end{equation}\]</span>
+<blockquote>
+<p>Additional material:<br />
+Actually, <span class="math inline">\(\hat{y}_{0i}\)</span> and <span class="math inline">\(\hat{y}_{(i)}\)</span> have to be understood as <em>functions</em> applied respectively on <span class="math inline">\(y_{0i}\)</span> or <span class="math inline">\(y_{i}\)</span>. The functions are the <em>prediction rules</em> built during the learning phase, i.e. respectively on <span class="math inline">\(y_i,i=1,\ldots,n\)</span> or <span class="math inline">\(y_i,i=1,\ldots,i-1,i+1,n\)</span>.</p>
+</blockquote>
 <p>A more common practice is to leave out several observations at a time: the sample is randomly partitioned into <span class="math inline">\(J\)</span> groups of size about <span class="math inline">\(\lfloor n/J\rfloor=n_J\)</span> each, then for each <span class="math inline">\(j=1,\ldots,J\)</span> groups, the training set is the sample without the <span class="math inline">\(j\)</span>th group on which the prediction <span class="math inline">\(\hat{y}_{(j)}\)</span> is computed and then compared to the observations in the <span class="math inline">\(j\)</span>th group <span class="math inline">\(y_j\)</span> using the chosen discrepancy measure <span class="math inline">\(D\)</span>. A common choice is <span class="math inline">\(J=10\)</span> leading to the <em>ten-fold cross-validation</em> procedure. Reducing from <span class="math inline">\(n\)</span> to <span class="math inline">\(J\)</span> the number of training and validation sets reduces the necessary number of prediction rules constructions (estimation). The optimal value for <span class="math inline">\(J\)</span> is however not known.</p>
 <p><br></p>
 <blockquote>
@@ -339,6 +343,9 @@ Originally, the covariance penalty approach treats prediction error estimation i
 \text{Err}_i=\mathbb{E}_{0}\left[\left(\hat{Y}_i-Y_0\right)^2\right]
 \end{equation}\]</span>
 <p>The overall prediction error is <span class="math inline">\(\text{Err}=1/n\sum_{i=1}^n\text{Err}_i\)</span>.</p>
+<blockquote>
+<p>Note: again, <span class="math inline">\(\hat{Y}_i\)</span> is understood as a function of the sample.</p>
+</blockquote>
 The question is how to estimate this quantity, given a sample and a data generating model? <span class="citation">(Efron <a href="#ref-efron2004estimation">2004</a>)</span> uses <span class="math inline">\(\mathbb{E}\left[\text{Err}_i\right]\)</span> (where <span class="math inline">\(\mathbb{E}\)</span> denotes the expectation at the <em>insample</em> distribution) and shows that
 <span class="math display">\[\begin{equation}  
 \mathbb{E}\left[\text{Err}_i\right]=
@@ -391,7 +398,7 @@ This result says that, on average, the apparent error <span class="math inline">
 <ol style="list-style-type: lower-alpha">
 <li>Simulate <span class="math inline">\(n\)</span> values <span class="math inline">\(y_i^{(j)}, i=1,\ldots,n\)</span> from <span class="math inline">\(F_{\hat{\boldsymbol{\theta}}}\)</span>,<br />
 </li>
-<li>Compute <span class="math inline">\(\hat{y}_i^{(j)}, i=1,\ldots,n\)</span>, possibly conditionally on the matrix of predictors <span class="math inline">\(\mathbf{X}\)</span><br />
+<li>Compute <span class="math inline">\(\hat{y}_i^{(j)}, i=1,\ldots,n\)</span> (i.e. the prediction rule), possibly conditionally on the matrix of predictors <span class="math inline">\(\mathbf{X}\)</span><br />
 </li>
 </ol>
 <ol start="4" style="list-style-type: decimal">
@@ -405,7 +412,7 @@ with <span class="math inline">\(\hat{y}_i^{(j\cdot)}=1/n\sum_{j=1}^B\hat{y}_i^{
 <p>Exercise (optional):<br />
 Consider the simulation setting of the exercise in the previous Section.<br />
 - Instead of splitting the sample in two halves, compute the covariance prenalized predition error, with covariance penalty estimated via simulations (using the proposed algorithm).<br />
-- Compare the analysis (decison) with the one obtained by means of cross-validation (in the previous exercise).</p>
+- Compare the analysis (decision) with the one obtained by means of cross-validation (in the previous exercise).</p>
 </blockquote>
 </div>
 <div id="mallows-c_p" class="section level3">

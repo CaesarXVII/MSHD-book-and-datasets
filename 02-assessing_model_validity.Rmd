@@ -76,6 +76,10 @@ has been omitted. The the *leave one out* cross-validation estimate of predictio
 \begin{equation}  
 \widehat{\text{Err}}_{\text{cv1}}= \frac{1}{n}\sum_{i=1}^{n}d\left(\hat{y}_{(i)},y_{i}\right)
 \end{equation}
+
+> Additional material:\
+> Actually, $\hat{y}_{0i}$ and $\hat{y}_{(i)}$ have to be understood as *functions* applied respectively on $y_{0i}$ or $y_{i}$. The functions are the *prediction rules* built during the learning phase, i.e. respectively on $y_i,i=1,\ldots,n$ or $y_i,i=1,\ldots,i-1,i+1,n$.
+
 A more common practice is to leave out several observations at a time: the sample is randomly partitioned into $J$ groups of size about $\lfloor n/J\rfloor=n_J$ each, then for each $j=1,\ldots,J$ groups, the training set is the sample without the $j$th group on which the prediction $\hat{y}_{(j)}$ is computed and then compared to the observations in the $j$th group $y_j$ using the chosen discrepancy measure $D$. A common choice is $J=10$ leading to the *ten-fold cross-validation* procedure. Reducing from $n$ to $J$ the number of training and validation sets reduces the necessary number of prediction rules constructions (estimation). The optimal value for $J$ is however not known.
 
 <br>
@@ -102,6 +106,8 @@ a regression framework, with the predictors $\mathbf{X}$ considered as fixed. Mo
 \text{Err}_i=\mathbb{E}_{0}\left[\left(\hat{Y}_i-Y_0\right)^2\right]
 \end{equation}
 The overall prediction error is $\text{Err}=1/n\sum_{i=1}^n\text{Err}_i$. 
+
+> Note: again, $\hat{Y}_i$ is understood as a function of the sample.
 
 The question is how to estimate this quantity, given a sample and a data generating model? [@efron2004estimation] uses $\mathbb{E}\left[\text{Err}_i\right]$ (where $\mathbb{E}$ denotes the expectation at the *insample* distribution) and shows that
 \begin{equation}  
@@ -151,7 +157,7 @@ Depending on the assumed model, $\widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)$
 2. Set the seed\
 3. For $j=1,\ldots,B$, do\
  a. Simulate $n$ values $y_i^{(j)}, i=1,\ldots,n$ from $F_{\hat{\boldsymbol{\theta}}}$,\
-b. Compute $\hat{y}_i^{(j)}, i=1,\ldots,n$, possibly conditionally on the matrix of predictors $\mathbf{X}$\
+b. Compute $\hat{y}_i^{(j)}, i=1,\ldots,n$ (i.e. the prediction rule), possibly conditionally on the matrix of predictors $\mathbf{X}$\
 4. Compute $\forall i$ 
 \begin{equation}  
 \widehat{\text{cov}}\left(\hat{Y}_i;Y_i\right)=1/B\sum_{j=1}^B\left(\hat{y}_i^{(j)}-\hat{y}_i^{(j\cdot)}\right)\left(y_i^{(j)}-y_i^{(j\cdot)}\right)
@@ -161,7 +167,7 @@ with $\hat{y}_i^{(j\cdot)}=1/n\sum_{j=1}^B\hat{y}_i^{(j)}$ and $y_i^{(j\cdot)}=1
 > Exercise (optional): \
 > Consider the simulation setting of the exercise in the previous Section. \
 > - Instead of splitting the sample in two halves, compute the covariance prenalized predition error, with covariance penalty estimated via simulations (using the proposed algorithm).\
-> - Compare the analysis (decison) with the one obtained by means of cross-validation (in the previous exercise).
+> - Compare the analysis (decision) with the one obtained by means of cross-validation (in the previous exercise).
 
   
 ### Mallows $C_p$
