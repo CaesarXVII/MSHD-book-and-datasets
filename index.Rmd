@@ -508,7 +508,7 @@ time of diagnosis".
 
 > Exercises \
 
-> Load the package SIS in your R environment. Type **data("prostate.train")** in the console window.\
+> Load the package SIS in your R environment. Type **data("prostate.train")** in the console window to load the data.\
 > Define the response variable y knowing that it is the last column of the dataset. In the same fashion create the matrix X of independent variables.\ 
 
 > Choose one of the model selection procedures explained during the course to select the most important genes related to prostate cancer. \
