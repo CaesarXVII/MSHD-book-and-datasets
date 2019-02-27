@@ -487,10 +487,8 @@ The *leukemia_big.csv* dataset contains gene expression measurements on 72 leuke
 
 > Exercises (\@ref(leuk)) \
 
-> Load the data from the URL <http://web.stanford.edu/~hastie/CASI_files/DATA/leukemia_big.csv> \
-> Create the response variable y according to the number of ALL and AML patients. In the same fashion create the matrix X of independent variables.\ 
-
-See  <https://web.stanford.edu/~hastie/CASI_files/DATA/leukemia.html> for further details.
+> Load the package SIS in your R environment. Type both **data("leukemia.train")** and **data("leukemia.test")**  in the console window to load the data. \
+> Create the response variable y according to the number of ALL and AML patients. In the same fashion create the matrix X of independent variables by merging the two datasets.\ 
 
 > Choose the correct exponential family for this situation and perform a GLM on the data. Comment on the results that you obtain. \
 
