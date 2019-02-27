@@ -300,7 +300,7 @@ library(dplyr)
 ```
 > 1. Comment on the type of variables of the iris dataset. Write a code that computes the mean of each variable, grouped by Species. Do it first using `R-base` only, and optionally, do it using `dplyr`.
 
-```{r, echo=T, message=F, eval=F}
+```{r, echo=T, message=F, eval=T}
 variables.to.average <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 species.types <- c("setosa", "versicolor", "virginica")  # levels(iris$Species)
 #
@@ -326,7 +326,7 @@ species.means2 <- t(sapply(species.types, function(species){
 
 >2. Using the method of your choice, plot the boxplots of alcohol levels of the three classes of wine from the wine dataset.
 
-```{r, echo=T, message=F, eval=F}
+```{r, echo=T, message=F, eval=T}
 boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentration")
 ```
 
@@ -334,7 +334,7 @@ boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentr
 
 > 3. Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.
 
-```{r, echo=T, message=F, eval=F}
+```{r, echo=T, message=F, eval=T}
 # Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.
 wine$Color_intensity_factor <- factor(wine$Color_intensity>5, levels=c(FALSE, TRUE), labels=c("mild", "intense"))
 # Create the boxplots using the standard formulae

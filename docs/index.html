@@ -489,12 +489,19 @@ species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span cla
 <span class="co"># Method 2: using dplyr; outputs a dataframe</span>
  species.means3 &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
  species.means3</code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   Species    Sepal.Length Sepal.Width Petal.Length Petal.Width
+##   &lt;fct&gt;             &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+## 1 setosa             5.01        3.43         1.46       0.246
+## 2 versicolor         5.94        2.77         4.26       1.33 
+## 3 virginica          6.59        2.97         5.55       2.03</code></pre>
 <blockquote>
 <ol start="2" style="list-style-type: decimal">
 <li>Using the method of your choice, plot the boxplots of alcohol levels of the three classes of wine from the wine dataset.</li>
 </ol>
 </blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <blockquote>
 <ol start="3" style="list-style-type: decimal">
 <li>Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.</li>
@@ -503,10 +510,21 @@ species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.</span>
 wine<span class="op">$</span>Color_intensity_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(wine<span class="op">$</span>Color_intensity<span class="op">&gt;</span><span class="dv">5</span>, <span class="dt">levels=</span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;mild&quot;</span>, <span class="st">&quot;intense&quot;</span>))
 <span class="co"># Create the boxplots using the standard formulae</span>
-<span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Color_intensity_factor <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)
-<span class="co">#</span>
+<span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Color_intensity_factor <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#</span>
 <span class="co"># Compute the alcohol means of each subgroup using dplyr</span>
 wine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Class, Color_intensity_factor) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="st">&quot;Alcohol&quot;</span>, mean)</code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   Class [3]
+##   Class Color_intensity_factor Alcohol
+##   &lt;fct&gt; &lt;fct&gt;                    &lt;dbl&gt;
+## 1 1     mild                      13.4
+## 2 1     intense                   13.9
+## 3 2     mild                      12.3
+## 4 2     intense                   12.4
+## 5 3     mild                      13.0
+## 6 3     intense                   13.2</code></pre>
 <blockquote>
 <ol start="4" style="list-style-type: decimal">
 <li>Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that “country” is the common relation among the three datasets]</li>
