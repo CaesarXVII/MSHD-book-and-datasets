@@ -25,7 +25,7 @@
 <meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
 
 
-<meta name="date" content="2019-02-25">
+<meta name="date" content="2019-02-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -243,7 +243,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Model Selection in High Dimensions</h1>
 <p class="author"><em>Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)</em></p>
-<p class="date"><em>2019-02-25</em></p>
+<p class="date"><em>2019-02-27</em></p>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -337,6 +337,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>pROC</li>
 <li>selectiveInference</li>
 <li>SIS</li>
+<li>rattle</li>
 <li>rpart</li>
 <li>rpart.plot</li>
 <li>glmnet</li>
@@ -345,7 +346,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>To install a package, use the R command <code>install.packages(&quot;chosen.package.name&quot;)</code> (see also <a href="https://cran.r-project.org/web/packages/" class="uri">https://cran.r-project.org/web/packages/</a>). Visit the <a href="https://cran.r-project.org/">CRAN R project</a> to get useful information about all the available R packages (<a href="https://cran.r-project.org/web/packages/available_packages_by_name.html" class="uri">https://cran.r-project.org/web/packages/available_packages_by_name.html</a>)</p>
 <p>To install all packages at once, run the following code with administrator rights.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">packages.required &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;quantmod&quot;</span>, <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;tidyr&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;RODBC&quot;</span>, <span class="st">&quot;pool&quot;</span>, <span class="st">&quot;RMySQL&quot;</span>, 
-                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>,<span class="st">&quot;mvtnorm&quot;</span>, <span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;tictoc&quot;</span>, <span class="st">&quot;pROC&quot;</span>, <span class="st">&quot;selectiveInference&quot;</span>, <span class="st">&quot;SIS&quot;</span>, <span class="st">&quot;rpart&quot;</span>, <span class="st">&quot;rpart.plot&quot;</span>, <span class="st">&quot;glmnet&quot;</span>, <span class="st">&quot;devtools&quot;</span>)
+                       <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;leaps&quot;</span>, <span class="st">&quot;glmulti&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;caret&quot;</span>,<span class="st">&quot;mvtnorm&quot;</span>, <span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;tictoc&quot;</span>, <span class="st">&quot;pROC&quot;</span>, <span class="st">&quot;selectiveInference&quot;</span>, <span class="st">&quot;SIS&quot;</span>, <span class="st">&quot;rpart&quot;</span>, <span class="st">&quot;rpart.plot&quot;</span>, <span class="st">&quot;glmnet&quot;</span>, <span class="st">&quot;devtools&quot;</span>,<span class="st">&quot;rattle&quot;</span>)
 packages.missing  &lt;-<span class="st"> </span>packages.required[<span class="op">!</span>(packages.required <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()))]
 <span class="cf">if</span>(<span class="kw">length</span>(packages.missing)<span class="op">!=</span><span class="dv">0</span>) <span class="kw">install.packages</span>(packages.missing)</code></pre></div>
 </div>
@@ -468,21 +469,55 @@ Exercise:<br />
 <li>Comment on the type of variables of the iris dataset. Write a code that computes the mean of each variable, grouped by Species. Do it first using <code>R-base</code> only, and optionally, do it using <code>dplyr</code>.</li>
 </ol>
 </blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">variables.to.average &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Sepal.Length&quot;</span>, <span class="st">&quot;Sepal.Width&quot;</span>, <span class="st">&quot;Petal.Length&quot;</span>, <span class="st">&quot;Petal.Width&quot;</span>)
+species.types &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;setosa&quot;</span>, <span class="st">&quot;versicolor&quot;</span>, <span class="st">&quot;virginica&quot;</span>)  <span class="co"># levels(iris$Species)</span>
+<span class="co">#</span>
+<span class="co"># Method 1A: without dplyr using a for loop; outputs a matrix </span>
+species.means1 &lt;-<span class="st"> </span><span class="ot">NULL</span>
+<span class="cf">for</span>(type <span class="cf">in</span> species.types){
+  is.species &lt;-<span class="st"> </span>iris<span class="op">$</span>Species<span class="op">==</span>type
+  species.subset &lt;-<span class="st"> </span>iris[is.species, variables.to.average]
+  species.means1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(species.means1, <span class="kw">colMeans</span>(species.subset))
+}
+<span class="kw">rownames</span>(species.means1) &lt;-<span class="st"> </span>species.types
+<span class="co">#</span>
+<span class="co"># Method 1B: more compact and efficient; outputs a matrix</span>
+species.means2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(species.types, <span class="cf">function</span>(species){
+  <span class="kw">colMeans</span>(iris[iris<span class="op">$</span>Species<span class="op">==</span>species, variables.to.average])
+}))
+<span class="co">#</span>
+<span class="co"># Method 2: using dplyr; outputs a dataframe</span>
+ species.means3 &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Species) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_all</span>(mean)
+ species.means3</code></pre></div>
 <blockquote>
 <ol start="2" style="list-style-type: decimal">
 <li>Using the method of your choice, plot the boxplots of alcohol levels of the three classes of wine from the wine dataset.</li>
 </ol>
 </blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)</code></pre></div>
 <blockquote>
 <ol start="3" style="list-style-type: decimal">
 <li>Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.</li>
 </ol>
 </blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.</span>
+wine<span class="op">$</span>Color_intensity_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(wine<span class="op">$</span>Color_intensity<span class="op">&gt;</span><span class="dv">5</span>, <span class="dt">levels=</span><span class="kw">c</span>(<span class="ot">FALSE</span>, <span class="ot">TRUE</span>), <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;mild&quot;</span>, <span class="st">&quot;intense&quot;</span>))
+<span class="co"># Create the boxplots using the standard formulae</span>
+<span class="kw">boxplot</span>(Alcohol <span class="op">~</span><span class="st"> </span>Color_intensity_factor <span class="op">+</span><span class="st"> </span>Class, <span class="dt">data=</span>wine, <span class="dt">xlab=</span><span class="st">&quot;Class of wine&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Alcohol concentration&quot;</span>)
+<span class="co">#</span>
+<span class="co"># Compute the alcohol means of each subgroup using dplyr</span>
+wine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Class, Color_intensity_factor) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise_at</span>(<span class="st">&quot;Alcohol&quot;</span>, mean)</code></pre></div>
 <blockquote>
 <ol start="4" style="list-style-type: decimal">
 <li>Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that “country” is the common relation among the three datasets]</li>
 </ol>
 </blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We observe that &quot;country&quot; is the common relation among all datasets. </span>
+<span class="co"># Let&#39;s try to merge all datasets into a single one using this key</span>
+<span class="co">#</span>
+<span class="co"># Merge all cities with country attributes</span>
+data.merged &lt;-<span class="st"> </span><span class="kw">left_join</span>(City, Country, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">&quot;CountryCode&quot;</span> =<span class="st"> &quot;Code&quot;</span>)) <span class="op">%&gt;%</span><span class="st">   </span><span class="kw">left_join</span>(CountryLanguage, <span class="dt">by=</span><span class="st">&quot;CountryCode&quot;</span>)
+<span class="co"># we observe that all the data pertaining to the countries appear multiple times. #The total number of data &quot;cells&quot; of the merged data set is 27031*22 = 594682, as compared to the original 24656 data &quot;cells&quot;, that is about 24 times bigger to store the same information.</span></code></pre></div>
 </div>
 </div>
 <div id="writing-reports" class="section level2">

@@ -119,6 +119,7 @@ The R packages that will be used throughout this class are the following (to be 
 - pROC
 - selectiveInference
 - SIS 
+- rattle
 - rpart
 - rpart.plot
 - glmnet
@@ -130,7 +131,7 @@ To install all packages at once, run the following code with administrator right
 
 ```{r echo=T, eval=FALSE}
 packages.required <- c("rmarkdown", "quantmod", "plotly", "tidyr", "dplyr", "RODBC", "pool", "RMySQL", 
-                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc", "pROC", "selectiveInference", "SIS", "rpart", "rpart.plot", "glmnet", "devtools")
+                       "foreign", "leaps", "glmulti", "MuMIn", "caret","mvtnorm", "MASS", "tictoc", "pROC", "selectiveInference", "SIS", "rpart", "rpart.plot", "glmnet", "devtools","rattle")
 packages.missing  <- packages.required[!(packages.required %in% rownames(installed.packages()))]
 if(length(packages.missing)!=0) install.packages(packages.missing)
 ```
@@ -299,7 +300,7 @@ library(dplyr)
 ```
 > 1. Comment on the type of variables of the iris dataset. Write a code that computes the mean of each variable, grouped by Species. Do it first using `R-base` only, and optionally, do it using `dplyr`.
 
-```{r, echo=F, message=F, eval=F}
+```{r, echo=T, message=F, eval=F}
 variables.to.average <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 species.types <- c("setosa", "versicolor", "virginica")  # levels(iris$Species)
 #
@@ -325,7 +326,7 @@ species.means2 <- t(sapply(species.types, function(species){
 
 >2. Using the method of your choice, plot the boxplots of alcohol levels of the three classes of wine from the wine dataset.
 
-```{r, echo=F, message=F, eval=F}
+```{r, echo=T, message=F, eval=F}
 boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentration")
 ```
 
@@ -333,7 +334,7 @@ boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentr
 
 > 3. Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.
 
-```{r, echo=F, message=F, eval=F}
+```{r, echo=T, message=F, eval=F}
 # Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.
 wine$Color_intensity_factor <- factor(wine$Color_intensity>5, levels=c(FALSE, TRUE), labels=c("mild", "intense"))
 # Create the boxplots using the standard formulae
@@ -346,7 +347,7 @@ wine %>% group_by(Class, Color_intensity_factor) %>% summarise_at("Alcohol", mea
 
 > 4. Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that "country" is the common relation among the three datasets]
 
-```{r, echo=F, message=F, eval=F}
+```{r, echo=T, message=F, eval=F}
 # We observe that "country" is the common relation among all datasets. 
 # Let's try to merge all datasets into a single one using this key
 #
