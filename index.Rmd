@@ -106,7 +106,16 @@ The dataset *Zambia.SAV* available at [Course Datasets - Malnutrition in Zambia]
 
 Factors that can affect a child’s outlook (prognosis) suffering e.g. from Leukemia are called prognostic factors. They help doctors decide whether a child with leukemia should receive standard treatment or more intensive treatment. Prognostic factors seem to be more determinant in acute lymphocytic leukemia (ALL) than in acute myelogenous leukemia (AML). See <https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html> for a detailed explanation.
 
-The *leukemia* dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of @golub1999molecular Science paper and exhibit an important statistical challenge because $p >> n$ as we deal with 72 patients and 7128 measurements. To obtain the dataset, install and load the package SIS in your R environment. Then type both **data("leukemia.train")** and **data("leukemia.test")** in the console window.  
+The *leukemia* dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of @golub1999molecular Science paper and exhibit an important statistical challenge because $p >> n$ as we deal with 72 patients and 7128 measurements. To obtain the dataset:
+
+1. install.packages(SIS)
+
+2. require(SIS)
+
+3. data("leukemia.train") #train dataset
+
+4. data("leukemia.test") #test dataset
+
 
 <!-- Since p>>n there are problems -->
 
@@ -119,7 +128,13 @@ cancer and to identify genes that might anticipate the clinical behavior of this
 
 The *prostate.train* dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from @singh2002gene Cancer cell paper and support the notion
 that "the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the
-time of diagnosis". To obtain the dataset, just install and load the package SIS in your R environment. Then type **data("prostate.train")** in the console window.    
+time of diagnosis". To obtain the dataset:
+
+1. install.packages(SIS)
+
+2. require(SIS)
+
+3. data("prostate.train")
 
 #### Gene Expression Ratios in Lung Cancer and Mesothelioma
 (by C. Miglioli)
@@ -128,7 +143,15 @@ The pathological distinction between malignant pleural mesothelioma (MPM) and ad
 using established methods. That is why doctors are moving towards gene expression ratios as an accurate and
 inexpensive technique with direct clinical applicability for distinguishing between MPM and lung cancer. 
 
-The *gordon* dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from @gordon2002translation Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios. To obtain the dataset, just install and load the package devtools in your R environment. Then type **install_github('ramhiser/datamicroarray')** in the console window to install the updated version of the datamicroarray package. Finally, after loading the datamicroarray package, type **data('gordon', package = 'datamicroarray')**.    
+The *gordon* dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from @gordon2002translation Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios. To obtain the dataset:  
+
+1. install.packages("devtools")
+
+2. require(devtools)
+
+3. install_github('ramhiser/datamicroarray') #updated version of datamicroarray package
+
+4. data('gordon', package = 'datamicroarray')
 
 
 ### Useful links 

@@ -320,20 +320,37 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h4><span class="header-section-number">1.2.2.2</span> Prognostic Factors in Childhood Leukemia</h4>
 <p>(by C. Miglioli)</p>
 <p>Factors that can affect a child’s outlook (prognosis) suffering e.g. from Leukemia are called prognostic factors. They help doctors decide whether a child with leukemia should receive standard treatment or more intensive treatment. Prognostic factors seem to be more determinant in acute lymphocytic leukemia (ALL) than in acute myelogenous leukemia (AML). See <a href="https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html" class="uri">https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html</a> for a detailed explanation.</p>
-<p>The <em>leukemia</em> dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of <span class="citation">Golub et al. (<a href="#ref-golub1999molecular">1999</a>)</span> Science paper and exhibit an important statistical challenge because <span class="math inline">\(p &gt;&gt; n\)</span> as we deal with 72 patients and 7128 measurements. To obtain the dataset, install and load the package SIS in your R environment. Then type both <strong>data(“leukemia.train”)</strong> and <strong>data(“leukemia.test”)</strong> in the console window.</p>
+<p>The <em>leukemia</em> dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of <span class="citation">Golub et al. (<a href="#ref-golub1999molecular">1999</a>)</span> Science paper and exhibit an important statistical challenge because <span class="math inline">\(p &gt;&gt; n\)</span> as we deal with 72 patients and 7128 measurements. To obtain the dataset:</p>
+<ol style="list-style-type: decimal">
+<li><p>install.packages(SIS)</p></li>
+<li><p>require(SIS)</p></li>
+<li><p>data(“leukemia.train”) #train dataset</p></li>
+<li><p>data(“leukemia.test”) #test dataset</p></li>
+</ol>
 <!-- Since p>>n there are problems -->
 </div>
 <div id="gene-expression-in-prostate-cancer" class="section level4">
 <h4><span class="header-section-number">1.2.2.3</span> Gene Expression in Prostate Cancer</h4>
 <p>(by C. Miglioli)</p>
 <p>Prostate tumors are among the most heterogeneous of cancers, both histologically and clinically. Microarray expression analysis can be used to determine whether global biological differences underlie common pathological features of prostate cancer and to identify genes that might anticipate the clinical behavior of this disease.</p>
-<p>The <em>prostate.train</em> dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from <span class="citation">Singh et al. (<a href="#ref-singh2002gene">2002</a>)</span> Cancer cell paper and support the notion that “the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the time of diagnosis”. To obtain the dataset, just install and load the package SIS in your R environment. Then type <strong>data(“prostate.train”)</strong> in the console window.</p>
+<p>The <em>prostate.train</em> dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from <span class="citation">Singh et al. (<a href="#ref-singh2002gene">2002</a>)</span> Cancer cell paper and support the notion that “the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the time of diagnosis”. To obtain the dataset:</p>
+<ol style="list-style-type: decimal">
+<li><p>install.packages(SIS)</p></li>
+<li><p>require(SIS)</p></li>
+<li><p>data(“prostate.train”)</p></li>
+</ol>
 </div>
 <div id="gene-expression-ratios-in-lung-cancer-and-mesothelioma" class="section level4">
 <h4><span class="header-section-number">1.2.2.4</span> Gene Expression Ratios in Lung Cancer and Mesothelioma</h4>
 <p>(by C. Miglioli)</p>
 <p>The pathological distinction between malignant pleural mesothelioma (MPM) and adenocarcinoma (ADCA) of the lung can be cumbersome using established methods. That is why doctors are moving towards gene expression ratios as an accurate and inexpensive technique with direct clinical applicability for distinguishing between MPM and lung cancer.</p>
-<p>The <em>gordon</em> dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from <span class="citation">Gordon et al. (<a href="#ref-gordon2002translation">2002</a>)</span> Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios. To obtain the dataset, just install and load the package devtools in your R environment. Then type <strong>install_github(‘ramhiser/datamicroarray’)</strong> in the console window to install the updated version of the datamicroarray package. Finally, after loading the datamicroarray package, type <strong>data(‘gordon’, package = ‘datamicroarray’)</strong>.</p>
+<p>The <em>gordon</em> dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from <span class="citation">Gordon et al. (<a href="#ref-gordon2002translation">2002</a>)</span> Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios. To obtain the dataset:</p>
+<ol style="list-style-type: decimal">
+<li><p>install.packages(“devtools”)</p></li>
+<li><p>require(devtools)</p></li>
+<li><p>install_github(‘ramhiser/datamicroarray’) #updated version of datamicroarray package</p></li>
+<li><p>data(‘gordon’, package = ‘datamicroarray’)</p></li>
+</ol>
 </div>
 </div>
 <div id="useful-links" class="section level3">
