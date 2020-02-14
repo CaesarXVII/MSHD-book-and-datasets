@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Model Selection in High Dimensions</title>
-  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
   
 
-<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)" />
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2020-02-14" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 
-<link rel="next" href="assessing-the-validity-of-a-model.html">
+<link rel="next" href="assessing-the-validity-of-a-model.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -243,7 +245,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Model Selection in High Dimensions</h1>
 <p class="author"><em>Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)</em></p>
-<p class="date"><em>2019-02-27</em></p>
+<p class="date"><em>2020-02-14</em></p>
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
@@ -290,7 +292,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>(to be completed)</strong></p>
 <!--- Project: https://www.dropbox.com/sh/ijh1bbxc49jztcl/AABdSzpcG4lGvo1ye8ZWtJjKa?dl=0 (to eliminate before publishing)-->
 <ul>
-<li><a href="https://chamilo.unige.ch/">Chamilo</a> (Search for <em>Model Selection in High Dimensions</em> to register)</li>
+<li><a href="https://moodle.unige.ch/">Moodle</a> (Search for <em>Model Selection in High Dimensions</em> to register)</li>
 <li><a href="https://github.com/CaesarXVII/Model-Selection-in-High-Dimensions">Github repository of the course</a></li>
 <li><a href="https://www.r-project.org/">R project</a></li>
 <li><a href="https://www.rstudio.com/">R Studio</a></li>
@@ -843,6 +845,42 @@ Hint: Read chapter 11 of <span class="citation">Efron and Hastie (<a href="#ref-
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-Cowe:11">
+<p>Cowell, F. A. 2011. <em>Measuring Inequality</em>. Third Edition. Oxford: Oxford University Press.</p>
+</div>
+<div id="ref-Efro:79">
+<p>Efron, B. 1979. “Bootstrap Methods: Another Look at the Jacknife.” <em>Annst</em> 7: 1–26.</p>
+</div>
+<div id="ref-EfHa:16">
+<p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
+</div>
+<div id="ref-EfSt:81">
+<p>Efron, B., and C. Stein. 1981. “The Jackknife Estimate of Variance.” <em>Annals of Statististics</em> 9: 586–96.</p>
+</div>
+<div id="ref-Fern:01">
+<p>Fernholz, L. 2001. “On Multivariate Higher Order von Mises Expansions.” <em>Metrika</em> 53: 123–40.</p>
+</div>
+<div id="ref-golub1999molecular">
+<p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
+</div>
+<div id="ref-gordon2002translation">
+<p>Gordon, Gavin J, Roderick V Jensen, Li-Li Hsiao, Steven R Gullans, Joshua E Blumenstock, Sridhar Ramaswamy, William G Richards, David J Sugarbaker, and Raphael Bueno. 2002. “Translation of Microarray Data into Clinically Relevant Cancer Diagnostic Tests Using Gene Expression Ratios in Lung Cancer and Mesothelioma.” <em>Cancer Research</em> 62 (17). AACR: 4963–7.</p>
+</div>
+<div id="ref-HuRo:09">
+<p>Huber, P. J., and E. M. Ronchetti. 2009. <em>Robust Statistics</em>. Second Edition. Wiley Series in Probability and Statistics. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-JaWiHaTi:13">
+<p>James, G., D. Witten, T. Hastie, and R. Tibshirani. 2013. <em>An Introduction to Statistical Learning: With Applications in R</em>. New York: Springer.</p>
+</div>
+<div id="ref-Quen:56">
+<p>Quenouille, Maurice H. 1956. “Notes on Bias in Estimation.” <em>Biometrika</em> 43: 353–60.</p>
+</div>
+<div id="ref-singh2002gene">
+<p>Singh, Dinesh, Phillip G Febbo, Kenneth Ross, Donald G Jackson, Judith Manola, Christine Ladd, Pablo Tamayo, et al. 2002. “Gene Expression Correlates of Clinical Prostate Cancer Behavior.” <em>Cancer Cell</em> 1 (2). Elsevier: 203–9.</p>
+</div>
+<div id="ref-Tuke:58">
+<p>Tukey, John W. 1958. “Bias and Confidence in Not Quite Large Samples (Abstract).” <em>The Annals of Mathematical Statistics</em> 29: 614.</p>
+</div>
 <div id="ref-unicef1998">
 <p>United Nations Children’s Fund. 1998. “The State of the World’s Children 1998: Focus on Nutrition.” UNICEF, New York, USA.</p>
 </div>
@@ -851,42 +889,6 @@ Hint: Read chapter 11 of <span class="citation">Efron and Hastie (<a href="#ref-
 </div>
 <div id="ref-victora2008maternal">
 <p>Victora, C. G., L. Adair, C. Fall, P. C. Hallal, R. Martorell, L. Richter, and H. S. Sachdev. 2008. “Maternal and Child Undernutrition: Consequences for Adult Health and Human Capital.” <em>Lancet</em> 371 (9609). Elsevier: 340.</p>
-</div>
-<div id="ref-golub1999molecular">
-<p>Golub, Todd R, Donna K Slonim, Pablo Tamayo, Christine Huard, Michelle Gaasenbeek, Jill P Mesirov, Hilary Coller, et al. 1999. “Molecular Classification of Cancer: Class Discovery and Class Prediction by Gene Expression Monitoring.” <em>Science</em> 286 (5439). American Association for the Advancement of Science: 531–37.</p>
-</div>
-<div id="ref-singh2002gene">
-<p>Singh, Dinesh, Phillip G Febbo, Kenneth Ross, Donald G Jackson, Judith Manola, Christine Ladd, Pablo Tamayo, et al. 2002. “Gene Expression Correlates of Clinical Prostate Cancer Behavior.” <em>Cancer Cell</em> 1 (2). Elsevier: 203–9.</p>
-</div>
-<div id="ref-gordon2002translation">
-<p>Gordon, Gavin J, Roderick V Jensen, Li-Li Hsiao, Steven R Gullans, Joshua E Blumenstock, Sridhar Ramaswamy, William G Richards, David J Sugarbaker, and Raphael Bueno. 2002. “Translation of Microarray Data into Clinically Relevant Cancer Diagnostic Tests Using Gene Expression Ratios in Lung Cancer and Mesothelioma.” <em>Cancer Research</em> 62 (17). AACR: 4963–7.</p>
-</div>
-<div id="ref-Cowe:11">
-<p>Cowell, F. A. 2011. <em>Measuring Inequality</em>. Third Edition. Oxford: Oxford University Press.</p>
-</div>
-<div id="ref-EfHa:16">
-<p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
-</div>
-<div id="ref-HuRo:09">
-<p>Huber, P. J., and E. M. Ronchetti. 2009. <em>Robust Statistics</em>. Second Edition. Wiley Series in Probability and Statistics. John Wiley &amp; Sons.</p>
-</div>
-<div id="ref-Fern:01">
-<p>Fernholz, L. 2001. “On Multivariate Higher Order von Mises Expansions.” <em>Metrika</em> 53: 123–40.</p>
-</div>
-<div id="ref-Efro:79">
-<p>Efron, B. 1979. “Bootstrap Methods: Another Look at the Jacknife.” <em>Annst</em> 7: 1–26.</p>
-</div>
-<div id="ref-Quen:56">
-<p>Quenouille, Maurice H. 1956. “Notes on Bias in Estimation.” <em>Biometrika</em> 43: 353–60.</p>
-</div>
-<div id="ref-Tuke:58">
-<p>Tukey, John W. 1958. “Bias and Confidence in Not Quite Large Samples (Abstract).” <em>The Annals of Mathematical Statistics</em> 29: 614.</p>
-</div>
-<div id="ref-EfSt:81">
-<p>Efron, B., and C. Stein. 1981. “The Jackknife Estimate of Variance.” <em>Annals of Statististics</em> 9: 586–96.</p>
-</div>
-<div id="ref-JaWiHaTi:13">
-<p>James, G., D. Witten, T. Hastie, and R. Tibshirani. 2013. <em>An Introduction to Statistical Learning: With Applications in R</em>. New York: Springer.</p>
 </div>
 </div>
             </section>
@@ -900,11 +902,13 @@ Hint: Read chapter 11 of <span class="citation">Efron and Hastie (<a href="#ref-
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -912,12 +916,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -929,6 +932,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
@@ -947,8 +954,9 @@ gitbook.start({
     script.type = "text/javascript";
     var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

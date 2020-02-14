@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5 Properties of model selection criteria | Model Selection in High Dimensions</title>
-  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5 Properties of model selection criteria | Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
   
 
-<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)" />
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2020-02-14" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="shrinkage-methods.html">
-<link rel="next" href="post-selection-inference.html">
+<link rel="prev" href="shrinkage-methods.html"/>
+<link rel="next" href="post-selection-inference.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -436,20 +438,20 @@ In this exercise we would like to prove that the Mallow <span class="math inline
 <div id="ref-fanandli2001">
 <p>Fan, J., and R. Li. 2001. “Variable Selection via Nonconcave Penalized Likelihood and Its Oracle Properties.” <em>Journal of the American Statistical Association</em> 96 (456). Taylor &amp; Francis: 1348–60.</p>
 </div>
-<div id="ref-shao1997asymptotic">
-<p>Shao, J. 1997. “An Asymptotic Theory for Linear Model Selection.” <em>Statistica Sinica</em> 7: 221–42.</p>
-</div>
 <div id="ref-KiKwCh:12">
 <p>Kim, Y., S. Kwon, and H. Choi. 2012. <em>Journal of Machine Learning Research</em> 13: 1037–57.</p>
-</div>
-<div id="ref-Yang:05">
-<p>Yang, Y. 2005. “Can the Strengths of AIC and BIC Be Shared? A Conflict Between Model Indentification and Regression Estimation.” <em>Biometrika</em> 92: 937–50.</p>
 </div>
 <div id="ref-LePo:08">
 <p>Leeb, H., and B. M. Pötscher. 2008. “Sparse Estimators and the Oracle Property, or the Return of Hodges’ Estimator.” <em>Journal of Econometrics</em> 142: 201–11.</p>
 </div>
 <div id="ref-McQuTs:98">
 <p>McQuarrie, A.D.R., and C.L. Tsai. 1998. <em>Regression and Time Series Model Selection</em>. World Scientific.</p>
+</div>
+<div id="ref-shao1997asymptotic">
+<p>Shao, J. 1997. “An Asymptotic Theory for Linear Model Selection.” <em>Statistica Sinica</em> 7: 221–42.</p>
+</div>
+<div id="ref-Yang:05">
+<p>Yang, Y. 2005. “Can the Strengths of AIC and BIC Be Shared? A Conflict Between Model Indentification and Regression Estimation.” <em>Biometrika</em> 92: 937–50.</p>
 </div>
 </div>
             </section>
@@ -463,11 +465,13 @@ In this exercise we would like to prove that the Mallow <span class="math inline
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -475,12 +479,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -492,6 +495,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
@@ -510,8 +517,9 @@ gitbook.start({
     script.type = "text/javascript";
     var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

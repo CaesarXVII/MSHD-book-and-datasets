@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Ordering the variables | Model Selection in High Dimensions</title>
-  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Ordering the variables | Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
   
 
-<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)" />
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2020-02-14" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="assessing-the-validity-of-a-model.html">
-<link rel="next" href="shrinkage-methods.html">
+<link rel="prev" href="assessing-the-validity-of-a-model.html"/>
+<link rel="next" href="shrinkage-methods.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -597,53 +599,8 @@ After having read the documentation of the <em>rpart</em> package and having ins
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-FoSt:04">
-<p>Foster, D., and R Stine. 2004. “Variable Selection in Data Mining: Building a Predictive Model for Bankruptcy.” <em>Journal of the American Statistical Association</em> 99: 303–13.</p>
-</div>
-<div id="ref-Good:79">
-<p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
-</div>
 <div id="ref-BeHo:95">
 <p>Benjamini, Y., and Y. Hochberg. 1995. “Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing.” <em>Journal of the Royal Statistical Society, Ser. B</em> 57: 289–300.</p>
-</div>
-<div id="ref-GSWaChTi:16">
-<p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
-</div>
-<div id="ref-LiFoUn:11">
-<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
-</div>
-<div id="ref-zhang2009">
-<p>Zhang, T. 2009. “On the Consistency of Feature Selection Using Greedy Least Squares Regression.” <em>Journal of Machine Learning Research</em> 10: 555–68.</p>
-</div>
-<div id="ref-EfHaJoTi:04">
-<p>Efron, B., T. Hastie, I. Johnstone, and R. Tibshirani. 2004. “Least Angle Regression (with Discussion).” <em>Annals of Statistics</em> 32: 407–99.</p>
-</div>
-<div id="ref-HaTaTiWa:07">
-<p>Hastie, T., J. Taylor, R. Tibshirani, and G. Walther. 2007. “Forward Stagewise Regression and the Monotone Lasso.” <em>Electronic Journal of Statistics</em> 1: 1–29.</p>
-</div>
-<div id="ref-TibR:15">
-<p>Tibshirani, R. J. 2015. “A General Framework for Fast Stagewise Algorithms.” <em>Journal of Machine Learning Research</em> 16: 2543–88.</p>
-</div>
-<div id="ref-ZhFoStUn:06">
-<p>Zhou, J., D. P. Foster, R. A. Stine, and L. H. Ungar. 2006. “Streamwise Feature Selection.” <em>Journal of Machine Learning Research</em> 7: 1861–85.</p>
-</div>
-<div id="ref-FaLi:08">
-<p>Fan, J., and J. Lv. 2008. “Sure Independence Screening for Ultrahigh Dimensional Feature Space.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 70 (5). Wiley Online Library: 849–911.</p>
-</div>
-<div id="ref-BuKaMa:10">
-<p>Bühlmann, P., M. Kalisch, and M. H. Maathuis. 2010. “Variable Selection in High-Dimensional Linear Models: Partially Faithful Distributions and the PC-Simple Algorithm.” <em>Biometrika</em> 97: 261–78.</p>
-</div>
-<div id="ref-SpGlSc:00">
-<p>Spirtes, P., C. Glymour, and R. Scheines. 2000. <em>Causation, Prediction, and Search</em>. MIT Press.</p>
-</div>
-<div id="ref-Fish:15">
-<p>Fisher, R. A. 1915. “Frequency Distribution of the Values of the Correlation Coeficient in Samples from an Indefinitely Large Population.” <em>Biometrika</em> 10: 507–21.</p>
-</div>
-<div id="ref-Fish:21">
-<p>Fisher, R. 1921. “On the ‘Probable Error’ of a Coefficient of Correlation Deduced from a Small Sample.” <em>Metron</em> 1: 3–32.</p>
-</div>
-<div id="ref-HaTiFr:09">
-<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
 </div>
 <div id="ref-Brei:84">
 <p>Breiman, L. 1984. <em>Classification and Regression Trees</em>. Chapman &amp; Hall.</p>
@@ -651,8 +608,53 @@ After having read the documentation of the <em>rpart</em> package and having ins
 <div id="ref-Brei:96">
 <p>Breiman, L. 1996. “Bagging Predictors.” <em>Machine Learning</em> 24: 123–40.</p>
 </div>
+<div id="ref-BuKaMa:10">
+<p>Bühlmann, P., M. Kalisch, and M. H. Maathuis. 2010. “Variable Selection in High-Dimensional Linear Models: Partially Faithful Distributions and the PC-Simple Algorithm.” <em>Biometrika</em> 97: 261–78.</p>
+</div>
+<div id="ref-EfHaJoTi:04">
+<p>Efron, B., T. Hastie, I. Johnstone, and R. Tibshirani. 2004. “Least Angle Regression (with Discussion).” <em>Annals of Statistics</em> 32: 407–99.</p>
+</div>
+<div id="ref-FaLi:08">
+<p>Fan, J., and J. Lv. 2008. “Sure Independence Screening for Ultrahigh Dimensional Feature Space.” <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em> 70 (5). Wiley Online Library: 849–911.</p>
+</div>
+<div id="ref-Fish:15">
+<p>Fisher, R. A. 1915. “Frequency Distribution of the Values of the Correlation Coeficient in Samples from an Indefinitely Large Population.” <em>Biometrika</em> 10: 507–21.</p>
+</div>
+<div id="ref-Fish:21">
+<p>Fisher, R. 1921. “On the ‘Probable Error’ of a Coefficient of Correlation Deduced from a Small Sample.” <em>Metron</em> 1: 3–32.</p>
+</div>
+<div id="ref-FoSt:04">
+<p>Foster, D., and R Stine. 2004. “Variable Selection in Data Mining: Building a Predictive Model for Bankruptcy.” <em>Journal of the American Statistical Association</em> 99: 303–13.</p>
+</div>
+<div id="ref-Good:79">
+<p>Goodnight, J. H. 1979. “A Tutorial on the SWEEP Operator.” <em>The American Statistician</em> 33: 149–58.</p>
+</div>
+<div id="ref-GSWaChTi:16">
+<p>G’Sell, M. G., S. Wager, A. Chouldechova, and R. Tibshirani. 2016. “Sequential Selection Procedures and False Discovery Rate Control.” <em>Journal of the Royal Statististical Society, B</em> 78: 423–44.</p>
+</div>
+<div id="ref-HaTaTiWa:07">
+<p>Hastie, T., J. Taylor, R. Tibshirani, and G. Walther. 2007. “Forward Stagewise Regression and the Monotone Lasso.” <em>Electronic Journal of Statistics</em> 1: 1–29.</p>
+</div>
+<div id="ref-HaTiFr:09">
+<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
+</div>
+<div id="ref-LiFoUn:11">
+<p>Lin, D., D. P. Foster, and L. H. Ungar. 2011. “VIF Regression: A Fast Regression Algorithm for Large Data.” <em>Journal of the American Statistical Association</em> 106: 232–47.</p>
+</div>
+<div id="ref-SpGlSc:00">
+<p>Spirtes, P., C. Glymour, and R. Scheines. 2000. <em>Causation, Prediction, and Search</em>. MIT Press.</p>
+</div>
 <div id="ref-Sutt:05">
 <p>Sutton, C. D. 2005. “11 - Classification and Regression Trees, Bagging, and Boosting.” In <em>Data Mining and Data Visualization</em>, edited by C.R. Rao, E.J. Wegman, and J.L. Solka, 24:303–29. Handbook of Statistics. Elsevier.</p>
+</div>
+<div id="ref-TibR:15">
+<p>Tibshirani, R. J. 2015. “A General Framework for Fast Stagewise Algorithms.” <em>Journal of Machine Learning Research</em> 16: 2543–88.</p>
+</div>
+<div id="ref-zhang2009">
+<p>Zhang, T. 2009. “On the Consistency of Feature Selection Using Greedy Least Squares Regression.” <em>Journal of Machine Learning Research</em> 10: 555–68.</p>
+</div>
+<div id="ref-ZhFoStUn:06">
+<p>Zhou, J., D. P. Foster, R. A. Stine, and L. H. Ungar. 2006. “Streamwise Feature Selection.” <em>Journal of Machine Learning Research</em> 7: 1861–85.</p>
 </div>
 </div>
             </section>
@@ -666,11 +668,13 @@ After having read the documentation of the <em>rpart</em> package and having ins
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -678,12 +682,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -695,6 +698,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
@@ -713,8 +720,9 @@ gitbook.start({
     script.type = "text/javascript";
     var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

@@ -72,7 +72,7 @@ Each presentation is accompanied with practical exercises using [R](<https://www
 **(to be completed)**
 
 <!--- Project: https://www.dropbox.com/sh/ijh1bbxc49jztcl/AABdSzpcG4lGvo1ye8ZWtJjKa?dl=0 (to eliminate before publishing)-->
-- [Chamilo](https://chamilo.unige.ch/) (Search for *Model Selection in High Dimensions* to register)
+- [Moodle](https://moodle.unige.ch/) (Search for *Model Selection in High Dimensions* to register)
 - [Github repository of the course](https://github.com/CaesarXVII/Model-Selection-in-High-Dimensions)
 - [R project](https://www.r-project.org/)
 - [R Studio](https://www.rstudio.com/)

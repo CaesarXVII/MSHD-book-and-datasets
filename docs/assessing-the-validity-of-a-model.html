@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Assessing the validity of a model | Model Selection in High Dimensions</title>
-  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Assessing the validity of a model | Model Selection in High Dimensions" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="This is the content of the course Model Selection. The output format for this project is bookdown::gitbook." />
   
 
-<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)">
+<meta name="author" content="Maria-Pia Victoria-Feser (professor), Cesare Miglioli and Guillaume Blanc (teaching assistants)" />
 
 
-<meta name="date" content="2019-02-27">
+<meta name="date" content="2020-02-14" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="ordering-the-variables.html">
+<link rel="prev" href="index.html"/>
+<link rel="next" href="ordering-the-variables.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -689,17 +691,38 @@ Exercise (optional):<br />
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-Akai:74">
+<p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
+</div>
+<div id="ref-ClHj:03">
+<p>Claeskens, Gerda, and Nils Lid Hjort. 2003. “The Focused Information Criterion.” <em>Journal of the American Statistical Association</em> 98: 900–945.</p>
+</div>
+<div id="ref-DoJo:95">
+<p>Donoho, David L., and Iain M. Johnstone. 1995. “Adapting to Unknown Smoothness via Wavelet Shrinkage.” <em>Journal of the American Statistical Association</em> 90: 1200–1224.</p>
+</div>
+<div id="ref-Efro:78">
+<p>Efron, B. 1978. “The Geometry of Exponential Families.” <em>The Annals of Statistics</em> 6: 362–76.</p>
+</div>
+<div id="ref-efron1986biased">
+<p>Efron, B. 1986a. “How Biased is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394). Taylor &amp; Francis: 461–70.</p>
+</div>
+<div id="ref-Efro:86">
+<p>Efron, B. 1986b. “How Biased Is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394): 461–70. <a href="http://www.jstor.org/stable/2289236" class="uri">http://www.jstor.org/stable/2289236</a>.</p>
+</div>
 <div id="ref-efron2004estimation">
 <p>Efron, B. 2004. “The Estimation of Prediction Error.” <em>Journal of the American Statistical Association</em> 99 (467). Taylor &amp; Francis: 619–32.</p>
 </div>
 <div id="ref-EfHa:16">
 <p>Efron, B., and T. Hastie. 2016. <em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em>. Cambridge University Press.</p>
 </div>
+<div id="ref-HaTiFr:09">
+<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
+</div>
 <div id="ref-Mall:73">
 <p>Mallows, C. L. 1973. “Some Comments on <span class="math inline">\(C_p\)</span>.” <em>Technometrics</em> 15: 661–75.</p>
 </div>
-<div id="ref-efron1986biased">
-<p>Efron, B. 1986a. “How Biased is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394). Taylor &amp; Francis: 461–70.</p>
+<div id="ref-Schw:78">
+<p>Schwarz, G. 1978. “Estimating the Dimension of a Model.” <em>Annst</em> 6: 461–64.</p>
 </div>
 <div id="ref-Shan:48a">
 <p>Shannon, C. E. 1948a. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 379–423.</p>
@@ -707,32 +730,11 @@ Exercise (optional):<br />
 <div id="ref-Shan:48b">
 <p>Shannon, C. 1948b. “A Mathematical Theory of Communication.” <em>Bell System Technical Journal</em> 27: 623–66.</p>
 </div>
-<div id="ref-Akai:74">
-<p>Akaike, H. 1974. “A New Look at the Statistical Model Identification.” <em>IEEE Transactions on Automatic Control</em> AC-19: 716–23.</p>
-</div>
-<div id="ref-Schw:78">
-<p>Schwarz, G. 1978. “Estimating the Dimension of a Model.” <em>Annst</em> 6: 461–64.</p>
-</div>
 <div id="ref-Stei:81">
 <p>Stein, C. M. 1981. “Estimation of the Mean of a Multivariate Normal Distribution.” <em>The Annals of Statistics</em> 9: 1135–51.</p>
 </div>
-<div id="ref-DoJo:95">
-<p>Donoho, David L., and Iain M. Johnstone. 1995. “Adapting to Unknown Smoothness via Wavelet Shrinkage.” <em>Journal of the American Statistical Association</em> 90: 1200–1224.</p>
-</div>
-<div id="ref-ClHj:03">
-<p>Claeskens, Gerda, and Nils Lid Hjort. 2003. “The Focused Information Criterion.” <em>Journal of the American Statistical Association</em> 98: 900–945.</p>
-</div>
 <div id="ref-Vapn:96">
 <p>Vapnik, V. 1996. <em>The Nature of Statistical Learning Theory</em>. New York: Springer.</p>
-</div>
-<div id="ref-HaTiFr:09">
-<p>Hastie, Trevor, Tibshirani Robert, and Jerome Friedman. 2009. <em>The Elements of Statistical Learning: Data Mining, Inference, and Prediction</em>. Second Edition. Springer Series in Statistics. Springer.</p>
-</div>
-<div id="ref-Efro:78">
-<p>Efron, B. 1978. “The Geometry of Exponential Families.” <em>The Annals of Statistics</em> 6: 362–76.</p>
-</div>
-<div id="ref-Efro:86">
-<p>Efron, B. 1986b. “How Biased Is the Apparent Error Rate of a Prediction Rule?” <em>Journal of the American Statistical Association</em> 81 (394): 461–70. <a href="http://www.jstor.org/stable/2289236" class="uri">http://www.jstor.org/stable/2289236</a>.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -752,11 +754,13 @@ Exercise (optional):<br />
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -764,12 +768,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -781,6 +784,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
@@ -799,8 +806,9 @@ gitbook.start({
     script.type = "text/javascript";
     var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
