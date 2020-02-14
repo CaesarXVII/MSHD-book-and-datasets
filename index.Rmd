@@ -223,6 +223,7 @@ packages.missing  <- packages.required[!(packages.required %in% rownames(install
 if(length(packages.missing)!=0) install.packages(packages.missing)
 ```
 
+
 ### Managing Data  
 (by G. Blanc)
 
@@ -317,7 +318,7 @@ As we will see, there are many advantages of relational databases which explain 
 <!--#### Loading data from a database-->
 To access the data store on the database, you will need to establish a *connection*, for which we will need RStudio's `pool` package. 
 
-```{r, echo=T}
+```{r, echo=T,eval=FALSE}
 library(pool)
 
 # Establish a connection to the external database
@@ -387,7 +388,7 @@ library(dplyr)
 ```
 > 1. Comment on the type of variables of the iris dataset. Write a code that computes the mean of each variable, grouped by Species. Do it first using `R-base` only, and optionally, do it using `dplyr`.
 
-```{r, echo=T, message=F, eval=T}
+```{r, echo=F, message=F, eval=F}
 variables.to.average <- c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 species.types <- c("setosa", "versicolor", "virginica")  # levels(iris$Species)
 #
@@ -413,7 +414,7 @@ species.means2 <- t(sapply(species.types, function(species){
 
 >2. Using the method of your choice, plot the boxplots of alcohol levels of the three classes of wine from the wine dataset.
 
-```{r, echo=T, message=F, eval=T}
+```{r, echo=F, message=F, eval=F}
 boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentration")
 ```
 
@@ -421,7 +422,7 @@ boxplot(Alcohol ~ Class, data=wine, xlab="Class of wine", ylab="Alcohol concentr
 
 > 3. Create 6 boxplots displaying the alcohol level of wine by class (3 levels) and by degree of color intensity (2 levels: above or below 5.0). Optional: compute the corresponding means using dplyr.
 
-```{r, echo=T, message=F, eval=T}
+```{r, echo=F, message=F, eval=F}
 # Create a new binary variable, called Color_intensity_factor to denote whether the color is mild or intense.
 wine$Color_intensity_factor <- factor(wine$Color_intensity>5, levels=c(FALSE, TRUE), labels=c("mild", "intense"))
 # Create the boxplots using the standard formulae
@@ -434,7 +435,7 @@ wine %>% group_by(Class, Color_intensity_factor) %>% summarise_at("Alcohol", mea
 
 > 4. Consider the three datasets City, Country, and CountryLanguage. Merge the three datasets into a single one using the method of your choice, such that no information is lost. Compare the total number of entries in the three relational datasets, to that of the unique dataset. What do you notice? [Hint: notice that "country" is the common relation among the three datasets]
 
-```{r, echo=T, message=F, eval=F}
+```{r, echo=F, message=F, eval=T}
 # We observe that "country" is the common relation among all datasets. 
 # Let's try to merge all datasets into a single one using this key
 #

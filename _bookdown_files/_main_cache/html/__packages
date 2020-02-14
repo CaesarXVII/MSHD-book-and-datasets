@@ -17,3 +17,5 @@ rattle
 rpart.plot
 RColorBrewer
 ncvreg
+coda
+adaptMCMC
