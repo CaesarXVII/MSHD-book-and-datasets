@@ -49,7 +49,7 @@ Each presentation is accompanied with practical exercises using [R](<https://www
 
 ### Bibliography 
 
-**(to be completed)**
+<!--- **(to be completed)** -->
 
 - *Computer Age Statistical Inference: Algorithms, Evidence, and Data Science*. Bradley Efron \& Trevor Hastie, Cambridge University Press, 2016. 
 
@@ -66,6 +66,70 @@ Each presentation is accompanied with practical exercises using [R](<https://www
 - *Model selection and model averaging*. Gerda Claeskens and Nils Lid Hjort, Cambridge University Press, 2008.
 
 - *Regression and Time Series Model Selection*. Allan D R McQuarrie and Chih-Ling Tsai, World Scientific, 1998.
+
+### Datasets 
+
+#### Data on Malnutrition in Zambia
+
+Childhood malnutrition is considered to be one of the worst health problems in developing countries [@unicef1998]. Both a manifestation and a cause of poverty, malnutrition is thought to contribute to over a third of death in children under five years old globally [@unicef2012]. Moreover, it is well established in the medical literature that maternal and child under nutrition have considerable consequences for adult health and human capital (see e.g. @victora2008maternal and the references therein). Such conditions are, for example, associated with less schooling, reduced economic productivity, and for women lower offspring birth weight. It has also been reported that lower birth weight and under nutrition in childhood have an influence on cancer occurrence and are risk factors for high glucose concentrations, blood pressure, and harmful lipid profiles. See also <https://archive-ouverte.unige.ch/unige:29628>, p. 64.
+
+
+Under nutrition is generally assessed by comparing anthropometric indicators such as height or weight at a certain age to a reference population. A well established measurement for the study of acute malnutrition is given by (see cite {who1995physical} for details):
+
+\begin{equation}
+	Y_i = \frac{H_{i,j} - \mu_j}{\sigma_{j}}
+	\label{eq:Zscore}
+\end{equation}
+
+where $H_{i,j}$, $\mu_j$ and $\sigma_j$ denote, respectively, the height of the $i^{\text{th}}$ child at age $j$, the median height of a child of the same age in the reference population and the associated standard deviation. Several factors are assumed to have a determinant influence on under nutrition. 
+
+
+The dataset *Zambia.SAV* available at [Course Datasets - Malnutrition in Zambia](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/Zambia.SAV) contains variables assumed to be potential causes for childhood malnutrition, i.e.
+
+* breastfeeding duration (month);
+* age of the child (month);
+* age of the mother (years);
+* Body Mass Index (BMI) of the mother (kg/meter$^2$);
+* height of the mother (meter);
+* weight of the mother (kg);
+* region of residence (9 levels: Central, Copperbelt, Eastern, Luapula, Lusaka, Northern, Northwestern, Southern and Western);
+* mother's highest education level attended (4 levels: No education, Primary, Secondary and Higher);
+* wealth index factor score;
+* weight of child at birth (kg) ;
+* sex of the child;
+* interval between the current birth and the previous birth (month); and
+* main source of drinking water (8 levels: Piped into dwelling, Piped to yard/plot, Public tap/standpipe, Protected well, Unprotected well, River/dam/lake/ponds/stream/canal/ irrigation channel, Bottled water, Other).     
+
+
+#### Prognostic Factors in Childhood Leukemia
+(by C. Miglioli)
+
+Factors that can affect a child’s outlook (prognosis) suffering e.g. from Leukemia are called prognostic factors. They help doctors decide whether a child with leukemia should receive standard treatment or more intensive treatment. Prognostic factors seem to be more determinant in acute lymphocytic leukemia (ALL) than in acute myelogenous leukemia (AML). See <https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html> for a detailed explanation.
+
+The *leukemia* dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of @golub1999molecular Science paper and exhibit an important statistical challenge because $p >> n$ as we deal with 72 patients and 7128 measurements. To obtain the dataset, install and load the package SIS in your R environment. Then type both **data("leukemia.train")** and **data("leukemia.test")** in the console window.  
+
+<!-- Since p>>n there are problems -->
+
+#### Gene Expression in Prostate Cancer
+(by C. Miglioli)
+
+Prostate tumors are among the most heterogeneous of cancers, both histologically and clinically. Microarray expression
+analysis can be used to determine whether global biological differences underlie common pathological features of prostate
+cancer and to identify genes that might anticipate the clinical behavior of this disease.
+
+The *prostate.train* dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from @singh2002gene Cancer cell paper and support the notion
+that "the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the
+time of diagnosis". To obtain the dataset, just install and load the package SIS in your R environment. Then type **data("prostate.train")** in the console window.    
+
+#### Gene Expression Ratios in Lung Cancer and Mesothelioma
+(by C. Miglioli)
+
+The pathological distinction between malignant pleural mesothelioma (MPM) and adenocarcinoma (ADCA) of the lung can be cumbersome
+using established methods. That is why doctors are moving towards gene expression ratios as an accurate and
+inexpensive technique with direct clinical applicability for distinguishing between MPM and lung cancer. 
+
+The *gordon* dataset contains 12533 gene expression measurements on 181 tissue samples: 31 MPM and 150 ADCA. These data derive from @gordon2002translation Cancer Research paper which provides evidence that this technique can be accurate in this and other clinical scenarios. To obtain the dataset, just install and load the package devtools in your R environment. Then type **install_github('ramhiser/datamicroarray')** in the console window to install the updated version of the datamicroarray package. Finally, after loading the datamicroarray package, type **data('gordon', package = 'datamicroarray')**.    
+
 
 ### Useful links 
 
@@ -433,21 +497,7 @@ Students following this course will be stimulated to complete the exercises and 
 
 ## Examples
 
-
 ### Data on Malnutrition in Zambia
-
-Childhood malnutrition is considered to be one of the worst health problems in developing countries [@unicef1998]. Both a manifestation and a cause of poverty, malnutrition is thought to contribute to over a third of death in children under five years old globally [@unicef2012]. Moreover, it is well established in the medical literature that maternal and child under nutrition have considerable consequences for adult health and human capital (see e.g. @victora2008maternal and the references therein). Such conditions are, for example, associated with less schooling, reduced economic productivity, and for women lower offspring birth weight. It has also been reported that lower birth weight and under nutrition in childhood have an influence on cancer occurrence and are risk factors for high glucose concentrations, blood pressure, and harmful lipid profiles. See also <https://archive-ouverte.unige.ch/unige:29628>, p. 64.
-
-
-Under nutrition is generally assessed by comparing anthropometric indicators such as height or weight at a certain age to a reference population. A well established measurement for the study of acute malnutrition is given by (see cite {who1995physical} for details):
-
-\begin{equation}
-	Y_i = \frac{H_{i,j} - \mu_j}{\sigma_{j}}
-	\label{eq:Zscore}
-\end{equation}
-
-where $H_{i,j}$, $\mu_j$ and $\sigma_j$ denote, respectively, the height of the $i^{\text{th}}$ child at age $j$, the median height of a child of the same age in the reference population and the associated standard deviation. Several factors are assumed to have a determinant influence on under nutrition. 
-
 
 Consider the dataset *Zambia.SAV* available at [Course Datasets - Malnutrition in Zambia](https://github.com/CaesarXVII/MSHD-book-and-datasets/blob/master/datasets/Zambia.SAV) containing variables assumed to be potential causes for childhood malnutrition, i.e.
 
@@ -481,9 +531,7 @@ Consider the dataset *Zambia.SAV* available at [Course Datasets - Malnutrition i
 ### Prognostic Factors in Childhood Leukemia
 (by C. Miglioli)
 
-Factors that can affect a child’s outlook (prognosis) suffering e.g. from Leukemia are called prognostic factors. They help doctors decide whether a child with leukemia should receive standard treatment or more intensive treatment. Prognostic factors seem to be more determinant in acute lymphocytic leukemia (ALL) than in acute myelogenous leukemia (AML). See <https://www.cancer.org/cancer/leukemia-in-children/detection-diagnosis-staging/prognostic-factors.html> for a detailed explanation.
-
-The *leukemia_big.csv* dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of @golub1999molecular Science paper and exhibit an important statistical challenge because $p >> n$ as we deal with 72 patients and 7128 measurements. 
+The *leukemia* dataset contains gene expression measurements on 72 leukemia patients: 47 ALL (i.e. acute lymphocytic leukemia) and 25 AML (i.e. acute myelogenous leukemia). These data arise from the landmark of @golub1999molecular Science paper and exhibit an important statistical challenge because $p >> n$ as we deal with 72 patients and 7128 measurements. 
 
 > Exercises (\@ref(leuk)) \
 
@@ -497,13 +545,7 @@ The *leukemia_big.csv* dataset contains gene expression measurements on 72 leuke
 ### Gene Expression in Prostate Cancer
 (by C. Miglioli)
 
-Prostate tumors are among the most heterogeneous of cancers, both histologically and clinically. Microarray expression
-analysis can be used to determine whether global biological differences underlie common pathological features of prostate
-cancer and to identify genes that might anticipate the clinical behavior of this disease.
-
-The *prostate.train* dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from @singh2002gene Cancer cell paper and support the notion
-that "the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the
-time of diagnosis".    
+The *prostate.train* dataset contains 12600 gene expression measurements on 102 patients: 52 with cancer and 50 healthy. These data originate from @singh2002gene Cancer cell paper and support the notion that "the clinical behavior of prostate cancer is linked to underlying gene expression differences that are detectable at the time of diagnosis".    
 
 > Exercises \
 
